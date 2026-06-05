@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>SafeAlert NG — Admin</title>
+  <style>
+    :root{--bg:#0a0e14;--surface:#121820;--text:#f4f6f8;--text2:#9aa4b2;--green:#12b76a;--amber:#f79009;--red:#f04438;--border:#2a3441;font-family:system-ui,sans-serif}
+    body{margin:0;background:var(--bg);color:var(--text);padding:20px 18px 40px;max-width:720px;margin:0 auto;line-height:1.55}
+    h1{font-size:22px;margin:0 0 8px}
+    .sub{color:var(--text2);font-size:13px;margin-bottom:20px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+    .card h2{font-size:14px;margin:0 0 10px;color:var(--green)}
+    .stat{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)}
+    .stat:last-child{border-bottom:none}
+    a{color:var(--green)}
+    .btn{display:inline-block;padding:8px 14px;background:var(--green);color:#fff;text-decoration:none;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer}
+    .btn-sm{padding:6px 10px;font-size:11px}
+    .btn-danger{background:var(--red)}
+    .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2)}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border);vertical-align:top}
+    th{color:var(--text2);font-weight:600}
+    .actions{display:flex;gap:6px;flex-wrap:wrap}
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+    .toggle input{opacity:0;width:0;height:0}
+    .toggle span{position:absolute;inset:0;background:var(--border);border-radius:12px;cursor:pointer;transition:.2s}
+    .toggle span:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+    .toggle input:checked+span{background:var(--green)}
+    .toggle input:checked+span:before{transform:translateX(20px)}
+    .empty{color:var(--text2);font-size:13px;padding:8px 0}
+    .error{color:var(--red);font-size:13px}
+    .note{font-size:11px;color:var(--text2);margin-top:8px}
+    #auth-gate .card input{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:14px;box-sizing:border-box;margin-bottom:10px}
+    .hidden{display:none}
+    .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  </style>
+</head>
+<body>
+  <div id="auth-gate">
+    <h1>SafeAlert admin</h1>
+    <p class="sub">Moderation console — enter your admin secret to continue.</p>
+    <div class="card">
+      <label for="secret-input" style="font-size:13px;color:var(--text2)">Admin secret</label>
+      <input id="secret-input" type="password" placeholder="X-Admin-Secret" autocomplete="off"/>
+      <button class="btn" id="auth-btn" type="button">Unlock</button>
+      <p class="error hidden" id="auth-error"></p>
+    </div>
+    <a class="btn btn-ghost" href="../index.html" style="margin-top:12px">← Back to app</a>
+  </div>
+
+  <div id="dashboard" class="hidden">
+    <div class="top-bar">
+      <div>
+        <h1>SafeAlert admin</h1>
+        <p class="sub">Daily moderation — leaders, false reports, proximity kill switch.</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="logout-btn" type="button">Lock</button>
+    </div>
+
+    <div class="card">
+      <h2>Proximity alerts</h2>
+      <div class="toggle-row">
+        <div>
+          <div style="font-size:13px">Runtime kill switch</div>
+          <div class="note" id="proximity-note">Loading…</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="proximity-toggle"/>
+          <span></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Pending leader applications</h2>
+      <div id="leaders-panel">Loading…</div>
+    </div>
+
+    <div class="card">
+      <h2>False-report flags</h2>
+      <div id="flags-panel">Loading…</div>
+    </div>
+
+    <a class="btn btn-ghost" href="../index.html" style="margin-top:12px">← Back to app</a>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

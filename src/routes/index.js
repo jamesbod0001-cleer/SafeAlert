@@ -1075,6 +1075,8 @@ router.post('/admin/stats/refresh', requireImportSecret, async (req, res) => {
   res.json({ success: true, stats });
 });
 
+router.use('/admin', require('./admin.routes'));
+
 router.get('/data/sources', (req, res) => {
   res.json({
     zones: {
@@ -1142,16 +1144,6 @@ router.post('/leaders/apply', requireAuth, validate('applyLeader'), async (req, 
 router.post('/leaders/endorse-zone', requireAuth, validate('leaderEndorseZone'), async (req, res) => {
   const result = await communityLeaderService.leaderEndorseZone(req.user.id, req.body.zone_id);
   if (result.error) return res.status(result.status || 400).json({ error: result.error });
-  res.json(result);
-});
-
-router.post('/admin/leaders/:id/verify', requireImportSecret, async (req, res) => {
-  const verified = req.body.verified !== false;
-  const result = await communityLeaderService.verifyLeader(req.params.id, {
-    verified,
-    note: req.body.note,
-  });
-  if (result.error) return res.status(404).json(result);
   res.json(result);
 });
 

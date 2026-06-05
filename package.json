@@ -68,6 +68,7 @@
     "testTimeout": 30000,
     "testMatch": [
       "**/tests/api.test.js",
+      "**/tests/admin.test.js",
       "**/tests/geo.test.js"
     ]
   }
