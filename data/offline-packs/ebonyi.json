@@ -1,0 +1,15 @@
+{
+  "state": "Ebonyi",
+  "version": "2026-06-05",
+  "generated_at": "2026-06-05T18:34:43.317Z",
+  "bounds": {
+    "name": "Ebonyi",
+    "minLat": 5.7,
+    "maxLat": 6.55,
+    "minLng": 7.65,
+    "maxLng": 8.35
+  },
+  "zone_count": 0,
+  "zones": [],
+  "note": "Download on Wi‑Fi. Warnings use cached data when offline."
+}

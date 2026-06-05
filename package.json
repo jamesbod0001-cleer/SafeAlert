@@ -15,6 +15,7 @@
     "sync:acled": "node scripts/sync-acled-live.js",
     "sync:hdx": "node scripts/sync-hdx-live.js",
     "build:zones-fallback": "node scripts/build-zones-fallback.js",
+    "build:offline-packs": "node scripts/build-offline-packs-all-states.js",
     "reimport:all": "node scripts/reimport-all.js",
     "stats:refresh": "node scripts/refresh-stats-cache.js",
     "purge:simulated": "node scripts/purge-simulated-data.js",

@@ -1,0 +1,15 @@
+{
+  "state": "Benue",
+  "version": "2026-06-05",
+  "generated_at": "2026-06-05T18:34:43.316Z",
+  "bounds": {
+    "name": "Benue",
+    "minLat": 6.5,
+    "maxLat": 8.5,
+    "minLng": 7.5,
+    "maxLng": 10
+  },
+  "zone_count": 0,
+  "zones": [],
+  "note": "Download on Wi‑Fi. Warnings use cached data when offline."
+}

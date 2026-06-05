@@ -1,0 +1,15 @@
+{
+  "state": "Bayelsa",
+  "version": "2026-06-05",
+  "generated_at": "2026-06-05T18:34:43.316Z",
+  "bounds": {
+    "name": "Bayelsa",
+    "minLat": 4.45,
+    "maxLat": 5.35,
+    "minLng": 5.4,
+    "maxLng": 6.5
+  },
+  "zone_count": 0,
+  "zones": [],
+  "note": "Download on Wi‑Fi. Warnings use cached data when offline."
+}

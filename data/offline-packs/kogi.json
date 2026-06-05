@@ -1,0 +1,29 @@
+{
+  "state": "Kogi",
+  "version": "2026-06-05",
+  "generated_at": "2026-06-05T18:34:43.318Z",
+  "bounds": {
+    "name": "Kogi",
+    "minLat": 6.5,
+    "maxLat": 8.5,
+    "minLng": 5.5,
+    "maxLng": 7.8
+  },
+  "zone_count": 1,
+  "zones": [
+    {
+      "id": "7fd856cc-b97f-475b-a96c-2cc8bafed01e",
+      "lat": 7.7973,
+      "lng": 6.7408,
+      "type": "armed_robbery",
+      "severity": "medium",
+      "state": "Kogi",
+      "lga": "",
+      "source": "community",
+      "verified": false,
+      "leader_endorsed": false,
+      "updated_at": "2026-06-05T18:34:43.314Z"
+    }
+  ],
+  "note": "Download on Wi‑Fi. Warnings use cached data when offline."
+}

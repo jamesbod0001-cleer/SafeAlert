@@ -1,0 +1,15 @@
+{
+  "state": "Jigawa",
+  "version": "2026-06-05",
+  "generated_at": "2026-06-05T18:34:43.317Z",
+  "bounds": {
+    "name": "Jigawa",
+    "minLat": 11,
+    "maxLat": 13.2,
+    "minLng": 9,
+    "maxLng": 10.5
+  },
+  "zone_count": 0,
+  "zones": [],
+  "note": "Download on Wi‑Fi. Warnings use cached data when offline."
+}

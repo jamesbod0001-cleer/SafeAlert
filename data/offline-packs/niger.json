@@ -1,0 +1,15 @@
+{
+  "state": "Niger",
+  "version": "2026-06-05",
+  "generated_at": "2026-06-05T18:34:43.320Z",
+  "bounds": {
+    "name": "Niger",
+    "minLat": 8.5,
+    "maxLat": 11.5,
+    "minLng": 4.5,
+    "maxLng": 7
+  },
+  "zone_count": 0,
+  "zones": [],
+  "note": "Download on Wi‑Fi. Warnings use cached data when offline."
+}

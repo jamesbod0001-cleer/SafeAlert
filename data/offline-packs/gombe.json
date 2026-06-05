@@ -1,0 +1,15 @@
+{
+  "state": "Gombe",
+  "version": "2026-06-05",
+  "generated_at": "2026-06-05T18:34:43.317Z",
+  "bounds": {
+    "name": "Gombe",
+    "minLat": 9.5,
+    "maxLat": 11.5,
+    "minLng": 10,
+    "maxLng": 12.2
+  },
+  "zone_count": 0,
+  "zones": [],
+  "note": "Download on Wi‑Fi. Warnings use cached data when offline."
+}

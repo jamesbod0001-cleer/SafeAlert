@@ -1,0 +1,15 @@
+{
+  "state": "Osun",
+  "version": "2026-06-05",
+  "generated_at": "2026-06-05T18:34:43.320Z",
+  "bounds": {
+    "name": "Osun",
+    "minLat": 6.8,
+    "maxLat": 8.2,
+    "minLng": 4,
+    "maxLng": 5.1
+  },
+  "zone_count": 0,
+  "zones": [],
+  "note": "Download on Wi‑Fi. Warnings use cached data when offline."
+}

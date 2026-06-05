@@ -1,0 +1,15 @@
+{
+  "state": "Lagos",
+  "version": "2026-06-05",
+  "generated_at": "2026-06-05T18:34:43.319Z",
+  "bounds": {
+    "name": "Lagos",
+    "minLat": 6.35,
+    "maxLat": 6.7,
+    "minLng": 2.7,
+    "maxLng": 3.75
+  },
+  "zone_count": 0,
+  "zones": [],
+  "note": "Download on Wi‑Fi. Warnings use cached data when offline."
+}

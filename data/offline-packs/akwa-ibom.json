@@ -1,0 +1,15 @@
+{
+  "state": "Akwa Ibom",
+  "version": "2026-06-05",
+  "generated_at": "2026-06-05T18:34:43.316Z",
+  "bounds": {
+    "name": "Akwa Ibom",
+    "minLat": 4.45,
+    "maxLat": 5.45,
+    "minLng": 7.45,
+    "maxLng": 8.25
+  },
+  "zone_count": 0,
+  "zones": [],
+  "note": "Download on Wi‑Fi. Warnings use cached data when offline."
+}
