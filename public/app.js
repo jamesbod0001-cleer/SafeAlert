@@ -109,6 +109,8 @@ let journeyOn = false;
 let jSecs = 0;
 let jTmr = null;
 let journeyRating = 0;
+let journeyFrom = '';
+let journeyTo = '';
 let liveN = 0;
 let zones = [];
 let allZones = [];
@@ -1029,6 +1031,9 @@ function closeSheets() {
   document.getElementById('zone-sheet')?.classList.remove('show');
   document.getElementById('profile-sheet')?.classList.remove('show');
   document.getElementById('journey-end-sheet')?.classList.remove('show');
+  document.getElementById('journey-feedback-prompt')?.classList.remove('show');
+  const jfb = document.getElementById('journey-feedback-prompt');
+  if (jfb) jfb.style.display = 'none';
   document.getElementById('panic-disclaimer-sheet')?.classList.remove('show');
   showLoader(false);
 }
@@ -1978,11 +1983,81 @@ async function broadcastPanicNearby() {
 }
 
 // ── JOURNEY ───────────────────────────────────────────────────────────────────
+function routeIdFromCities(from, to) {
+  const norm = (s) =>
+    String(s || '')
+      .trim()
+      .replace(/\s+/g, ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  const slug = (s) =>
+    norm(s)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_|_$/g, '');
+  return `${slug(from)}_${slug(to)}`;
+}
+
+function captureJourneyRoute() {
+  const from =
+    document.getElementById('j-from')?.value?.trim() ||
+    document.getElementById('j-start-from')?.value?.trim() ||
+    '';
+  const to =
+    document.getElementById('j-to')?.value?.trim() ||
+    document.getElementById('j-start-to')?.value?.trim() ||
+    '';
+  if (from) journeyFrom = from;
+  if (to) journeyTo = to;
+}
+
+function showJourneyFeedbackPrompt() {
+  if (!journeyFrom || !journeyTo) return;
+  markSheetOpened();
+  document.getElementById('sheet-bg')?.classList.add('show');
+  const el = document.getElementById('journey-feedback-prompt');
+  if (el) {
+    el.style.display = 'block';
+    el.classList.add('show');
+  }
+}
+
+function dismissJourneyFeedbackPrompt() {
+  document.getElementById('journey-feedback-prompt')?.classList.remove('show');
+  document.getElementById('journey-feedback-prompt').style.display = 'none';
+  closeSheets();
+}
+
+async function submitJourneyQuickFeedback(rating) {
+  if (!journeyFrom || !journeyTo) return dismissJourneyFeedbackPrompt();
+  const routeId = routeIdFromCities(journeyFrom, journeyTo);
+  try {
+    const res = await api(`/routes/${routeId}/feedback`, {
+      method: 'POST',
+      body: JSON.stringify({
+        safe: rating >= 4,
+        safety_rating: rating,
+        from: journeyFrom,
+        to: journeyTo,
+      }),
+    });
+    dismissJourneyFeedbackPrompt();
+    const scoreMsg = res.route?.safety_score != null ? ` Route score: ${res.route.safety_score}/100.` : '';
+    toast(`✓ Thanks for rating your trip.${scoreMsg}`, 'ok');
+    routesLoaded = false;
+    loadRoutesData().catch(() => {});
+  } catch (e) {
+    dismissJourneyFeedbackPrompt();
+    toast(e.message || 'Could not save rating', 'err');
+  }
+}
+
 async function startJourney() {
   if (!(await ensureAuth())) {
     toast('Sign in required for journey');
     return;
   }
+  journeyFrom = document.getElementById('j-start-from')?.value?.trim() || '';
+  journeyTo = document.getElementById('j-start-to')?.value?.trim() || '';
   try {
     await api('/journey/start', { method: 'POST', body: '{}' });
     journeyOn = true;
@@ -2003,6 +2078,8 @@ async function startJourney() {
 function resetJourneyUi() {
   journeyOn = false;
   journeyRating = 0;
+  journeyFrom = '';
+  journeyTo = '';
   clearInterval(jTmr);
   if (!panicOn) stopLocationPing();
   document.getElementById('j-start-ui').style.display = 'block';
@@ -2020,6 +2097,7 @@ function openJourneyEndSheet() {
     toast('✓ Journey ended.');
     return;
   }
+  captureJourneyRoute();
   journeyRating = 0;
   document.querySelectorAll('.j-rate').forEach((b) => {
     b.classList.remove('btn-green');
@@ -2046,6 +2124,8 @@ async function submitJourneyEnd() {
   const to = document.getElementById('j-to')?.value?.trim();
   const via = document.getElementById('j-via')?.value?.trim() || '';
   if (!from || !to) return toast('Enter From and To cities', 'err');
+  journeyFrom = from;
+  journeyTo = to;
   if (!journeyRating) return toast('Pick a safety score 1–5', 'err');
   try {
     const res = await api('/journey/end', {
@@ -2066,6 +2146,9 @@ async function submitJourneyEnd() {
 }
 
 async function endJourneySkipRating() {
+  captureJourneyRoute();
+  const savedFrom = journeyFrom || document.getElementById('j-from')?.value?.trim() || '';
+  const savedTo = journeyTo || document.getElementById('j-to')?.value?.trim() || '';
   if (state.token) {
     try {
       await api('/journey/end', { method: 'POST', body: '{}' });
@@ -2076,6 +2159,11 @@ async function endJourneySkipRating() {
   closeSheets();
   resetJourneyUi();
   toast('✓ Journey ended.');
+  if (savedFrom && savedTo) {
+    journeyFrom = savedFrom;
+    journeyTo = savedTo;
+    showJourneyFeedbackPrompt();
+  }
 }
 
 async function endJourney() {
@@ -2115,7 +2203,7 @@ async function submitReport() {
   const { lat, lng } = effectiveCoords();
   const desc = document.getElementById('rdesc').value;
   try {
-    await api('/zones', {
+    const res = await api('/zones', {
       method: 'POST',
       body: JSON.stringify({
         lat,
@@ -2135,7 +2223,8 @@ async function submitReport() {
     selectedType = null;
     go('map');
     if (map) map.flyTo([lat, lng], 12, { animate: true, duration: 1.2 });
-    toast('🚨 Report submitted! Community alerted.');
+    const firstMsg = res.first_in_state ? ' 🏅 First reporter in your state!' : '';
+    toast(`🚨 Report submitted! Community alerted.${firstMsg}`, res.first_in_state ? 'ok' : undefined);
   } catch (e) {
     toast(e.message);
   }
@@ -2492,6 +2581,8 @@ window.openJourneyEndSheet = openJourneyEndSheet;
 window.pickJourneyRating = pickJourneyRating;
 window.submitJourneyEnd = submitJourneyEnd;
 window.endJourneySkipRating = endJourneySkipRating;
+window.submitJourneyQuickFeedback = submitJourneyQuickFeedback;
+window.dismissJourneyFeedbackPrompt = dismissJourneyFeedbackPrompt;
 window.pickType = pickType;
 window.submitReport = submitReport;
 window.filt = filt;

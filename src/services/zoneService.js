@@ -114,6 +114,27 @@ async function getZones({ lat, lng, radiusKm, severity, limit = 100, state: stat
   }
 }
 
+async function countActiveZonesInState(state) {
+  const stateName = normState(state);
+  if (!stateName || stateName === 'Unknown' || stateName === 'Nigeria') return 0;
+  try {
+    const rows = await runQuery(
+      db()
+        .collection('zones')
+        .where('active', '==', true)
+        .where('state', '==', stateName)
+        .limit(500)
+    );
+    return rows.filter((z) => !isBlocked(z)).length;
+  } catch (err) {
+    const fallbackData = require('./fallbackDataService');
+    if (fallbackData.isQuotaError(err) && fallbackData.hasFallback()) {
+      return fallbackData.getZones({ state: stateName, limit: 500 }).length;
+    }
+    throw err;
+  }
+}
+
 async function getZoneById(id) {
   const fallbackData = require('./fallbackDataService');
   try {
@@ -300,6 +321,7 @@ async function reportFalseZone(id, deviceId, reason = '') {
 
 module.exports = {
   getZones,
+  countActiveZonesInState,
   getZoneById,
   createZone,
   confirmZone,

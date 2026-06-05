@@ -6,6 +6,7 @@ const { validate } = require('../middleware/validate');
 const { db } = require('../config/db');
 const routeService = require('../services/routeService');
 const convoyService = require('../services/convoyService');
+const reputationService = require('../services/reputationService');
 
 router.post('/journey/start', requireAuth, async (req, res) => {
   await db().collection('users').doc(req.user.id).update({
@@ -36,6 +37,15 @@ router.post('/journey/end', requireAuth, validate('endJourney'), async (req, res
   }
 
   const rated = routeResult && !routeResult.error;
+  if (rated && req.user?.id) {
+    reputationService
+      .addPoints(req.user.id, 'journey_rated', {
+        from,
+        to,
+        safety_rating,
+      })
+      .catch(() => {});
+  }
   res.json({
     success: true,
     message: rated

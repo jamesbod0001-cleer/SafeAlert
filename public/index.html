@@ -520,6 +520,10 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
         </div>
         <div class="journey-meta">Your circle sees your live GPS while you travel. Auto-alert fires if you stop in a danger zone.</div>
         <div id="j-start-ui">
+          <label class="field-lbl" for="j-start-from">From (optional)</label>
+          <input class="field-inp" id="j-start-from" type="text" placeholder="e.g. Lagos" autocomplete="off" style="margin-bottom:8px"/>
+          <label class="field-lbl" for="j-start-to">To (optional)</label>
+          <input class="field-inp" id="j-start-to" type="text" placeholder="e.g. Ibadan" autocomplete="off" style="margin-bottom:10px"/>
           <button class="btn btn-green" onclick="startJourney()"><span class="btn-ico" aria-hidden="true">▶</span><span class="btn-txt" data-i18n="start_journey">Start journey</span></button>
         </div>
         <div id="j-live-ui" style="display:none">
@@ -890,6 +894,19 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
   <p style="font-size:10px;color:var(--text3);margin-bottom:12px;line-height:1.5">1 = very unsafe · 5 = felt safe</p>
   <button type="button" class="btn btn-green" onclick="submitJourneyEnd()">Submit & end journey</button>
   <button type="button" class="btn btn-outline btn-sm" style="margin-top:10px" onclick="endJourneySkipRating()">Skip rating</button>
+</div>
+<div id="journey-feedback-prompt" class="sheet" onclick="event.stopPropagation()" style="display:none">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">How safe was your trip?</div>
+  <div class="sheet-sub">Quick tap helps others on this road.</div>
+  <div id="j-feedback-rating" style="display:flex;gap:8px;margin-bottom:14px">
+    <button type="button" class="btn btn-outline btn-sm j-fb-rate" data-rating="1" onclick="submitJourneyQuickFeedback(1)">1</button>
+    <button type="button" class="btn btn-outline btn-sm j-fb-rate" data-rating="2" onclick="submitJourneyQuickFeedback(2)">2</button>
+    <button type="button" class="btn btn-outline btn-sm j-fb-rate" data-rating="3" onclick="submitJourneyQuickFeedback(3)">3</button>
+    <button type="button" class="btn btn-outline btn-sm j-fb-rate" data-rating="4" onclick="submitJourneyQuickFeedback(4)">4</button>
+    <button type="button" class="btn btn-green btn-sm j-fb-rate" data-rating="5" onclick="submitJourneyQuickFeedback(5)">5</button>
+  </div>
+  <button type="button" class="btn btn-outline btn-sm" onclick="dismissJourneyFeedbackPrompt()">Not now</button>
 </div>
 <div id="profile-sheet" class="sheet" onclick="event.stopPropagation()">
   <div class="sheet-handle"></div>

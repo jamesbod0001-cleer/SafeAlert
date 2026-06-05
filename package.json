@@ -71,7 +71,9 @@
     "testMatch": [
       "**/tests/api.test.js",
       "**/tests/admin.test.js",
-      "**/tests/geo.test.js"
+      "**/tests/geo.test.js",
+      "**/tests/reputation.test.js",
+      "**/tests/notify-jobs.test.js"
     ]
   }
 }

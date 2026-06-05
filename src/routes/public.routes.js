@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
+const { optionalAuth } = require('../middleware/auth');
 const appConfig = require('../config/appConfig');
 const { db } = require('../config/db');
+const reputationService = require('../services/reputationService');
 const { sendJsonCached } = require('../utils/httpCache');
 const resourceService = require('../services/resourceService');
 const routeService = require('../services/routeService');
@@ -86,6 +88,58 @@ router.get('/routes', async (req, res) => {
     }
     throw err;
   }
+});
+
+router.post('/routes/:id/feedback', optionalAuth, async (req, res) => {
+  const { safe, note, safety_rating, from: bodyFrom, to: bodyTo } = req.body || {};
+  if (typeof safe !== 'boolean' && safety_rating == null) {
+    return res.status(400).json({ error: 'safe (boolean) or safety_rating (1-5) required' });
+  }
+  const rating =
+    safety_rating != null
+      ? Math.max(1, Math.min(5, parseInt(safety_rating, 10)))
+      : safe
+        ? 5
+        : 1;
+  if (!Number.isFinite(rating)) {
+    return res.status(400).json({ error: 'safety_rating must be 1-5' });
+  }
+
+  const ref = db().collection('routes').doc(req.params.id);
+  const snap = await ref.get();
+  let from;
+  let to;
+  if (snap.exists) {
+    ({ from, to } = snap.data());
+  } else if (bodyFrom && bodyTo && routeService.routeDocId(bodyFrom, bodyTo) === req.params.id) {
+    from = bodyFrom;
+    to = bodyTo;
+  } else {
+    return res.status(404).json({ error: 'Route not found' });
+  }
+
+  const routeResult = await routeService.recordTravellerFeedback({
+    from,
+    to,
+    safety_rating: rating,
+    userId: req.user?.id || null,
+  });
+  if (routeResult.error) return res.status(400).json(routeResult);
+
+  if (req.user?.id) {
+    reputationService
+      .addPoints(req.user.id, 'journey_rated', {
+        route_id: req.params.id,
+        note: note ? String(note).slice(0, 300) : undefined,
+      })
+      .catch(() => {});
+  }
+
+  res.json({
+    success: true,
+    route: routeResult.route,
+    message: 'Thanks — your trip rating helps the community',
+  });
 });
 
 router.get('/routes/check', async (req, res) => {

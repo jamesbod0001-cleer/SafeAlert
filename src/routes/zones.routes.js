@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { optionalAuth } = require('../middleware/auth');
 const { validate } = require('../middleware/validate');
+const { guessState } = require('../utils/geo');
 const zoneService = require('../services/zoneService');
 const reputationService = require('../services/reputationService');
 const proximityNotifyService = require('../services/proximityNotifyService');
@@ -42,14 +43,27 @@ router.get('/zones/:id', async (req, res) => {
 // Create new zone report (anonymous — device_id required)
 router.post('/zones', optionalAuth, validate('createZone'), async (req, res) => {
   const { lat, lng, type, description, device_id } = req.body;
+  const state = zoneService.normState(guessState(lat, lng));
+  const zonesBefore = await zoneService.countActiveZonesInState(state);
   const zone = await zoneService.createZone({ lat, lng, type, description, deviceId: device_id });
   if (req.user?.id) {
     reputationService.addPoints(req.user.id, 'report_created', { zone_id: zone.id }).catch(() => {});
   }
 
+  let firstInState = false;
+  if (zonesBefore === 0 && req.user?.id) {
+    const award = await reputationService.awardFirstStateReport(req.user.id, state);
+    firstInState = !award.skipped && !award.already;
+  }
+
   proximityNotifyService.enqueueZoneCreatedNotify(zone);
 
-  res.status(201).json({ zone, message: 'Alert submitted — nearby users will be notified' });
+  const payload = { zone, message: 'Alert submitted — nearby users will be notified' };
+  if (firstInState) {
+    payload.first_in_state = true;
+    payload.message = `First reporter in ${state}! Community alerted.`;
+  }
+  res.status(201).json(payload);
 });
 
 // Confirm a zone is still dangerous

@@ -11,6 +11,7 @@ const POINTS = {
   false_report_flagged: -8,
   leader_endorse: 10,
   journey_rated: 1,
+  first_state_report: 15,
 };
 
 const BADGE_THRESHOLDS = [
@@ -91,20 +92,62 @@ async function getLeaderboard({ state, lga, limit = 20 }) {
   }));
 }
 
+async function hasFirstStateReport(userId, state) {
+  const stateNorm = String(state || '').trim();
+  if (!stateNorm) return true;
+  const snap = await db()
+    .collection('reputation_events')
+    .where('user_id', '==', userId)
+    .where('action', '==', 'first_state_report')
+    .limit(50)
+    .get();
+  return snap.docs.some((d) => {
+    const meta = d.data().meta || {};
+    return String(meta.state || '').toLowerCase() === stateNorm.toLowerCase();
+  });
+}
+
+async function awardFirstStateReport(userId, state) {
+  if (!userId || !state) return { skipped: true };
+  if (await hasFirstStateReport(userId, state)) return { skipped: true, already: true };
+  return addPoints(userId, 'first_state_report', { state });
+}
+
+async function getFirstStateBadges(userId) {
+  const snap = await db()
+    .collection('reputation_events')
+    .where('user_id', '==', userId)
+    .where('action', '==', 'first_state_report')
+    .limit(50)
+    .get();
+  const states = new Set();
+  for (const doc of snap.docs) {
+    const st = doc.data().meta?.state;
+    if (st) states.add(st);
+  }
+  return [...states].map((st) => ({
+    id: 'first_in_state',
+    label: `First Reporter in ${st}`,
+    state: st,
+  }));
+}
+
 async function getPublicProfile(userId) {
   const snap = await db().collection('users').doc(userId).get();
   if (!snap.exists) return null;
   const u = snap.data();
+  const scoreBadges = (u.reputation_badges || []).map((id) => {
+    const b = BADGE_THRESHOLDS.find((x) => x.id === id);
+    return b ? { id, label: b.label } : { id, label: id };
+  });
+  const firstStateBadges = await getFirstStateBadges(userId);
   return {
     id: userId,
     display_name: u.display_name || u.name || 'Community member',
     score: u.reporter_score || 0,
     reports_submitted: u.reports_submitted || 0,
     reports_confirmed: u.reports_confirmed || 0,
-    badges: (u.reputation_badges || []).map((id) => {
-      const b = BADGE_THRESHOLDS.find((x) => x.id === id);
-      return b ? { id, label: b.label } : { id, label: id };
-    }),
+    badges: [...scoreBadges, ...firstStateBadges],
   };
 }
 
@@ -112,6 +155,7 @@ module.exports = {
   POINTS,
   BADGE_THRESHOLDS,
   addPoints,
+  awardFirstStateReport,
   getLeaderboard,
   getPublicProfile,
   badgesForScore,
