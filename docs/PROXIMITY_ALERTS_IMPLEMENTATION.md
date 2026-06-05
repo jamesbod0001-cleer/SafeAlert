@@ -49,6 +49,8 @@ Proximity alert = (event at lat/lng) + (recent locations in radius) + (user opte
 
 ## 2. What exists in this codebase today
 
+> **Updated 2026-06-05:** Items below marked ✅ are implemented. See `docs/PRODUCTION.md` and `docs/SERIOUS_LAUNCH_DEPLOYMENT.md` for current status.
+
 | Component | Location | Status |
 |-----------|----------|--------|
 | Haversine distance | `src/utils/geo.js` | ✅ |
@@ -62,12 +64,12 @@ Proximity alert = (event at lat/lng) + (recent locations in radius) + (user opte
 
 **Gaps for production at scale:**
 
-- No `help_nearby_enabled` opt-in
-- No geospatial index (Firestore geohash / Redis GEO)
-- Nearby users only found if they recently wrote to `locations`
-- No responder APIs (`/panic/nearby`, `/panic/:id/respond`)
-- Web app does not register FCM tokens
-- `getNearbyUsers` loads **all** locations — O(n) per alert
+- ✅ `help_nearby_enabled` opt-in (`GET/PUT /user/preferences`, settings UI)
+- ✅ Geospatial index — Firestore geohash (`src/utils/geohash.js`, `geoService.js`)
+- Nearby users only found if they recently wrote to `locations` (by design; TTL 45 min)
+- ✅ Responder APIs (`GET /panic/nearby`, `POST /panic/:id/respond`)
+- ✅ Web FCM registration (`public/js/fcm.js`, `firebase-messaging-sw.js`, `PUT /user/fcm-token`)
+- Redis GEO (optional at 5M+ MAU) — not deployed; geohash covers current scale
 
 ---
 

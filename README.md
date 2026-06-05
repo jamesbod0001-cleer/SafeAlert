@@ -61,8 +61,8 @@ Base URL: `https://api.safealertng.com/v1`
 
 ### Authentication
 ```
-POST /auth/verify-phone    — Send OTP
-POST /auth/confirm-otp     — Confirm OTP → get token
+POST /auth/request-otp     — Send OTP
+POST /auth/verify-otp      — Verify OTP → get token
 POST /auth/logout          — Revoke token
 ```
 
@@ -171,7 +171,7 @@ pm2 save
 ## Testing
 
 ```bash
-npm test
+npm test   # API integration suite (Jest + Supertest) — works out of the box
 
 # Test individual endpoints with curl:
 curl http://localhost:3000/health
