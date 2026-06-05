@@ -36,9 +36,9 @@
     "marketing:video": "python3 scripts/build-marketing-video.py",
     "marketing:posters": "python3 scripts/generate-marketing-posters.py && python3 scripts/brand-marketing-photos.py",
     "deploy:aws": "bash scripts/aws/deploy-apprunner.sh",
-    "flutter:run": "cd flutter_app && flutter run --dart-define=SAFEALERT_API=https://qrhtc5kg79.us-east-1.awsapprunner.com/v1",
-    "flutter:build:android": "cd flutter_app && flutter build apk --release --dart-define=SAFEALERT_API=https://qrhtc5kg79.us-east-1.awsapprunner.com/v1",
-    "flutter:build:ios": "cd flutter_app && flutter build ios --release --dart-define=SAFEALERT_API=https://qrhtc5kg79.us-east-1.awsapprunner.com/v1"
+    "flutter:run": "cd flutter_app && flutter run --dart-define=SAFEALERT_API=${SAFEALERT_API:-http://localhost:3000/v1}",
+    "flutter:build:android": "cd flutter_app && flutter build apk --release --dart-define=SAFEALERT_API=${SAFEALERT_API:-http://localhost:3000/v1}",
+    "flutter:build:ios": "cd flutter_app && flutter build ios --release --dart-define=SAFEALERT_API=${SAFEALERT_API:-http://localhost:3000/v1}"
   },
   "engines": {
     "node": ">=18"

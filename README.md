@@ -197,7 +197,7 @@ npm run dev            # local dev with memory DB + review seed
 ## iOS & Android apps
 
 Native apps now use **Flutter** (`flutter_app/`) while the web app remains at `/app/`.
-See **[docs/MOBILE_IOS_ANDROID.md](docs/MOBILE_IOS_ANDROID.md)**.
+See **[docs/MOBILE_IOS_ANDROID.md](docs/MOBILE_IOS_ANDROID.md)**. Set the API base URL with `export SAFEALERT_API=https://your-api/v1` (defaults to `http://localhost:3000/v1`).
 
 ```bash
 cd flutter_app
