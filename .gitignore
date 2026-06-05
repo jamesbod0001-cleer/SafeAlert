@@ -23,5 +23,5 @@ credentials/*
 !credentials/*.template.json
 
 # Firebase mobile (download from console — do not commit if repo is public)
-# flutter_app/android/app/google-services.json
-# flutter_app/ios/Runner/GoogleService-Info.plist
+flutter_app/android/app/google-services.json
+flutter_app/ios/Runner/GoogleService-Info.plist

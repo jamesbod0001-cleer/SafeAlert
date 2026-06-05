@@ -7,11 +7,11 @@ Native iOS + Android client for [SafeAlert NG](https://qrhtc5kg79.us-east-1.awsa
 ```
 lib/
   main.dart, app.dart
-  core/           api, storage, theme, constants, utils
+  core/           api, storage, theme, constants, utils, i18n, notifications
   data/models/    Zone, Panic, Circle, Route, Estate, …
   features/
     app/          AppController + AppShell
-    onboarding/
+    onboarding/   welcome + state/offline pack step
     home/         SOS, journey, check-in, nearby alerts
     map/          flutter_map + zone/SOS markers
     insights/     stats + AI summary
@@ -37,6 +37,7 @@ lib/
 | Trust | Guest OK | Leaders, agents, tips, transparency |
 | Panic overlay | Active SOS | WhatsApp, broadcast, responders |
 | Profile sheet | OTP | Sandbox OTP shown when enabled |
+| Onboarding | Guest OK | State picker + optional offline pack download |
 
 ## Run
 
@@ -62,18 +63,53 @@ flutter build apk --release --dart-define=SAFEALERT_API=https://YOUR_HOST/v1
 flutter build ios --release --dart-define=SAFEALERT_API=https://YOUR_HOST/v1
 ```
 
-## Not yet ported (follow-ups)
+## Push notifications (FCM)
 
-- Firebase FCM push (`firebase_core`, `firebase_messaging`)
-- Full i18n (en / ha / yo / ig / pcm)
-- Deep links (`?zone=`, `?panic=`, `?estate=`)
-- Offline pack download to device storage
+Firebase is optional until you add platform config files. The app degrades gracefully without them.
 
-## Added scaffolding now
+### Android
 
-- Push service bootstrap in `lib/core/notifications/push_service.dart` (safe no-op until Firebase platform files are configured)
-- Basic language switching + string map in `lib/core/i18n/app_i18n.dart`
-- Query deep-link capture in router (`zone`, `panic`, `estate`) with handoff actions on home screen
+1. In [Firebase Console](https://console.firebase.google.com/), add an Android app with package name `com.safealert.ng.safealert_ng`.
+2. Download `google-services.json`.
+3. Copy it next to the example file:
+
+   ```bash
+   cp /path/to/google-services.json flutter_app/android/app/google-services.json
+   ```
+
+   See `android/app/google-services.json.example` for the expected shape. **Do not commit the real file** if the repo is public.
+
+4. Gradle applies the `google-services` plugin only when `google-services.json` exists.
+
+### iOS
+
+1. Add an iOS app in Firebase Console and download `GoogleService-Info.plist`.
+2. Place it at `flutter_app/ios/Runner/GoogleService-Info.plist`.
+3. Enable push capabilities in Xcode (Background Modes → Remote notifications).
+
+### Runtime behaviour
+
+- `PushService.initialize()` runs on bootstrap when the user is signed in.
+- After OTP verify, `PushService.syncToken()` registers the FCM token via `PUT /user/fcm-token`.
+- Token refresh is listened for and synced automatically.
+
+## Offline state packs
+
+Onboarding (and Trust screen) can download per-state safety data for offline use.
+
+- API: `GET /v1/offline/packs/:state`
+- Storage: `lib/core/storage/offline_pack_storage.dart` (SharedPreferences, same key pattern as web `localStorage`)
+- State detection uses `publicConfig.nigeria_states` bounding boxes (same algorithm as web `guessStateFromBounds`)
+
+Download on Wi‑Fi before travelling — packs work when the API is unreachable.
+
+## Internationalization
+
+`lib/core/i18n/app_i18n.dart` includes 50+ keys in **en**, **Hausa**, **Yoruba**, **Igbo**, and **Pidgin** — nav tabs, panic/SOS, onboarding, trust, insights, and auth strings ported from `public/js/i18n.js`.
+
+## Deep links
+
+Query deep-link capture in router (`zone`, `panic`, `estate`) with handoff actions on home screen.
 
 ## API
 

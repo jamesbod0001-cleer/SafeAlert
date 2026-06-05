@@ -4,17 +4,22 @@ import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../core/api/api_exception.dart';
 import '../../core/api/safealert_api.dart';
+import '../../core/notifications/push_service.dart';
 import '../../core/storage/local_storage.dart';
+import '../../core/storage/offline_pack_storage.dart';
 import '../../data/models/models.dart';
 
 /// Central app state — mirrors web `app.js` session + data refresh loops.
 class AppController extends ChangeNotifier {
-  AppController({SafeAlertApi? api, LocalStorage? storage})
+  AppController({SafeAlertApi? api, LocalStorage? storage, OfflinePackStorage? offlinePacks})
       : _api = api ?? SafeAlertApi(),
-        _storage = storage ?? LocalStorage();
+        _storage = storage ?? LocalStorage() {
+    _offlinePacks = offlinePacks ?? OfflinePackStorage(_api);
+  }
 
   final SafeAlertApi _api;
   final LocalStorage _storage;
+  late final OfflinePackStorage _offlinePacks;
   Timer? _refreshTimer;
   Timer? _panicTimer;
 
@@ -89,6 +94,9 @@ class AppController extends ChangeNotifier {
       await _loadPublicConfig();
       await refreshAll(silent: true);
       _startRefreshLoop();
+      if (isSignedIn) {
+        await PushService().initialize(this);
+      }
     } catch (e) {
       error = e.toString();
     } finally {
@@ -317,6 +325,7 @@ class AppController extends ChangeNotifier {
       _api.token = token;
       await _storage.setToken(token);
       await refreshAll(silent: true);
+      await PushService().syncToken(this);
       notifyListeners();
       return true;
     } on ApiException catch (e) {
@@ -551,6 +560,38 @@ class AppController extends ChangeNotifier {
   }
 
   List<SafetyZone> get activeZones => zones.where((z) => z.active).toList();
+
+  List<Map<String, dynamic>> get nigeriaStates {
+    final raw = publicConfig['nigeria_states'];
+    if (raw is! List) return [];
+    return raw.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+  }
+
+  String? guessStateFromBounds(double lat, double lng, List<Map<String, dynamic>> states) {
+    for (final s in states) {
+      final minLat = (s['minLat'] as num?)?.toDouble();
+      final maxLat = (s['maxLat'] as num?)?.toDouble();
+      final minLng = (s['minLng'] as num?)?.toDouble();
+      final maxLng = (s['maxLng'] as num?)?.toDouble();
+      if (minLat == null || maxLat == null || minLng == null || maxLng == null) continue;
+      if (lat >= minLat && lat <= maxLat && lng >= minLng && lng <= maxLng) {
+        return s['name']?.toString();
+      }
+    }
+    return null;
+  }
+
+  String? detectStateFromPosition() {
+    if (position == null) return null;
+    return guessStateFromBounds(position!.latitude, position!.longitude, nigeriaStates);
+  }
+
+  Future<void> downloadOfflinePackForState(String state) async {
+    await _offlinePacks.downloadPack(state);
+    showToast('Offline map saved: $state');
+  }
+
+  Future<bool> hasOfflinePack(String state) => _offlinePacks.hasPack(state);
 
   @override
   void dispose() {

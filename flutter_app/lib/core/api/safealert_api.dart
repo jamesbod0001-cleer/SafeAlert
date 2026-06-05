@@ -167,6 +167,7 @@ class SafeAlertApi {
   Future<void> registerAgent(Map<String, dynamic> body) => post('/agents/register', body: body).then((_) {});
   Future<List<dynamic>> offlinePacks() async => (await get('/offline/packs'))['packs'] as List? ?? [];
   Future<Map<String, dynamic>> offlinePack(String state) => get('/offline/packs/$state');
+  Future<Map<String, dynamic>> getOfflinePack(String state) => offlinePack(state);
   Future<List<dynamic>> tips({String lang = 'en'}) async => (await get('/tips', query: {'lang': lang}))['tips'] as List? ?? [];
   Future<Map<String, dynamic>> radioBulletin({String lang = 'en'}) => get('/radio/bulletin', query: {'lang': lang});
   Future<List<dynamic>> reputationLeaderboard() async =>

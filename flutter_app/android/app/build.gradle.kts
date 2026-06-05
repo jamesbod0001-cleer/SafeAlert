@@ -42,3 +42,8 @@ android {
 flutter {
     source = "../.."
 }
+
+// Apply Firebase google-services only when the real file is present (see google-services.json.example).
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
