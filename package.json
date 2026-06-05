@@ -20,6 +20,8 @@
     "stats:refresh": "node scripts/refresh-stats-cache.js",
     "purge:simulated": "node scripts/purge-simulated-data.js",
     "launch:check": "node scripts/national-launch-checklist.js",
+    "loadtest:panic": "k6 run scripts/load-test/k6-panic.js",
+    "loadtest:zones": "k6 run scripts/load-test/k6-zones.js",
     "validate-env": "node scripts/validate-env.js",
     "setup:secrets": "node scripts/generate-production-secrets.js",
     "setup:firebase": "node scripts/apply-firebase-service-account.js credentials/serviceAccountKey.json",
