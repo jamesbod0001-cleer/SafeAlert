@@ -19,6 +19,7 @@
     "reimport:all": "node scripts/reimport-all.js",
     "stats:refresh": "node scripts/refresh-stats-cache.js",
     "purge:simulated": "node scripts/purge-simulated-data.js",
+    "launch:check": "node scripts/national-launch-checklist.js",
     "validate-env": "node scripts/validate-env.js",
     "setup:secrets": "node scripts/generate-production-secrets.js",
     "setup:firebase": "node scripts/apply-firebase-service-account.js credentials/serviceAccountKey.json",
