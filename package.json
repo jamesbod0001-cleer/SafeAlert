@@ -28,6 +28,7 @@
     "check:credentials": "node scripts/check-credentials.js",
     "test:at-sms": "node scripts/test-at-sms.js",
     "test:smoke": "node scripts/smoke-test-backend.js",
+    "test": "NODE_ENV=test USE_MEMORY_DB=true SEED_REVIEW_DATA=true jest tests/api.test.js --forceExit",
     "ensure:settings": "node scripts/ensure-app-settings.js",
     "fcm:sw": "node scripts/write-fcm-sw.js",
     "marketing:voice": "python3 scripts/generate-ad-voiceover.py",
@@ -56,6 +57,12 @@
     "ngeohash": "^0.6.3"
   },
   "devDependencies": {
-    "edge-tts": "^1.0.1"
+    "edge-tts": "^1.0.1",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 30000
   }
 }

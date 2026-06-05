@@ -95,28 +95,7 @@ app.use((err, req, res, next) => {
 
 let server;
 
-async function start() {
-  await new Promise((resolve, reject) => {
-    server = app.listen(PORT, () => {
-      console.log(`\n🛡️  SafeAlert NG API running on port ${PORT}`);
-      console.log(`📱 App UI:  http://localhost:${PORT}/app/`);
-      console.log(`🌍 Health:  http://localhost:${PORT}/v1/health`);
-      console.log(`📋 API:     http://localhost:${PORT}/v1/zones`);
-      console.log(`🔧 Mode:    ${process.env.NODE_ENV || 'development'}\n`);
-      resolve(server);
-    });
-
-    server.on('error', (err) => {
-      if (err.code === 'EADDRINUSE') {
-        console.error(
-          `\nPort ${PORT} is in use. Run: npm run kill-port\nOr: lsof -ti :${PORT} | xargs kill -9\n`
-        );
-        process.exit(1);
-      }
-      reject(err);
-    });
-  });
-
+async function bootstrap() {
   if (isProduction()) {
     try {
       assertProductionEnv();
@@ -147,7 +126,31 @@ async function start() {
   } catch (err) {
     console.error('[Resources seed] failed:', err.message);
   }
+}
 
+async function start() {
+  await new Promise((resolve, reject) => {
+    server = app.listen(PORT, () => {
+      console.log(`\n🛡️  SafeAlert NG API running on port ${PORT}`);
+      console.log(`📱 App UI:  http://localhost:${PORT}/app/`);
+      console.log(`🌍 Health:  http://localhost:${PORT}/v1/health`);
+      console.log(`📋 API:     http://localhost:${PORT}/v1/zones`);
+      console.log(`🔧 Mode:    ${process.env.NODE_ENV || 'development'}\n`);
+      resolve(server);
+    });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(
+          `\nPort ${PORT} is in use. Run: npm run kill-port\nOr: lsof -ti :${PORT} | xargs kill -9\n`
+        );
+        process.exit(1);
+      }
+      reject(err);
+    });
+  });
+
+  await bootstrap();
   startMaintenanceScheduler();
   startDailyImportScheduler();
 
@@ -167,9 +170,13 @@ function shutdown(signal) {
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));
 
-start().catch((err) => {
-  console.error('Failed to start:', err.message);
-  process.exit(1);
-});
-
-module.exports = app;
+if (process.env.NODE_ENV === 'test') {
+  module.exports = app;
+  module.exports.prepare = bootstrap;
+} else {
+  start().catch((err) => {
+    console.error('Failed to start:', err.message);
+    process.exit(1);
+  });
+  module.exports = app;
+}

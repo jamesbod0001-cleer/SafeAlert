@@ -82,7 +82,7 @@ async function getZones({ lat, lng, radiusKm, severity, limit = 100, state: stat
           .limit(stateLimit)
       );
       mergeZones(zonesMap, rows);
-    } else if (!stateName) {
+    } else if (!stateName && !severity) {
       const rows = await runQuery(
         database.collection('zones').where('active', '==', true).orderBy('updated_at', 'desc').limit(cap)
       );
@@ -90,6 +90,10 @@ async function getZones({ lat, lng, radiusKm, severity, limit = 100, state: stat
     }
 
     let zones = [...zonesMap.values()];
+
+    if (severity) {
+      zones = zones.filter((z) => z.severity === severity);
+    }
 
     if (lat !== undefined && lng !== undefined && radiusKm) {
       zones = zones.filter((z) => distanceKm(lat, lng, z.lat, z.lng) <= radiusKm);
