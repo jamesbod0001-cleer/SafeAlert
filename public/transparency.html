@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>SafeAlert NG — Transparency</title>
+  <link rel="stylesheet" href="index.html" onerror="this.remove()"/>
+  <style>
+    :root{--bg:#0a0e14;--surface:#121820;--text:#f4f6f8;--text2:#9aa4b2;--green:#12b76a;--amber:#f79009;--border:#2a3441;font-family:system-ui,sans-serif}
+    body{margin:0;background:var(--bg);color:var(--text);padding:20px 18px 40px;max-width:520px;margin:0 auto;line-height:1.55}
+    h1{font-size:22px;margin:0 0 8px}
+    .sub{color:var(--text2);font-size:13px;margin-bottom:20px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+    .card h2{font-size:14px;margin:0 0 10px;color:var(--green)}
+    .stat{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)}
+    a{color:var(--green)}
+    .btn{display:inline-block;margin-top:16px;padding:12px 18px;background:var(--green);color:#fff;text-decoration:none;border-radius:10px;font-weight:700}
+  </style>
+</head>
+<body>
+  <h1>SafeAlert transparency</h1>
+  <p class="sub">Open data for trust — no hidden government pipe, no selling your location.</p>
+  <div id="report">Loading report…</div>
+  <a class="btn" href="index.html">← Back to app</a>
+  <script>
+    const API = (location.origin && location.origin !== 'null') ? location.origin + '/v1' : 'http://localhost:3000/v1';
+    fetch(API + '/transparency')
+      .then((r) => r.json())
+      .then(({ report: r }) => {
+        document.getElementById('report').innerHTML = `
+          <div class="card"><h2>Alerts on the map</h2>
+            <div class="stat"><span>Active alerts</span><strong>${r.zones.active}</strong></div>
+            <div class="stat"><span>Community verified</span><strong>${r.zones.community_verified}</strong></div>
+            <div class="stat"><span>Community / user reports</span><strong>${r.zones.by_source.community}</strong></div>
+            <div class="stat"><span>HDX / ACLED (when configured)</span><strong>${r.zones.by_source.acled_and_hdx}</strong></div>
+            <div class="stat"><span>Hidden after false reports</span><strong>${r.zones.hidden_after_false_reports}</strong></div>
+          </div>
+          <div class="card"><h2>Moderation</h2>
+            <div class="stat"><span>False-report flags</span><strong>${r.moderation.false_report_flags}</strong></div>
+            <div class="stat"><span>Demo data blocked in API</span><strong>${r.moderation.simulated_data_blocked ? 'Yes' : 'No'}</strong></div>
+          </div>
+          <div class="card"><h2>Community network</h2>
+            <div class="stat"><span>Verified leaders</span><strong>${r.community.verified_leaders}</strong></div>
+            <div class="stat"><span>Leader applications pending</span><strong>${r.community.pending_leader_applications}</strong></div>
+            <div class="stat"><span>Field agents</span><strong>${r.community.active_field_agents}</strong></div>
+          </div>
+          <div class="card"><h2>Privacy promises</h2>
+            <p style="font-size:13px;color:var(--text2)">${r.privacy.note}</p>
+            <ul style="font-size:12px;color:var(--text2);padding-left:18px">
+              <li>Government auto-dispatch: <strong>No</strong></li>
+              <li>Police auto-alert: <strong>No</strong></li>
+              <li>Location sold: <strong>No</strong></li>
+              <li>Anonymous reports: <strong>Yes</strong></li>
+            </ul>
+          </div>
+          <p style="font-size:11px;color:var(--text2)">Updated ${new Date(r.generated_at).toLocaleString()}</p>`;
+      })
+      .catch(() => {
+        document.getElementById('report').textContent = 'Could not load report. Try again when online.';
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+/* SafeAlert NG — professional stroke icons */
+.sa-ico,
+.btn-ico[data-icon],
+.nav-icon[data-icon],
+.hdr-btn[data-icon],
+.stat-icon[data-icon],
+.t-icon[data-icon],
+.gps-icon[data-icon],
+.panic-icon[data-icon] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 0;
+  color: inherit;
+}
+.sa-ico-svg {
+  display: block;
+}
+.nav-icon[data-icon] .sa-ico-svg {
+  width: 22px;
+  height: 22px;
+}
+.nav-item.active .nav-icon {
+  color: var(--green);
+}
+.nav-item.nav-report.active .nav-icon {
+  color: var(--red);
+}
+.hdr-btn[data-icon] {
+  color: var(--text);
+}
+.hdr-btn[data-icon] .sa-ico-svg {
+  width: 20px;
+  height: 20px;
+}
+.btn-ico[data-icon] .sa-ico-svg {
+  width: 18px;
+  height: 18px;
+}
+.stat-icon[data-icon] .sa-ico-svg {
+  width: 22px;
+  height: 22px;
+}
+.stat-card:nth-child(1) .stat-icon {
+  color: var(--red);
+}
+.stat-card:nth-child(2) .stat-icon {
+  color: var(--green);
+}
+.stat-card:nth-child(3) .stat-icon {
+  color: var(--blue);
+}
+#panic-btn .panic-icon[data-icon] .sa-ico-svg {
+  width: 28px;
+  height: 28px;
+  color: #fff;
+}
+.t-chip.sel .t-icon {
+  color: var(--green);
+}
+html.icon-only-mode .btn .btn-ico[data-icon] .sa-ico-svg {
+  width: 22px;
+  height: 22px;
+}
+#locate-fab[data-icon] {
+  color: var(--green);
+}
+#locate-fab[data-icon] .sa-ico-svg {
+  width: 22px;
+  height: 22px;
+}
+.member-av .sa-ico-svg {
+  width: 22px;
+  height: 22px;
+}
+.alert-icon-box .sa-ico-svg,
+.pu-icon .sa-ico-svg {
+  width: 20px;
+  height: 20px;
+}

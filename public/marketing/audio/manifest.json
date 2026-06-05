@@ -1,0 +1,43 @@
+{
+  "scenes": [
+    {
+      "file": "audio/scene-01.mp3",
+      "voice": "en-NG-EzinneNeural",
+      "index": 0
+    },
+    {
+      "file": "audio/scene-02.mp3",
+      "voice": "en-NG-EzinneNeural",
+      "index": 1
+    },
+    {
+      "file": "audio/scene-03.mp3",
+      "voice": "en-NG-AbeoNeural",
+      "index": 2
+    },
+    {
+      "file": "audio/scene-04.mp3",
+      "voice": "en-NG-EzinneNeural",
+      "index": 3
+    },
+    {
+      "file": "audio/scene-05.mp3",
+      "voice": "en-NG-AbeoNeural",
+      "index": 4
+    },
+    {
+      "file": "audio/scene-06.mp3",
+      "voice": "en-NG-EzinneNeural",
+      "index": 5
+    },
+    {
+      "file": "audio/scene-07.mp3",
+      "voice": "en-NG-EzinneNeural",
+      "index": 6
+    }
+  ],
+  "voices": [
+    "en-NG-EzinneNeural",
+    "en-NG-AbeoNeural"
+  ]
+}

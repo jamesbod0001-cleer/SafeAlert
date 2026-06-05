@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-NG">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>SafeAlert NG — Posters &amp; Ad Images</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,sans-serif;background:#050810;color:#fff;padding:24px;max-width:1200px;margin:0 auto}
+    h1{font-size:1.75rem;margin-bottom:6px}
+    h1 em{color:#12B76A;font-style:normal}
+    .sub{color:rgba(255,255,255,.65);margin-bottom:28px;line-height:1.5}
+    h2{font-size:1.1rem;margin:32px 0 14px;color:#12B76A}
+    .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+    .tab{border:1px solid rgba(255,255,255,.15);background:transparent;color:#fff;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer}
+    .tab.active{background:#12B76A;color:#041208;border-color:#12B76A}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+    .card{background:#0A0E1A;border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden}
+    .card img{width:100%;aspect-ratio:1;object-fit:cover;background:#000;display:block}
+    .card.story img{aspect-ratio:9/16}
+    .card.wide img{aspect-ratio:16/9}
+    .card .info{padding:12px}
+    .card .info strong{display:block;font-size:13px;margin-bottom:4px}
+    .card .info span{font-size:11px;color:rgba(255,255,255,.5)}
+    .card a.dl{display:inline-block;margin-top:8px;font-size:12px;font-weight:800;color:#12B76A;text-decoration:none}
+    code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-size:12px}
+    .links{margin-top:24px;display:flex;flex-wrap:wrap;gap:12px}
+    .links a{color:#12B76A;font-weight:700;text-decoration:none;font-size:14px}
+  </style>
+</head>
+<body>
+  <h1>Safe<em>Alert</em> NG — Posters</h1>
+  <p class="sub">40 branded graphics + 7 photo adverts. Regenerate: <code>npm run marketing:posters</code></p>
+
+  <div class="links">
+    <a href="../export/">→ Video exports</a>
+    <a href="../safealert-ad.html">→ Interactive ad</a>
+  </div>
+
+  <h2>Photo adverts (AI + branding)</h2>
+  <div class="grid" id="photos"></div>
+
+  <h2>Branded posters</h2>
+  <div class="tabs" id="theme-tabs"></div>
+  <div class="grid" id="posters"></div>
+
+  <script>
+    const THEMES = {
+      sos: 'SOS / Panic',
+      estate: 'Estate watch',
+      map: 'Danger map',
+      citizen: 'Citizen-powered',
+      whatsapp: 'WhatsApp share',
+      travel: 'Travel routes',
+      helper: 'Helper response',
+      free: 'Free download',
+      chairman: 'Estate chairman',
+      'data-saver': 'Data saver',
+      stores: 'iPhone & Android',
+    };
+
+    const FORMATS = ['square', 'story', 'landscape', 'whatsapp'];
+    const FORMAT_LABEL = { square: '1:1 Instagram', story: '9:16 Story', landscape: '16:9 Banner', whatsapp: 'WhatsApp DP' };
+
+    const photos = [
+      ['photos/poster-travel-check.png', 'Travel check', 'Raw photo'],
+      ['photos/poster-estate-watch.png', 'Estate watch', 'Raw photo'],
+      ['photos/poster-sos-closeup.png', 'SOS close-up', 'Raw photo'],
+      ['photos/poster-whatsapp-community.png', 'WhatsApp community', 'Raw photo'],
+      ['photos/poster-campus-safety.png', 'Campus safety', 'Raw photo'],
+      ['photos/poster-driver-danfo.png', 'Driver / danfo', 'Raw photo'],
+      ['photos/poster-market-alert.png', 'Market alert', 'Raw photo'],
+      ['photos/travel-check-branded-story.png', 'Travel check', 'Branded story'],
+      ['photos/estate-watch-branded-story.png', 'Estate watch', 'Branded story'],
+      ['photos/sos-closeup-branded-story.png', 'SOS', 'Branded story'],
+      ['photos/driver-danfo-branded-story.png', 'Driver', 'Branded story'],
+      ['photos/market-alert-branded-story.png', 'Market', 'Branded story'],
+    ];
+
+    const photoEl = document.getElementById('photos');
+    photos.forEach(([src, title, tag]) => {
+      const story = src.includes('story') || src.includes('travel') || src.includes('estate') || src.includes('sos') || src.includes('driver') || src.includes('market') || src.includes('campus');
+      const card = document.createElement('article');
+      card.className = 'card' + (story && src.includes('branded') ? ' story' : '');
+      card.innerHTML = `<img src="${src}" alt="${title}" loading="lazy"/><div class="info"><strong>${title}</strong><span>${tag}</span><a class="dl" download href="${src}">Download</a></div>`;
+      photoEl.appendChild(card);
+    });
+
+    let active = 'all';
+    const tabs = document.getElementById('theme-tabs');
+    ['all', ...Object.keys(THEMES)].forEach((k) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'tab' + (k === 'all' ? ' active' : '');
+      b.textContent = k === 'all' ? 'All themes' : THEMES[k];
+      b.onclick = () => {
+        active = k;
+        tabs.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+        b.classList.add('active');
+        renderPosters();
+      };
+      tabs.appendChild(b);
+    });
+
+    function renderPosters() {
+      const el = document.getElementById('posters');
+      el.innerHTML = '';
+      Object.entries(THEMES).forEach(([id, label]) => {
+        if (active !== 'all' && active !== id) return;
+        FORMATS.forEach((fmt) => {
+          const src = `${id}-${fmt}.png`;
+          const card = document.createElement('article');
+          card.className = 'card' + (fmt === 'story' ? ' story' : fmt === 'landscape' ? ' wide' : '');
+          card.innerHTML = `<img src="${src}" alt="${label}" loading="lazy"/><div class="info"><strong>${label}</strong><span>${FORMAT_LABEL[fmt]}</span><a class="dl" download href="${src}">Download</a></div>`;
+          el.appendChild(card);
+        });
+      });
+    }
+    renderPosters();
+  </script>
+</body>
+</html>

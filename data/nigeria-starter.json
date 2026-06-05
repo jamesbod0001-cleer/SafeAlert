@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "description": "Curated starter safety data for Nigeria — major corridors and known high-risk areas. Replace or extend with ACLED CSV via scripts/import-data.js",
+    "source": "safealert_starter_v1",
+    "updated": "2026-05-23"
+  },
+  "routes": [
+    { "from": "Lagos", "to": "Abuja", "via": "Ore–Benin bypass–Okene–Lokoja", "safety_score": 58, "travelers_last_2h": 240 },
+    { "from": "Lagos", "to": "Ibadan", "via": "Lagos–Ibadan Expressway", "safety_score": 72, "travelers_last_2h": 380 },
+    { "from": "Abuja", "to": "Kaduna", "via": "Abuja–Kaduna–Zaria highway", "safety_score": 32, "travelers_last_2h": 95 },
+    { "from": "Abuja", "to": "Lokoja", "via": "A2 / Lokoja–Abuja road", "safety_score": 65, "travelers_last_2h": 70 },
+    { "from": "Kaduna", "to": "Kano", "via": "Kaduna–Zaria–Kano", "safety_score": 38, "travelers_last_2h": 110 },
+    { "from": "Kano", "to": "Maiduguri", "via": "A3 / Damaturu axis", "safety_score": 18, "travelers_last_2h": 22 },
+    { "from": "Port Harcourt", "to": "Owerri", "via": "East–West Road", "safety_score": 55, "travelers_last_2h": 88 },
+    { "from": "Benin", "to": "Warri", "via": "Sapele–Warri", "safety_score": 48, "travelers_last_2h": 60 },
+    { "from": "Enugu", "to": "Onitsha", "via": "Enugu–Onitsha express", "safety_score": 62, "travelers_last_2h": 130 },
+    { "from": "Ilorin", "to": "Abuja", "via": "Jebba–Bida", "safety_score": 52, "travelers_last_2h": 45 },
+    { "from": "Makurdi", "to": "Lafia", "via": "Makurdi–Lafia", "safety_score": 44, "travelers_last_2h": 35 },
+    { "from": "Calabar", "to": "Uyo", "via": "Calabar–Itu–Uyo", "safety_score": 68, "travelers_last_2h": 52 }
+  ],
+  "zones": [
+    { "id": "starter_abuja_kaduna_01", "lat": 10.612, "lng": 7.432, "type": "kidnapping", "state": "Kaduna", "description": "Abuja–Kaduna highway — recurring kidnapping reports", "votes_danger": 8, "reports": 8, "severity": "critical", "verified": true, "source": "safealert_starter" },
+    { "id": "starter_kaduna_birnin_02", "lat": 10.52, "lng": 7.44, "type": "banditry", "state": "Kaduna", "description": "Birnin Gwari axis — bandit activity", "votes_danger": 6, "reports": 6, "severity": "high", "verified": true, "source": "safealert_starter" },
+    { "id": "starter_zamfara_03", "lat": 12.17, "lng": 6.66, "type": "banditry", "state": "Zamfara", "description": "Northwest — rural banditry hotspot", "votes_danger": 7, "reports": 7, "severity": "critical", "verified": true, "source": "safealert_starter" },
+    { "id": "starter_sokoto_04", "lat": 13.06, "lng": 5.24, "type": "kidnapping", "state": "Sokoto", "description": "Sokoto–Zamfara border reports", "votes_danger": 4, "reports": 4, "severity": "high", "source": "safealert_starter" },
+    { "id": "starter_borno_05", "lat": 11.83, "lng": 13.15, "type": "terror", "state": "Borno", "description": "Borno state — insurgency-affected area", "votes_danger": 5, "reports": 5, "severity": "critical", "verified": true, "source": "safealert_starter" },
+    { "id": "starter_lokoja_06", "lat": 7.8, "lng": 6.74, "type": "armed_robbery", "state": "Kogi", "description": "Lokoja–Ajaokuta road — robbery reports", "votes_danger": 3, "reports": 3, "severity": "medium", "source": "safealert_starter" },
+    { "id": "starter_ore_07", "lat": 6.75, "lng": 4.88, "type": "kidnapping", "state": "Ondo", "description": "Ore–Benin corridor — travel advisory area", "votes_danger": 5, "reports": 5, "severity": "high", "verified": true, "source": "safealert_starter" },
+    { "id": "starter_lagos_ikeja_08", "lat": 6.6, "lng": 3.35, "type": "armed_robbery", "state": "Lagos", "description": "Lagos mainland — one-chance / robbery cluster", "votes_danger": 4, "reports": 4, "severity": "high", "source": "safealert_starter" },
+    { "id": "starter_ph_09", "lat": 4.82, "lng": 7.03, "type": "kidnapping", "state": "Rivers", "description": "Port Harcourt outskirts — kidnapping risk", "votes_danger": 3, "reports": 3, "severity": "medium", "source": "safealert_starter" },
+    { "id": "starter_enugu_10", "lat": 6.45, "lng": 7.5, "type": "roadblock", "state": "Enugu", "description": "Enugu–Nsukka road — illegal checkpoints reported", "votes_danger": 2, "reports": 2, "severity": "medium", "source": "safealert_starter" },
+    { "id": "starter_benue_11", "lat": 7.73, "lng": 8.54, "type": "banditry", "state": "Benue", "description": "Benue rural communities — herder-farmer conflict reports", "votes_danger": 4, "reports": 4, "severity": "high", "source": "safealert_starter" },
+    { "id": "starter_niger_12", "lat": 9.6, "lng": 6.55, "type": "kidnapping", "state": "Niger", "description": "Minna–Bida road — kidnapping reports", "votes_danger": 3, "reports": 3, "severity": "medium", "source": "safealert_starter" },
+    { "id": "starter_katsina_13", "lat": 12.99, "lng": 7.6, "type": "banditry", "state": "Katsina", "description": "Katsina south — bandit raids", "votes_danger": 6, "reports": 6, "severity": "critical", "verified": true, "source": "safealert_starter" },
+    { "id": "starter_abuja_14", "lat": 9.08, "lng": 7.4, "type": "protest", "state": "FCT", "description": "Abuja central — large gathering / traffic disruption", "votes_danger": 2, "reports": 2, "severity": "medium", "source": "safealert_starter" },
+    { "id": "starter_delta_15", "lat": 5.52, "lng": 5.75, "type": "armed_robbery", "state": "Delta", "description": "Warri–Effurun — armed robbery reports", "votes_danger": 3, "reports": 3, "severity": "medium", "source": "safealert_starter" },
+    { "id": "starter_osun_16", "lat": 7.78, "lng": 4.56, "type": "roadblock", "state": "Osun", "description": "Osogbo–Ilesa — unofficial roadblocks", "votes_danger": 2, "reports": 2, "severity": "medium", "source": "safealert_starter" },
+    { "id": "starter_taraba_17", "lat": 7.87, "lng": 9.78, "type": "banditry", "state": "Taraba", "description": "Taraba rural — communal violence reports", "votes_danger": 3, "reports": 3, "severity": "medium", "source": "safealert_starter" },
+    { "id": "starter_cross_river_18", "lat": 5.87, "lng": 8.6, "type": "kidnapping", "state": "Cross River", "description": "Calabar hinterland — kidnapping reports", "votes_danger": 2, "reports": 2, "severity": "medium", "source": "safealert_starter" }
+  ],
+  "groups": [
+    { "id": "grp_nurtw_lagos", "name": "NURTW Lagos Chapter", "type": "transport_union", "state": "Lagos", "member_count": 4200, "alert_radius_km": 30 },
+    { "id": "grp_haulage_north", "name": "Northern Haulage Watch", "type": "community", "state": "Kaduna", "member_count": 890, "alert_radius_km": 80 },
+    { "id": "grp_market_enugu", "name": "Enugu Traders Safety", "type": "market_association", "state": "Enugu", "member_count": 1200, "alert_radius_km": 25 }
+  ]
+}

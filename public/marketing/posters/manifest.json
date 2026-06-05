@@ -1,0 +1,401 @@
+{
+  "posters": [
+    {
+      "id": "sos",
+      "format": "square",
+      "file": "posters/sos-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "sos",
+      "format": "story",
+      "file": "posters/sos-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "sos",
+      "format": "landscape",
+      "file": "posters/sos-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "sos",
+      "format": "whatsapp",
+      "file": "posters/sos-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    },
+    {
+      "id": "estate",
+      "format": "square",
+      "file": "posters/estate-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "estate",
+      "format": "story",
+      "file": "posters/estate-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "estate",
+      "format": "landscape",
+      "file": "posters/estate-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "estate",
+      "format": "whatsapp",
+      "file": "posters/estate-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    },
+    {
+      "id": "map",
+      "format": "square",
+      "file": "posters/map-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "map",
+      "format": "story",
+      "file": "posters/map-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "map",
+      "format": "landscape",
+      "file": "posters/map-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "map",
+      "format": "whatsapp",
+      "file": "posters/map-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    },
+    {
+      "id": "citizen",
+      "format": "square",
+      "file": "posters/citizen-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "citizen",
+      "format": "story",
+      "file": "posters/citizen-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "citizen",
+      "format": "landscape",
+      "file": "posters/citizen-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "citizen",
+      "format": "whatsapp",
+      "file": "posters/citizen-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    },
+    {
+      "id": "whatsapp",
+      "format": "square",
+      "file": "posters/whatsapp-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "whatsapp",
+      "format": "story",
+      "file": "posters/whatsapp-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "whatsapp",
+      "format": "landscape",
+      "file": "posters/whatsapp-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "whatsapp",
+      "format": "whatsapp",
+      "file": "posters/whatsapp-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    },
+    {
+      "id": "travel",
+      "format": "square",
+      "file": "posters/travel-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "travel",
+      "format": "story",
+      "file": "posters/travel-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "travel",
+      "format": "landscape",
+      "file": "posters/travel-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "travel",
+      "format": "whatsapp",
+      "file": "posters/travel-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    },
+    {
+      "id": "helper",
+      "format": "square",
+      "file": "posters/helper-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "helper",
+      "format": "story",
+      "file": "posters/helper-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "helper",
+      "format": "landscape",
+      "file": "posters/helper-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "helper",
+      "format": "whatsapp",
+      "file": "posters/helper-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    },
+    {
+      "id": "free",
+      "format": "square",
+      "file": "posters/free-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "free",
+      "format": "story",
+      "file": "posters/free-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "free",
+      "format": "landscape",
+      "file": "posters/free-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "free",
+      "format": "whatsapp",
+      "file": "posters/free-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    },
+    {
+      "id": "chairman",
+      "format": "square",
+      "file": "posters/chairman-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "chairman",
+      "format": "story",
+      "file": "posters/chairman-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "chairman",
+      "format": "landscape",
+      "file": "posters/chairman-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "chairman",
+      "format": "whatsapp",
+      "file": "posters/chairman-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    },
+    {
+      "id": "data-saver",
+      "format": "square",
+      "file": "posters/data-saver-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "data-saver",
+      "format": "story",
+      "file": "posters/data-saver-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "data-saver",
+      "format": "landscape",
+      "file": "posters/data-saver-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "data-saver",
+      "format": "whatsapp",
+      "file": "posters/data-saver-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    },
+    {
+      "id": "stores",
+      "format": "square",
+      "file": "posters/stores-square.png",
+      "size": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "id": "stores",
+      "format": "story",
+      "file": "posters/stores-story.png",
+      "size": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "id": "stores",
+      "format": "landscape",
+      "file": "posters/stores-landscape.png",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "id": "stores",
+      "format": "whatsapp",
+      "file": "posters/stores-whatsapp.png",
+      "size": [
+        800,
+        800
+      ]
+    }
+  ],
+  "generated": []
+}

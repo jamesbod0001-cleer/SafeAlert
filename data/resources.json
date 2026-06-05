@@ -1,0 +1,8 @@
+[
+  {"id":"res_lagos_redcross","type":"mental_health","name":"Nigerian Red Cross — Lagos","phone":"08026660000","state":"Lagos","lga":"Ikeja","lat":6.6018,"lng":3.3515,"verified_by_ngo":true,"active":true},
+  {"id":"res_survivors","type":"mental_health","name":"Survivors Support Line","phone":"08007887799","state":"Lagos","lga":"Lagos","lat":6.5244,"lng":3.3792,"verified_by_ngo":true,"active":true,"note":"Trauma support after incidents — citizen NGO"},
+  {"id":"res_enugu_legal","type":"legal","name":"Citizens Rights Desk — Enugu","phone":"08090000002","state":"Enugu","lga":"Enugu North","lat":6.4584,"lng":7.5464,"verified_by_ngo":true,"active":true},
+  {"id":"res_ph_safehouse","type":"safe_house","name":"Port Harcourt Safe Transit Hub","phone":"08070000003","state":"Rivers","lga":"Port Harcourt","lat":4.8156,"lng":7.0498,"verified_by_ngo":true,"active":true},
+  {"id":"res_kaduna_clinic","type":"clinic","name":"Kaduna Community Health Post","phone":"08030000001","state":"Kaduna","lga":"Kaduna North","lat":10.5105,"lng":7.4165,"verified_by_ngo":false,"active":true},
+  {"id":"res_police_optional","type":"legal","name":"112 / Police (your choice to call)","phone":"112","state":"Lagos","lga":"Lagos","lat":6.5244,"lng":3.3792,"verified_by_ngo":false,"active":true,"note":"Optional — SafeAlert never contacts government for you"}
+]

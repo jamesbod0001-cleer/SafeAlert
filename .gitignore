@@ -1,0 +1,27 @@
+node_modules/
+.env
+.env.*
+!.env.example
+public/mobile-config.js
+.DS_Store
+
+# Flutter mobile build artifacts
+flutter_app/android/.gradle/
+flutter_app/android/app/build/
+flutter_app/android/build/
+flutter_app/android/local.properties
+flutter_app/ios/Pods/
+flutter_app/ios/DerivedData/
+flutter_app/ios/build/
+*.xcuserstate
+xcuserdata/
+
+# Local credential files (never commit)
+credentials/*
+!credentials/.gitkeep
+!credentials/README.md
+!credentials/*.template.json
+
+# Firebase mobile (download from console — do not commit if repo is public)
+# flutter_app/android/app/google-services.json
+# flutter_app/ios/Runner/GoogleService-Info.plist

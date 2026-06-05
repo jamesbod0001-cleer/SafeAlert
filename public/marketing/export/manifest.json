@@ -1,0 +1,21 @@
+{
+  "exports": [
+    {
+      "file": "safealert-ad-16x9.mp4",
+      "aspect": "16:9",
+      "duration_s": 90.56
+    },
+    {
+      "file": "safealert-ad-9x16.mp4",
+      "aspect": "9:16",
+      "duration_s": 90.56
+    },
+    {
+      "file": "safealert-ad-30s.mp4",
+      "aspect": "9:16",
+      "duration_s": 48.01,
+      "cut": "30s"
+    }
+  ],
+  "generated_at": "2026-05-30T13:37:48.933306Z"
+}

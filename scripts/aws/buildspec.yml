@@ -1,0 +1,37 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo "Source server.js (first 6 lines):"
+      - head -6 src/server.js
+      - grep -q "const path" src/server.js || (echo "ERROR stale src/server.js in build context" && exit 1)
+      - grep -q "express-async-errors" src/server.js || (echo "ERROR server.js missing express-async-errors" && exit 1)
+      - docker build --pull --no-cache -t $IMAGE_REPO_NAME:$IMAGE_TAG --build-arg CACHEBUST=$(date +%s) .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - |
+        if [ "$IMAGE_TAG" != "latest" ]; then
+          docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+        fi
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - |
+        if [ "$IMAGE_TAG" != "latest" ]; then
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+        fi
+      - docker run --rm -e NODE_ENV=production -e USE_MEMORY_DB=true -e PORT=8080 $IMAGE_REPO_NAME:$IMAGE_TAG node -e "require('./src/routes/index'); console.log('routes-ok')"
+      - |
+        docker run --rm -e NODE_ENV=production -e USE_MEMORY_DB=true -e PORT=8080 $IMAGE_REPO_NAME:$IMAGE_TAG \
+          sh -c 'node src/server.js & sleep 8; node -e "fetch(\"http://127.0.0.1:8080/v1/health\").then(r=>r.json()).then(d=>{console.log(\"health\",d.status,d.firestore_ok);process.exit(d.status===\"ok\"?0:1)}).catch(e=>{console.error(e);process.exit(1)})"'
+      - printf '{"ImageUri":"%s"}' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG > imageDetail.json
+
+artifacts:
+  files:
+    - imageDetail.json

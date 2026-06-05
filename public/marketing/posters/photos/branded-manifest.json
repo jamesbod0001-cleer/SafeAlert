@@ -1,0 +1,109 @@
+{
+  "branded": [
+    {
+      "file": "posters/photos/travel-check-branded-story.png",
+      "theme": "travel-check",
+      "format": "story"
+    },
+    {
+      "file": "posters/photos/travel-check-branded-square.png",
+      "theme": "travel-check",
+      "format": "square"
+    },
+    {
+      "file": "posters/photos/travel-check-branded-landscape.png",
+      "theme": "travel-check",
+      "format": "landscape"
+    },
+    {
+      "file": "posters/photos/estate-watch-branded-story.png",
+      "theme": "estate-watch",
+      "format": "story"
+    },
+    {
+      "file": "posters/photos/estate-watch-branded-square.png",
+      "theme": "estate-watch",
+      "format": "square"
+    },
+    {
+      "file": "posters/photos/estate-watch-branded-landscape.png",
+      "theme": "estate-watch",
+      "format": "landscape"
+    },
+    {
+      "file": "posters/photos/sos-closeup-branded-story.png",
+      "theme": "sos-closeup",
+      "format": "story"
+    },
+    {
+      "file": "posters/photos/sos-closeup-branded-square.png",
+      "theme": "sos-closeup",
+      "format": "square"
+    },
+    {
+      "file": "posters/photos/sos-closeup-branded-landscape.png",
+      "theme": "sos-closeup",
+      "format": "landscape"
+    },
+    {
+      "file": "posters/photos/whatsapp-community-branded-story.png",
+      "theme": "whatsapp-community",
+      "format": "story"
+    },
+    {
+      "file": "posters/photos/whatsapp-community-branded-square.png",
+      "theme": "whatsapp-community",
+      "format": "square"
+    },
+    {
+      "file": "posters/photos/whatsapp-community-branded-landscape.png",
+      "theme": "whatsapp-community",
+      "format": "landscape"
+    },
+    {
+      "file": "posters/photos/campus-safety-branded-story.png",
+      "theme": "campus-safety",
+      "format": "story"
+    },
+    {
+      "file": "posters/photos/campus-safety-branded-square.png",
+      "theme": "campus-safety",
+      "format": "square"
+    },
+    {
+      "file": "posters/photos/campus-safety-branded-landscape.png",
+      "theme": "campus-safety",
+      "format": "landscape"
+    },
+    {
+      "file": "posters/photos/driver-danfo-branded-story.png",
+      "theme": "driver-danfo",
+      "format": "story"
+    },
+    {
+      "file": "posters/photos/driver-danfo-branded-square.png",
+      "theme": "driver-danfo",
+      "format": "square"
+    },
+    {
+      "file": "posters/photos/driver-danfo-branded-landscape.png",
+      "theme": "driver-danfo",
+      "format": "landscape"
+    },
+    {
+      "file": "posters/photos/market-alert-branded-story.png",
+      "theme": "market-alert",
+      "format": "story"
+    },
+    {
+      "file": "posters/photos/market-alert-branded-square.png",
+      "theme": "market-alert",
+      "format": "square"
+    },
+    {
+      "file": "posters/photos/market-alert-branded-landscape.png",
+      "theme": "market-alert",
+      "format": "landscape"
+    }
+  ]
+}

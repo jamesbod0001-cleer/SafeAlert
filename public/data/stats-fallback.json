@@ -1,0 +1,103 @@
+{
+  "generated_at": "2026-05-24T14:33:43.330Z",
+  "stats": {
+    "total_active_zones": 2500,
+    "critical_zones": 0,
+    "high_zones": 1156,
+    "medium_zones": 1021,
+    "low_zones": 323,
+    "total_reports": 12230,
+    "active_panics": 0,
+    "live_count": 0,
+    "verified_zones": 2177,
+    "by_type": {
+      "banditry": 1959,
+      "armed_robbery": 541
+    },
+    "by_state": {
+      "Borno": 1372,
+      "Adamawa": 54,
+      "Katsina": 1,
+      "Niger": 9,
+      "Anambra": 68,
+      "Delta": 32,
+      "Kano": 5,
+      "Benue": 209,
+      "Ebonyi": 16,
+      "Federal Capital territory": 4,
+      "Osun": 20,
+      "Plateau": 61,
+      "Rivers": 26,
+      "Lagos": 76,
+      "Imo": 83,
+      "Cross River": 4,
+      "Abia": 28,
+      "Enugu": 26,
+      "Kogi": 12,
+      "Nigeria": 4,
+      "Ogun": 46,
+      "Oyo": 25,
+      "Ondo": 17,
+      "Bayelsa": 6,
+      "Edo": 36,
+      "Bauchi": 5,
+      "Sokoto": 5,
+      "Yobe": 56,
+      "Kaduna": 31,
+      "Taraba": 84,
+      "Kebbi": 1,
+      "Akwa Ibom": 9,
+      "Kwara": 21,
+      "Jigawa": 2,
+      "Nasarawa": 42,
+      "Ekiti": 3,
+      "Zamfara": 1
+    },
+    "top_states": [
+      {
+        "name": "Borno",
+        "count": 1372
+      },
+      {
+        "name": "Benue",
+        "count": 209
+      },
+      {
+        "name": "Taraba",
+        "count": 84
+      },
+      {
+        "name": "Imo",
+        "count": 83
+      },
+      {
+        "name": "Lagos",
+        "count": 76
+      },
+      {
+        "name": "Anambra",
+        "count": 68
+      },
+      {
+        "name": "Plateau",
+        "count": 61
+      },
+      {
+        "name": "Yobe",
+        "count": 56
+      },
+      {
+        "name": "Adamawa",
+        "count": 54
+      },
+      {
+        "name": "Ogun",
+        "count": 46
+      }
+    ],
+    "by_source": {
+      "hdx_ucdp": 2500
+    },
+    "last_updated": "2026-05-24T14:33:43.330Z"
+  }
+}

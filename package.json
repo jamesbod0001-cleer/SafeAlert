@@ -1,0 +1,61 @@
+{
+  "name": "safealert-ng-backend",
+  "version": "1.0.0",
+  "description": "SafeAlert NG — community safety API",
+  "main": "src/server.js",
+  "scripts": {
+    "kill-port": "node scripts/kill-port.js",
+    "start": "NODE_ENV=production node src/server.js",
+    "dev": "node scripts/kill-port.js && node --watch src/server.js",
+    "review": "node scripts/review-features.js",
+    "seed:routes": "node scripts/seed-routes.js",
+    "import:data": "node scripts/import-data.js",
+    "import:starter": "node scripts/import-data.js --starter --resources",
+    "import:starter:dry": "node scripts/import-data.js --starter --dry-run",
+    "sync:acled": "node scripts/sync-acled-live.js",
+    "sync:hdx": "node scripts/sync-hdx-live.js",
+    "build:zones-fallback": "node scripts/build-zones-fallback.js",
+    "reimport:all": "node scripts/reimport-all.js",
+    "stats:refresh": "node scripts/refresh-stats-cache.js",
+    "purge:simulated": "node scripts/purge-simulated-data.js",
+    "validate-env": "node scripts/validate-env.js",
+    "setup:secrets": "node scripts/generate-production-secrets.js",
+    "setup:firebase": "node scripts/apply-firebase-service-account.js credentials/serviceAccountKey.json",
+    "setup:firebase-web": "node scripts/apply-firebase-web-config.js credentials/firebase-web-config.json",
+    "setup:at": "node scripts/apply-africas-talking.js",
+    "setup:at:sandbox": "node scripts/apply-africas-talking.js sandbox",
+    "setup:credentials": "node scripts/fill-env-interactive.js",
+    "check:credentials": "node scripts/check-credentials.js",
+    "test:at-sms": "node scripts/test-at-sms.js",
+    "test:smoke": "node scripts/smoke-test-backend.js",
+    "ensure:settings": "node scripts/ensure-app-settings.js",
+    "fcm:sw": "node scripts/write-fcm-sw.js",
+    "marketing:voice": "python3 scripts/generate-ad-voiceover.py",
+    "marketing:video": "python3 scripts/build-marketing-video.py",
+    "marketing:posters": "python3 scripts/generate-marketing-posters.py && python3 scripts/brand-marketing-photos.py",
+    "deploy:aws": "bash scripts/aws/deploy-apprunner.sh",
+    "flutter:run": "cd flutter_app && flutter run --dart-define=SAFEALERT_API=https://qrhtc5kg79.us-east-1.awsapprunner.com/v1",
+    "flutter:build:android": "cd flutter_app && flutter build apk --release --dart-define=SAFEALERT_API=https://qrhtc5kg79.us-east-1.awsapprunner.com/v1",
+    "flutter:build:ios": "cd flutter_app && flutter build ios --release --dart-define=SAFEALERT_API=https://qrhtc5kg79.us-east-1.awsapprunner.com/v1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "africastalking": "^0.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-async-errors": "^3.1.1",
+    "express-rate-limit": "^7.5.1",
+    "firebase-admin": "^13.0.2",
+    "helmet": "^8.2.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "ngeohash": "^0.6.3"
+  },
+  "devDependencies": {
+    "edge-tts": "^1.0.1"
+  }
+}

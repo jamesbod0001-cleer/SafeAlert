@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-NG">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Download SafeAlert NG — iPhone &amp; Android</title>
+  <meta name="description" content="Free community safety app for Nigeria. iPhone, Android, and web."/>
+  <meta name="theme-color" content="#12B76A"/>
+  <link rel="icon" href="icons/icon-512.png"/>
+  <link rel="apple-touch-icon" href="icons/icon-512.png"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,sans-serif;background:#050810;color:#fff;min-height:100dvh;padding:24px 20px 40px;max-width:480px;margin:0 auto}
+    .logo{font-size:28px;font-weight:900;margin-bottom:4px}
+    .logo em{color:#12B76A;font-style:normal}
+    .tag{color:#12B76A;font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:20px}
+    h1{font-size:22px;line-height:1.35;margin-bottom:10px}
+    .lead{font-size:14px;color:rgba(255,255,255,.72);line-height:1.6;margin-bottom:24px}
+    .card{background:#0A0E1A;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px;margin-bottom:16px}
+    .card h2{font-size:15px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .card p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.55;margin-bottom:14px}
+    .stores{display:flex;flex-direction:column;gap:10px}
+    .store{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;text-decoration:none;font-weight:800;font-size:14px;color:#fff;transition:transform .15s}
+    .store:active{transform:scale(.98)}
+    .store-ios{background:linear-gradient(135deg,#333,#111);border:1px solid rgba(255,255,255,.15)}
+    .store-android{background:linear-gradient(135deg,#12B76A,#0d9660);color:#041208}
+    .store-web{background:#111827;border:1px solid rgba(18,183,106,.35);color:#12B76A}
+    .store small{display:block;font-weight:600;font-size:11px;opacity:.85;margin-top:2px}
+    .steps{font-size:13px;color:rgba(255,255,255,.75);line-height:1.65;padding-left:18px}
+    .steps li{margin-bottom:8px}
+    .pill{display:inline-block;background:rgba(18,183,106,.15);color:#12B76A;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;margin-bottom:12px}
+    .foot{margin-top:28px;font-size:12px;color:rgba(255,255,255,.45);text-align:center;line-height:1.5}
+    .foot a{color:#12B76A}
+    #platform-hint{display:none}
+    #platform-hint.show{display:block}
+  </style>
+</head>
+<body>
+  <div class="logo">Safe<em>Alert</em> NG</div>
+  <div class="tag">YOUR PEOPLE. NOT GOVERNMENT.</div>
+
+  <h1>Get SafeAlert on your phone</h1>
+  <p class="lead">Free on <strong>iPhone</strong> and <strong>Android</strong>. Community alerts, SOS, estate watch — built for Nigeria.</p>
+
+  <div id="platform-hint" class="card"></div>
+
+  <div class="card">
+    <div class="pill">Recommended</div>
+    <h2>📱 Download the app</h2>
+    <div class="stores" id="store-links">
+      <a class="store store-ios" id="link-ios" href="#">
+        <span style="font-size:22px"></span>
+        <span>iPhone<br/><small>App Store</small></span>
+      </a>
+      <a class="store store-android" id="link-android" href="#">
+        <span style="font-size:22px">▶</span>
+        <span>Android<br/><small>Google Play</small></span>
+      </a>
+      <a class="store store-web" id="link-web" href="/app/">
+        <span style="font-size:22px">🌐</span>
+        <span>Use in browser<br/><small>Works on any phone</small></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card" id="pwa-ios" style="display:none">
+    <h2>🍎 Add to iPhone Home Screen</h2>
+    <ol class="steps">
+      <li>Open <strong>safealert.ng/app</strong> in <strong>Safari</strong></li>
+      <li>Tap <strong>Share</strong> → <strong>Add to Home Screen</strong></li>
+      <li>Allow notifications when prompted</li>
+    </ol>
+  </div>
+
+  <div class="card" id="pwa-android" style="display:none">
+    <h2>🤖 Add to Android Home Screen</h2>
+    <ol class="steps">
+      <li>Open in <strong>Chrome</strong></li>
+      <li>Tap menu <strong>⋮</strong> → <strong>Install app</strong> or <strong>Add to Home screen</strong></li>
+      <li>Allow location &amp; notifications for SOS</li>
+    </ol>
+    <p id="apk-note" style="display:none;margin-top:12px;font-size:12px;color:#12B76A"></p>
+  </div>
+
+  <div class="card">
+    <h2>Why install?</h2>
+    <ul class="steps">
+      <li><strong>Push alerts</strong> when someone nearby panics</li>
+      <li><strong>GPS SOS</strong> to your circle on WhatsApp</li>
+      <li><strong>Offline maps</strong> — works on low data</li>
+      <li><strong>Free</strong> — no subscription</li>
+    </ul>
+  </div>
+
+  <p class="foot">Already have the app? <a href="/app/">Open SafeAlert →</a></p>
+
+  <script>
+    (function () {
+      const ua = navigator.userAgent || '';
+      const isIos = /iPhone|iPad|iPod/i.test(ua);
+      const isAndroid = /Android/i.test(ua);
+      const cfg = { ios: null, android: null, apk: null };
+
+      async function loadConfig() {
+        try {
+          const r = await fetch('/v1/config/public');
+          const j = await r.json();
+          const m = j.mobile || {};
+          cfg.ios = m.ios_app_store_url;
+          cfg.android = m.android_play_store_url;
+          cfg.apk = m.android_apk_url;
+        } catch (_) {}
+        applyLinks();
+      }
+
+      function applyLinks() {
+        const dl = location.origin + '/app/download.html';
+        const ios = document.getElementById('link-ios');
+        const android = document.getElementById('link-android');
+
+        ios.href = cfg.ios || dl + '#iphone';
+        android.href = cfg.android || cfg.apk || dl + '#android';
+
+        const hint = document.getElementById('platform-hint');
+        if (isIos) {
+          hint.className = 'card show';
+          hint.innerHTML = cfg.ios
+            ? '<p style="font-size:13px;line-height:1.5">Tap <strong>App Store</strong> below, or add the web app to your Home Screen.</p>'
+            : '<p style="font-size:13px;line-height:1.5">Native iPhone app coming to App Store soon. Use <strong>Add to Home Screen</strong> below for now — works like an app.</p>';
+          document.getElementById('pwa-ios').style.display = 'block';
+        } else if (isAndroid) {
+          hint.className = 'card show';
+          hint.innerHTML = cfg.android
+            ? '<p style="font-size:13px;line-height:1.5">Tap <strong>Google Play</strong> below for the full Android app.</p>'
+            : '<p style="font-size:13px;line-height:1.5">Install from Google Play when live, or use <strong>Install app</strong> in Chrome below.</p>';
+          document.getElementById('pwa-android').style.display = 'block';
+          if (cfg.apk) {
+            const n = document.getElementById('apk-note');
+            n.style.display = 'block';
+            n.innerHTML = 'Direct APK: <a href="' + cfg.apk + '" style="color:#12B76A">Download Android APK</a>';
+          }
+        }
+
+        if (location.hash === '#iphone') document.getElementById('pwa-ios').style.display = 'block';
+        if (location.hash === '#android') document.getElementById('pwa-android').style.display = 'block';
+      }
+
+      loadConfig();
+    })();
+  </script>
+</body>
+</html>

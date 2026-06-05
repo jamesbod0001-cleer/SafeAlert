@@ -1,0 +1,27 @@
+{
+  "routes": [
+    { "from": "Lagos", "to": "Abuja", "via": "Ore–Okene–Lokoja", "safety_score": 72, "travelers_last_2h": 120 },
+    { "from": "Abuja", "to": "Kaduna", "via": "A2 Highway", "safety_score": 28, "travelers_last_2h": 45 },
+    { "from": "Kano", "to": "Maiduguri", "via": "A3 Highway", "safety_score": 15, "travelers_last_2h": 8 },
+    { "from": "Benin", "to": "Ore", "via": "E28 Route", "safety_score": 68, "travelers_last_2h": 90 }
+  ],
+  "zones": [
+    {
+      "lat": 10.5221,
+      "lng": 7.4378,
+      "type": "kidnapping",
+      "description": "Review fixture — highway incident",
+      "device_id": "review-device-001"
+    },
+    {
+      "lat": 7.7973,
+      "lng": 6.7408,
+      "type": "armed_robbery",
+      "description": "Review fixture — junction reports",
+      "device_id": "review-device-002"
+    }
+  ],
+  "groups": [
+    { "id": "grp-review-1", "name": "Review Transport Union", "type": "transport_union", "state": "Kaduna", "member_count": 100, "alert_radius_km": 50 }
+  ]
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en-NG">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>SafeAlert NG — Marketing Videos</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,sans-serif;background:#050810;color:#fff;padding:24px;max-width:960px;margin:0 auto}
+    h1{font-size:1.75rem;margin-bottom:8px}
+    h1 em{color:#12B76A;font-style:normal}
+    p{color:rgba(255,255,255,.7);margin-bottom:24px;line-height:1.5}
+    .grid{display:grid;gap:20px}
+    @media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
+    .card{background:#0A0E1A;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px}
+    .card h2{font-size:1rem;margin-bottom:8px}
+    .card video{width:100%;border-radius:10px;background:#000;margin-bottom:12px}
+    .meta{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px}
+    a.dl{display:inline-block;background:#12B76A;color:#041208;font-weight:800;padding:10px 16px;border-radius:10px;text-decoration:none;font-size:13px}
+    a.dl:hover{filter:brightness(1.08)}
+    code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-size:12px}
+  </style>
+</head>
+<body>
+  <h1>Safe<em>Alert</em> NG — Ad exports</h1>
+  <p>Professional marketing videos with Nigerian English voiceover, captions, and subtle background bed. Regenerate with <code>npm run marketing:video</code>. <a href="../posters/" style="color:#12B76A">Posters &amp; images →</a></p>
+
+  <div class="grid">
+    <article class="card">
+      <h2>9:16 — Reels / TikTok / WhatsApp</h2>
+      <p class="meta">1080×1920 · ~90s · H.264</p>
+      <video controls playsinline src="safealert-ad-9x16.mp4" poster="../poster.png"></video>
+      <a class="dl" download href="safealert-ad-9x16.mp4">Download MP4</a>
+    </article>
+    <article class="card">
+      <h2>16:9 — YouTube / TV / Facebook</h2>
+      <p class="meta">1920×1080 · ~90s · H.264</p>
+      <video controls playsinline src="safealert-ad-16x9.mp4" poster="../poster.png"></video>
+      <a class="dl" download href="safealert-ad-16x9.mp4">Download MP4</a>
+    </article>
+    <article class="card">
+      <h2>Short cut — SOS hook</h2>
+      <p class="meta">1080×1920 · scenes 1, 3, 5, 7 · ~48s</p>
+      <video controls playsinline src="safealert-ad-30s.mp4" poster="../ad-scene-panic.png"></video>
+      <a class="dl" download href="safealert-ad-30s.mp4">Download MP4</a>
+    </article>
+    <article class="card">
+      <h2>Interactive preview</h2>
+      <p class="meta">Browser player with scene controls</p>
+      <p style="margin-bottom:12px;color:rgba(255,255,255,.65);font-size:14px">Use for live demos or re-recording with different VO files.</p>
+      <a class="dl" href="../safealert-ad.html?autoplay=1">Open interactive ad →</a>
+    </article>
+  </div>
+</body>
+</html>

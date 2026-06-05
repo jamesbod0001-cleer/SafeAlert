@@ -1,0 +1,47 @@
+[
+  {
+    "id": "tip_shaken_en",
+    "lang": "en",
+    "category": "after_incident",
+    "title": "You are safe but shaken",
+    "body": "It is normal to feel fear after danger. Breathe slowly. Sit somewhere safe. Tell one person you trust you are okay.",
+    "voice_hint": "You are safe. It is normal to feel fear. Breathe slowly. Tell someone you trust you are okay.",
+    "active": true
+  },
+  {
+    "id": "tip_shaken_pcm",
+    "lang": "pcm",
+    "category": "after_incident",
+    "title": "You dey safe but fear catch you",
+    "body": "E normal to feel fear after wahala. Breathe slow. Sit for safe place. Call person wey you trust.",
+    "voice_hint": "You dey safe. Fear dey normal. Breathe slow. Call person wey you trust.",
+    "active": true
+  },
+  {
+    "id": "tip_shaken_ha",
+    "lang": "ha",
+    "category": "after_incident",
+    "title": "Kuna cikin aminci",
+    "body": "Yana da al'ada a ji tsoro bayan hatsari. Ku yi numfashi a hankali. Ku zauna a wuri mai aminci.",
+    "voice_hint": "Kuna cikin aminci. Yi numfashi a hankali.",
+    "active": true
+  },
+  {
+    "id": "tip_help_lines",
+    "lang": "en",
+    "category": "support",
+    "title": "Talk to someone",
+    "body": "If you need to talk, contact a trusted NGO or counsellor in your state. SafeAlert does not replace professional care.",
+    "voice_hint": "If you need to talk, contact a trusted helper in your area.",
+    "active": true
+  },
+  {
+    "id": "tip_community",
+    "lang": "en",
+    "category": "community",
+    "title": "You are not alone",
+    "body": "Many Nigerians watch out for each other on the road. Your circle and community reports help others travel safer.",
+    "voice_hint": "You are not alone. Your community helps others stay safe.",
+    "active": true
+  }
+]
