@@ -1029,6 +1029,7 @@ function closeSheets() {
   document.getElementById('zone-sheet')?.classList.remove('show');
   document.getElementById('profile-sheet')?.classList.remove('show');
   document.getElementById('journey-end-sheet')?.classList.remove('show');
+  document.getElementById('panic-disclaimer-sheet')?.classList.remove('show');
   showLoader(false);
 }
 
@@ -1194,15 +1195,18 @@ function updateProfileUI() {
   const out = document.getElementById('profile-signed-out');
   const inn = document.getElementById('profile-signed-in');
   const card = document.getElementById('profile-card');
+  const guestFooter = document.getElementById('profile-legal-footer-guest');
   if (state.token) {
     out.style.display = 'none';
     inn.style.display = 'block';
+    if (guestFooter) guestFooter.style.display = 'none';
     card.innerHTML = `<div style="font-size:14px;font-weight:700">Signed in</div>
       <div style="font-size:11px;color:var(--text2);margin-top:4px">Device ${escapeHtml(state.deviceId.slice(0, 16))}…</div>`;
     syncPreferencesUI();
   } else {
     out.style.display = 'block';
     inn.style.display = 'none';
+    if (guestFooter) guestFooter.style.display = 'block';
   }
   window.SafeAlertZeroBudget?.renderGuestBanner?.(window.SAFEALERT_PUBLIC_CONFIG || {});
   syncCircleSetupNudge();
@@ -1794,6 +1798,42 @@ function setGPSBox(lat, lng, demo = false) {
 }
 
 // ── PANIC ─────────────────────────────────────────────────────────────────────
+function ensurePanicDisclaimerAccepted() {
+  if (localStorage.getItem('sa_panic_disclaimer') === '1') return Promise.resolve(true);
+  return new Promise((resolve) => {
+    const sheet = document.getElementById('panic-disclaimer-sheet');
+    const bg = document.getElementById('sheet-bg');
+    const accept = document.getElementById('panic-disclaimer-accept');
+    const cancel = document.getElementById('panic-disclaimer-cancel');
+    if (!sheet || !bg || !accept || !cancel) return resolve(false);
+
+    const cleanup = () => {
+      accept.removeEventListener('click', onAccept);
+      cancel.removeEventListener('click', onCancel);
+    };
+    const onAccept = () => {
+      localStorage.setItem('sa_panic_disclaimer', '1');
+      sheet.classList.remove('show');
+      if (!document.querySelector('.sheet.show')) bg.classList.remove('show');
+      cleanup();
+      resolve(true);
+    };
+    const onCancel = () => {
+      sheet.classList.remove('show');
+      if (!document.querySelector('.sheet.show')) bg.classList.remove('show');
+      cleanup();
+      resolve(false);
+    };
+
+    sheetOpenedAt = Date.now();
+    window.sheetOpenedAt = sheetOpenedAt;
+    bg.classList.add('show');
+    sheet.classList.add('show');
+    accept.addEventListener('click', onAccept);
+    cancel.addEventListener('click', onCancel);
+  });
+}
+
 function holdStart() {
   holdProg = 0;
   const arc = document.getElementById('panic-arc');
@@ -1825,6 +1865,7 @@ function holdStop() {
 async function doPanic() {
   holdStop();
   if (!(await ensureAuth())) return;
+  if (!(await ensurePanicDisclaimerAccepted())) return;
   window.SafeAlertCitizenSOS?.warnIfCircleEmpty?.();
   try {
     const { lat, lng } = effectiveCoords();
@@ -2440,6 +2481,8 @@ window.api = api;
 window.apiGetCached = apiGetCached;
 window.loadData = loadData;
 window.doPanic = doPanic;
+window.activatePanic = doPanic;
+window.ensurePanicDisclaimerAccepted = ensurePanicDisclaimerAccepted;
 window.deactivatePanic = deactivatePanic;
 window.syncNearbyPanicCard = syncNearbyPanicCard;
 window.respondToPanic = respondToPanic;

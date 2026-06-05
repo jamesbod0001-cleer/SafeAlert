@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>SafeAlert NG — Privacy Policy</title>
+  <style>
+    :root{--bg:#0a0e14;--surface:#121820;--text:#f4f6f8;--text2:#9aa4b2;--green:#12b76a;--amber:#f79009;--border:#2a3441;font-family:system-ui,sans-serif}
+    body{margin:0;background:var(--bg);color:var(--text);padding:20px 18px 40px;max-width:520px;margin:0 auto;line-height:1.55}
+    h1{font-size:22px;margin:0 0 8px}
+    .sub{color:var(--text2);font-size:13px;margin-bottom:20px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+    .card h2{font-size:14px;margin:0 0 10px;color:var(--green)}
+    .card p,.card li{font-size:13px;color:var(--text2);margin:0 0 8px}
+    .card ul{padding-left:18px;margin:0}
+    .card li{margin-bottom:6px}
+    a{color:var(--green)}
+    .btn{display:inline-block;margin-top:16px;padding:12px 18px;background:var(--green);color:#fff;text-decoration:none;border-radius:10px;font-weight:700}
+    code{font-size:12px;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px}
+  </style>
+</head>
+<body>
+  <h1>Privacy Policy</h1>
+  <p class="sub">How SafeAlert handles your data — citizen network, not government surveillance.</p>
+
+  <div class="card">
+    <h2>Phone numbers</h2>
+    <p>Your phone number is stored as a one-way <strong>SHA-256 hash</strong>, not in plain text. We use the hash only to verify OTP sign-in and match your account. We do not sell or share phone numbers with third parties.</p>
+  </div>
+
+  <div class="card">
+    <h2>Location data</h2>
+    <p>Live GPS is shared only while a <strong>journey</strong> or <strong>panic</strong> is active, or when you opt in to help nearby. When your journey ends or you mark yourself safe after a panic, your live location is <strong>deleted</strong> from our servers.</p>
+  </div>
+
+  <div class="card">
+    <h2>Help nearby (opt-in)</h2>
+    <p>Receiving alerts when someone near you needs help is <strong>off by default</strong>. You must turn on <em>Help nearby</em> in your profile. We never show your exact address in push notifications.</p>
+  </div>
+
+  <div class="card">
+    <h2>Safety circle</h2>
+    <p>Names and phone numbers you add to your safety circle are <strong>encrypted at rest</strong>. Only you can view and manage your circle contacts. They receive alerts only when you trigger panic or start a journey.</p>
+  </div>
+
+  <div class="card">
+    <h2>No government data sharing</h2>
+    <p>SafeAlert does <strong>not</strong> automatically share your data, location, or reports with police, military, or government agencies. Community alerts are citizen-reported. You choose who to call in an emergency.</p>
+  </div>
+
+  <div class="card">
+    <h2>Account deletion</h2>
+    <p>You can delete your account and all associated data at any time by calling <code>DELETE /user/account</code> while signed in. This removes your profile, circle, panic history, and preferences.</p>
+  </div>
+
+  <div class="card">
+    <h2>Contact</h2>
+    <p>Questions about privacy? Email <a href="mailto:privacy@safealert.ng">privacy@safealert.ng</a></p>
+  </div>
+
+  <p style="font-size:11px;color:var(--text2)">Last updated June 2026</p>
+  <a class="btn" href="index.html">← Back to app</a>
+</body>
+</html>
