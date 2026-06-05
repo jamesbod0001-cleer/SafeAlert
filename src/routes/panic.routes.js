@@ -7,7 +7,7 @@ const { panicLimiter } = require('../middleware/rateLimiter');
 const appConfig = require('../config/appConfig');
 const { db } = require('../config/db');
 const panicService = require('../services/panicService');
-const notifyQueue = require('../services/notifyQueue');
+const notifyJobsService = require('../services/notifyJobsService');
 const locationService = require('../services/locationService');
 const fallbackData = require('../services/fallbackDataService');
 const logger = require('../utils/logger');
@@ -138,58 +138,14 @@ router.post('/panic/activate', requireAuth, panicLimiter, validate('activatePani
     panic_active: true,
   });
 
-  const { circlePhones, circleFCMTokens } = await panicService.getCirclePhonesAndTokens(user);
+  const { circlePhones } = await panicService.getCirclePhonesAndTokens(updatedUser);
 
-  notifyQueue.enqueueNamed('panic-notify', async () => {
-    try {
-      const circleResult = await panicService.notifyCircleAsync(
-        updatedUser,
-        lat,
-        lng,
-        circlePhones,
-        circleFCMTokens,
-        event.id
-      );
-
-      let nearbyNotified = 0;
-      let estateNotified = 0;
-      const estate = await panicService.notifyEstateWatchAsync(
-        updatedUser,
-        lat,
-        lng,
-        event.id,
-        req.body.message
-      );
-      estateNotified = estate.notified;
-
-      if (appConfig.panicAutoBroadcastEnabled) {
-        const nearby = await panicService.notifyNearbyAsync(
-          lat,
-          lng,
-          user.id,
-          event.id,
-          req.body.message
-        );
-        nearbyNotified = nearby.notified;
-        await db().collection('panic_events').doc(event.id).update({
-          circle_notified: circleResult.sms,
-          nearby_notified: nearbyNotified,
-          estate_notified: estateNotified,
-          notified_user_ids: [...new Set([...(nearby.userIds || []), ...(estate.userIds || [])])],
-        });
-      } else {
-        await db().collection('panic_events').doc(event.id).update({
-          circle_notified: circleResult.sms,
-          estate_notified: estateNotified,
-        });
-      }
-
-      logger.info(
-        `PANIC notify complete: ${event.id} SMS:${circleResult.sms} nearby:${nearbyNotified} estate:${estateNotified}`
-      );
-    } catch (err) {
-      logger.error('Panic notify job failed:', err.message);
-    }
+  await notifyJobsService.enqueueJob('panic-notify', {
+    eventId: event.id,
+    userId: user.id,
+    lat,
+    lng,
+    message: req.body.message,
   });
 
   res.status(202).json({
@@ -223,8 +179,14 @@ router.post('/panic/broadcast', requireAuth, async (req, res) => {
   const active = await panicService.getActivePanicForUser(req.user.id);
   const panicId = active?.id || req.body.panic_id;
 
-  notifyQueue.enqueueNamed('panic-broadcast', async () => {
-    await panicService.notifyNearbyAsync(lat, lng, req.user.id, panicId, req.body.message);
+  notifyJobsService.enqueueJob('panic-broadcast', {
+    lat,
+    lng,
+    userId: req.user.id,
+    panicId,
+    message: req.body.message,
+  }).catch((err) => {
+    logger.error('Panic broadcast enqueue failed:', err.message);
   });
 
   res.status(202).json({ success: true, message: 'Broadcast queued', notifications_async: true });

@@ -1,4 +1,3 @@
-const notifyQueue = require('./notifyQueue');
 const { getNearbyUsers } = require('./geoService');
 const pushService = require('./pushService');
 const smsService = require('./smsService');
@@ -40,19 +39,27 @@ async function notifyCriticalZone(zone) {
 }
 
 function enqueueZoneCreatedNotify(zone) {
-  notifyQueue.enqueueNamed('zone-created', () =>
-    notifyZoneNearbyUsers(zone, appConfig.defaultNotifyRadiusKm).catch((err) => {
-      logger.error('Zone created notify failed:', err.message);
-    })
-  );
+  if (!zone?.id) {
+    logger.error('Zone created notify skipped: missing zone id');
+    return;
+  }
+  require('./notifyJobsService')
+    .enqueueJob('zone-created', { zoneId: zone.id })
+    .catch((err) => {
+      logger.error('Zone created notify enqueue failed:', err.message);
+    });
 }
 
 function enqueueCriticalZoneNotify(zone) {
-  notifyQueue.enqueueNamed('zone-critical', () =>
-    notifyCriticalZone(zone).catch((err) => {
-      logger.error('Critical zone notify failed:', err.message);
-    })
-  );
+  if (!zone?.id) {
+    logger.error('Critical zone notify skipped: missing zone id');
+    return;
+  }
+  require('./notifyJobsService')
+    .enqueueJob('zone-critical', { zoneId: zone.id })
+    .catch((err) => {
+      logger.error('Critical zone notify enqueue failed:', err.message);
+    });
 }
 
 module.exports = {

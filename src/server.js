@@ -11,6 +11,7 @@ const morgan = require('morgan');
 const routes = require('./routes/index');
 const smsService = require('./services/smsService');
 const { initFirebase } = require('./config/firebase');
+const notifyJobsService = require('./services/notifyJobsService');
 const { seedReviewDataIfEnabled } = require('./config/seedReviewData');
 const resourceService = require('./services/resourceService');
 const { startMaintenanceScheduler } = require('./services/locationCleanup');
@@ -105,6 +106,7 @@ async function bootstrap() {
   }
 
   initFirebase();
+  await notifyJobsService.init();
   smsService.initAT();
 
   try {

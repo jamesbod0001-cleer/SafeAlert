@@ -19,6 +19,7 @@ const store = {
   ussd_reports: {},
   otps: {},
   panic_events: {},
+  notify_jobs: {},
   check_ins: {},
   resources: {},
   journey_sessions: {},

@@ -297,6 +297,77 @@ async function notifyEstateWatchAsync(user, lat, lng, panicId, message) {
   return require('./estateService').notifyEstateWatch(user, lat, lng, panicId, message);
 }
 
+function parseJobCoords(payload) {
+  const lat = Number(payload?.lat);
+  const lng = Number(payload?.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+    throw new Error('Panic notify job requires valid lat/lng');
+  }
+  return { lat, lng };
+}
+
+async function getUserForNotifyJob(userId) {
+  const snap = await db().collection('users').doc(userId).get();
+  if (!snap.exists) {
+    throw new Error(`User ${userId} not found for panic notify job`);
+  }
+  return { id: snap.id, ...snap.data() };
+}
+
+async function runPanicNotifyJob(payload = {}) {
+  if (!payload.eventId || !payload.userId) {
+    throw new Error('panic-notify job requires eventId and userId');
+  }
+
+  const { lat, lng } = parseJobCoords(payload);
+  const user = await getUserForNotifyJob(payload.userId);
+  const { circlePhones, circleFCMTokens } = await getCirclePhonesAndTokens(user);
+
+  const circleResult = await notifyCircleAsync(
+    user,
+    lat,
+    lng,
+    circlePhones,
+    circleFCMTokens,
+    payload.eventId
+  );
+
+  const estate = await notifyEstateWatchAsync(user, lat, lng, payload.eventId, payload.message);
+  const estateNotified = estate?.notified || 0;
+
+  let nearbyNotified = 0;
+  let nearbyUserIds = [];
+  if (appConfig.panicAutoBroadcastEnabled) {
+    const nearby = await notifyNearbyAsync(lat, lng, payload.userId, payload.eventId, payload.message);
+    nearbyNotified = nearby?.notified || 0;
+    nearbyUserIds = nearby?.userIds || [];
+  }
+
+  const updates = {
+    circle_notified: circleResult.sms,
+    estate_notified: estateNotified,
+  };
+
+  if (appConfig.panicAutoBroadcastEnabled) {
+    updates.nearby_notified = nearbyNotified;
+    updates.notified_user_ids = [...new Set([...(nearbyUserIds || []), ...((estate && estate.userIds) || [])])];
+  }
+
+  await db().collection('panic_events').doc(payload.eventId).update(updates);
+
+  logger.info(
+    `PANIC notify complete: ${payload.eventId} SMS:${circleResult.sms} nearby:${nearbyNotified} estate:${estateNotified}`
+  );
+}
+
+async function runPanicBroadcastJob(payload = {}) {
+  if (!payload.userId) {
+    throw new Error('panic-broadcast job requires userId');
+  }
+  const { lat, lng } = parseJobCoords(payload);
+  await notifyNearbyAsync(lat, lng, payload.userId, payload.panicId, payload.message);
+}
+
 async function notifyVictimResponderOnWay(victimId, responderUser, panicId, shortId, responderCount) {
   const victimSnap = await db().collection('users').doc(victimId).get();
   if (!victimSnap.exists) return { sent: 0 };
@@ -331,6 +402,8 @@ module.exports = {
   notifyCircleAsync,
   notifyNearbyAsync,
   notifyEstateWatchAsync,
+  runPanicNotifyJob,
+  runPanicBroadcastJob,
   listNearbyActivePanics,
   getPanicById,
   addResponder,
