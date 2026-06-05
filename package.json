@@ -28,7 +28,7 @@
     "check:credentials": "node scripts/check-credentials.js",
     "test:at-sms": "node scripts/test-at-sms.js",
     "test:smoke": "node scripts/smoke-test-backend.js",
-    "test": "NODE_ENV=test USE_MEMORY_DB=true SEED_REVIEW_DATA=true jest tests/api.test.js --forceExit",
+    "test": "NODE_ENV=test USE_MEMORY_DB=true SEED_REVIEW_DATA=true jest --forceExit",
     "ensure:settings": "node scripts/ensure-app-settings.js",
     "fcm:sw": "node scripts/write-fcm-sw.js",
     "marketing:voice": "python3 scripts/generate-ad-voiceover.py",
@@ -63,6 +63,10 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testTimeout": 30000
+    "testTimeout": 30000,
+    "testMatch": [
+      "**/tests/api.test.js",
+      "**/tests/geo.test.js"
+    ]
   }
 }
