@@ -65,6 +65,7 @@
 
   function applyPublicConfig(cfg) {
     window.SAFEALERT_PUBLIC_CONFIG = cfg || {};
+    window.publicConfig = cfg || {};
     window.SAFEALERT_BUDGET_MODE = !!cfg?.budget_mode;
     if (cfg?.data_saver_recommended && window.SafeAlertDataSaver) {
       window.SafeAlertDataSaver.applyBudgetMode?.(!!cfg.budget_mode);

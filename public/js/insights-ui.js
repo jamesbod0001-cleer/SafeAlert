@@ -102,6 +102,60 @@
     window.buildInsights();
   };
 
+  let nigeriaStatesCache = null;
+
+  async function ensureNigeriaStates() {
+    if (nigeriaStatesCache?.length) return nigeriaStatesCache;
+    const cfg = window.publicConfig || window.SAFEALERT_PUBLIC_CONFIG;
+    if (cfg?.nigeria_states?.length) {
+      nigeriaStatesCache = cfg.nigeria_states;
+      return nigeriaStatesCache;
+    }
+    if (typeof window.loadStateList === 'function') {
+      nigeriaStatesCache = await window.loadStateList();
+      return nigeriaStatesCache;
+    }
+    try {
+      const res = await window.api('/config/public');
+      window.publicConfig = res;
+      nigeriaStatesCache = res.nigeria_states || [];
+      return nigeriaStatesCache;
+    } catch {
+      return [];
+    }
+  }
+
+  function buildStateEntries(s, allStates) {
+    const byState = s.by_state || {};
+    const norm = (name) => (typeof window.normState === 'function' ? window.normState(name) : name);
+    const countFor = (name) => {
+      const n = norm(name);
+      return byState[n] ?? byState[name] ?? 0;
+    };
+
+    if (!allStates?.length) {
+      return (s.top_states || []).map((st) => ({
+        key: st.name,
+        label: st.name,
+        value: st.count,
+        color: 'var(--amber)',
+      }));
+    }
+
+    return allStates
+      .map((st) => {
+        const name = st.name || st.state || st;
+        const count = countFor(name);
+        return {
+          key: name,
+          label: count > 0 ? name : `${name} — Be the first to report`,
+          value: count,
+          color: count > 0 ? 'var(--amber)' : 'var(--text3)',
+        };
+      })
+      .sort((a, b) => b.value - a.value || String(a.key).localeCompare(String(b.key)));
+  }
+
   function renderDrillPanel(s) {
     const drill = window.insightsDrill || { level: 'root' };
     const p = pool();
@@ -113,15 +167,22 @@
       if (head) {
         head.innerHTML = `${t('hot_states')} <span style="font-weight:400;color:var(--text3)">· ${t('tap_to_explore')}</span>`;
       }
-      const entries = (s.top_states || []).map((st) => ({
-        key: st.name,
-        label: st.name,
-        value: st.count,
-        color: 'var(--amber)',
-      }));
+      const allStates =
+        nigeriaStatesCache ||
+        window.publicConfig?.nigeria_states ||
+        window.SAFEALERT_PUBLIC_CONFIG?.nigeria_states ||
+        [];
+      const entries = buildStateEntries(s, allStates);
       el.innerHTML = entries.length
         ? clickableBars(entries, 'var(--amber)', 'drillInsightsState')
         : '<p style="font-size:12px;color:var(--text3)">No state data yet</p>';
+      if (!allStates.length) {
+        ensureNigeriaStates().then((states) => {
+          if (!states.length) return;
+          const merged = buildStateEntries(s, states);
+          if (merged.length) el.innerHTML = clickableBars(merged, 'var(--amber)', 'drillInsightsState');
+        });
+      }
       return;
     }
 

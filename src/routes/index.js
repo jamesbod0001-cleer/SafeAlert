@@ -148,6 +148,7 @@ router.get('/config/public', (req, res) => {
           vapidKey: appConfig.firebaseWebVapidKey,
         }
       : null,
+    nigeria_states: require('../config/nigeriaStates.json'),
   });
 });
 

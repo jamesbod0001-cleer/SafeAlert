@@ -119,6 +119,8 @@ window.SafeAlertI18n = {
     ussd_title: 'No smartphone data?',
     checkin: 'Safe Check-in',
     onboarding_welcome: 'Welcome to SafeAlert',
+    onboarding_state_title: 'Your state',
+    onboarding_download_pack: 'Download {state} offline pack',
     legend_title: 'What alerts mean',
     start_journey: 'Start journey',
     arrived_safely: 'Arrived safely',

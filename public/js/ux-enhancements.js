@@ -277,12 +277,27 @@
           );
         }
       }
+      if (step === 2) {
+        if (typeof window.getOnboardingWantsPack === 'function' && window.getOnboardingWantsPack()) {
+          const state =
+            typeof window.getOnboardingSelectedState === 'function'
+              ? window.getOnboardingSelectedState()
+              : '';
+          if (state && typeof window.offerOfflinePack === 'function') {
+            await window.offerOfflinePack(state);
+          }
+        }
+        if (typeof window.setOnboardingWantsPack === 'function') window.setOnboardingWantsPack(false);
+      }
       step += 1;
       if (step >= steps.length) {
         localStorage.setItem(ONBOARDING_KEY, '1');
         ob.classList.remove('show');
         if (!window.state?.token && typeof openProfile === 'function') openProfile();
         return;
+      }
+      if (step === 2 && typeof window.initOnboardingStateStep === 'function') {
+        window.initOnboardingStateStep();
       }
       show(step);
     });
