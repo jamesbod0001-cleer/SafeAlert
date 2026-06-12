@@ -50,6 +50,7 @@
     "marketing:video": "python3 scripts/build-marketing-video.py",
     "marketing:posters": "python3 scripts/generate-marketing-posters.py && python3 scripts/brand-marketing-photos.py",
     "deploy:aws": "bash scripts/aws/deploy-apprunner.sh",
+    "secrets:push": "node scripts/aws/push-secrets-manager.js",
     "flutter:run": "cd flutter_app && flutter run --dart-define=SAFEALERT_API=${SAFEALERT_API:-https://qrhtc5kg79.us-east-1.awsapprunner.com/v1}",
     "flutter:run:android": "cd flutter_app && flutter run -d android --dart-define=SAFEALERT_API=${SAFEALERT_API:-https://qrhtc5kg79.us-east-1.awsapprunner.com/v1}",
     "flutter:run:ios": "cd flutter_app && flutter run -d ios --dart-define=SAFEALERT_API=${SAFEALERT_API:-https://qrhtc5kg79.us-east-1.awsapprunner.com/v1}",
@@ -62,6 +63,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.840.0",
     "@google-cloud/pubsub": "^4.11.0",
     "africastalking": "^0.7.9",
     "cors": "^2.8.5",

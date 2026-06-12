@@ -332,6 +332,22 @@ function signOut() {
   toast('Signed out');
 }
 
+async function deleteMyAccount() {
+  if (!state.token) return toast('Sign in first', 'err');
+  const ok = window.confirm(
+    'Delete your SafeAlert account permanently?\n\nThis removes your profile, circle, and preferences. This cannot be undone.'
+  );
+  if (!ok) return;
+  try {
+    await api('/user/account', { method: 'DELETE' });
+    signOut();
+    toast('Account deleted', 'ok');
+  } catch (e) {
+    toast(typeof friendlyError === 'function' ? friendlyError(e) : e.message, 'err');
+  }
+}
+window.deleteMyAccount = deleteMyAccount;
+
 function circlePhoneStore() {
   try {
     return JSON.parse(localStorage.getItem('safealert_circle_phones') || '{}');

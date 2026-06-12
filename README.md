@@ -96,8 +96,8 @@ GET  /journey/:userId      — Get circle member's live location
 GET    /user/profile       — Get profile
 PUT    /user/profile       — Update profile + FCM token
 PUT    /user/circle        — Update safety circle (max 5)
-DELETE /user/account       — Delete all data
 ```
+Account deletion is available in-app under **Settings & account** (signed-in users). It permanently removes profile, circle, and preferences.
 
 ### Routes
 ```

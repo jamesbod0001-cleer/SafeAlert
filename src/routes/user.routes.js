@@ -201,6 +201,14 @@ router.put('/user/responder-profile', requireAuth, validate('responderProfile'),
   res.json({ success: true, responder: profile });
 });
 
+router.delete('/user/account', requireAuth, async (req, res) => {
+  await authService.deleteUserAccount(req.user.id);
+  res.json({
+    success: true,
+    message: 'Your account and personal data have been deleted.',
+  });
+});
+
 router.get('/responders/nearby', requireAuth, async (req, res) => {
   const lat = parseFloat(req.query.lat);
   const lng = parseFloat(req.query.lng);

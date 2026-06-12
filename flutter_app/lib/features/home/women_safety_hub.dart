@@ -52,8 +52,7 @@ class WomenSafetyHub extends StatelessWidget {
               OutlinedButton(onPressed: () => context.go('/circle'), child: Text(AppI18n.t(lang, 'women_my_circle'))),
               OutlinedButton(
                 onPressed: () {
-                  final base = AppConfig.apiBase.replaceFirst(RegExp(r'/v1/?$'), '');
-                  launchUrl(Uri.parse('$base/faq.html#abuse'), mode: LaunchMode.externalApplication);
+                  launchUrl(Uri.parse('${AppConfig.webAppBase}/faq.html#abuse'), mode: LaunchMode.externalApplication);
                 },
                 child: Text(AppI18n.t(lang, 'women_safety_tips')),
               ),

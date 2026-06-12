@@ -42,13 +42,21 @@ if [[ "$EXISTING_ARN" != "None" && -n "$EXISTING_ARN" ]]; then
 fi
 
 if is_weak_secret "${JWT_SECRET:-}" || [[ -z "${JWT_SECRET:-}" ]] || [[ ${#JWT_SECRET} -lt 32 ]]; then
-  JWT_SECRET="$(openssl rand -hex 32)"
+  if [[ -n "${AWS_SECRETS_ARN:-${SAFEALERT_SECRETS_ARN:-}}" ]]; then
+    echo "Using AWS Secrets Manager — skipping local JWT_SECRET generation"
+  else
+    JWT_SECRET="$(openssl rand -hex 32)"
+  fi
 fi
 if is_weak_secret "${HASH_SECRET:-}" || [[ -z "${HASH_SECRET:-}" ]]; then
-  HASH_SECRET="$(openssl rand -hex 32)"
+  if [[ -z "${AWS_SECRETS_ARN:-${SAFEALERT_SECRETS_ARN:-}}" ]]; then
+    HASH_SECRET="$(openssl rand -hex 32)"
+  fi
 fi
 if is_weak_secret "${ENCRYPTION_KEY:-}" || [[ -z "${ENCRYPTION_KEY:-}" ]]; then
-  ENCRYPTION_KEY="$(openssl rand -hex 16)"
+  if [[ -z "${AWS_SECRETS_ARN:-${SAFEALERT_SECRETS_ARN:-}}" ]]; then
+    ENCRYPTION_KEY="$(openssl rand -hex 16)"
+  fi
 fi
 
 echo "Account: $ACCOUNT_ID  Region: $REGION"
@@ -183,8 +191,11 @@ echo ""
 echo "Deployed: https://${URL}"
 echo "App UI:   https://${URL}/app/"
 echo "Health:   https://${URL}/v1/health"
-echo ""
-echo "Save these secrets locally (not committed):"
-echo "JWT_SECRET=$JWT_SECRET"
-echo "HASH_SECRET=$HASH_SECRET"
-echo "ENCRYPTION_KEY=$ENCRYPTION_KEY"
+if [[ -n "${AWS_SECRETS_ARN:-${SAFEALERT_SECRETS_ARN:-}}" ]]; then
+  echo ""
+  echo "Secrets: loaded from AWS Secrets Manager at runtime (not printed)."
+else
+  echo ""
+  echo "Tip: store production secrets in AWS Secrets Manager and set AWS_SECRETS_ARN before deploy."
+  echo "     npm run secrets:push  (requires local .env — never commit)"
+fi

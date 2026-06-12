@@ -283,7 +283,7 @@ EOF
 
 - [ ] **Step 1: Create privacy.html**
 
-Static page covering: phone hash storage, location retention (deleted after journey/panic), opt-in help_nearby, circle encryption, no government data sharing, account deletion via `DELETE /user/account`, contact email placeholder.
+Static page covering: phone hash storage, location retention (deleted after journey/panic), opt-in help_nearby, circle encryption, no government data sharing, in-app account deletion (Settings & account), contact email from config.
 
 - [ ] **Step 2: Create terms.html**
 

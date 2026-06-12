@@ -3,75 +3,98 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>SafeAlert NG — Terms of Use</title>
-  <style>
-    :root{--bg:#0a0e14;--surface:#121820;--text:#f4f6f8;--text2:#9aa4b2;--green:#12b76a;--amber:#f79009;--border:#2a3441;font-family:system-ui,sans-serif}
-    body{margin:0;background:var(--bg);color:var(--text);padding:20px 18px 40px;max-width:520px;margin:0 auto;line-height:1.55}
-    h1{font-size:22px;margin:0 0 8px}
-    .sub{color:var(--text2);font-size:13px;margin-bottom:20px}
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
-    .card h2{font-size:14px;margin:0 0 10px;color:var(--green)}
-    .card p,.card li{font-size:13px;color:var(--text2);margin:0 0 8px}
-    .card ul{padding-left:18px;margin:0}
-    .card li{margin-bottom:6px}
-    .warn{border-color:rgba(247,144,9,0.35)}
-    .warn h2{color:var(--amber)}
-    a{color:var(--green)}
-    .btn{display:inline-block;margin-top:16px;padding:12px 18px;background:var(--green);color:#fff;text-decoration:none;border-radius:10px;font-weight:700}
-  </style>
+  <title>Terms — SafeAlert NG</title>
+  <link rel="icon" type="image/png" href="icons/icon-512.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/legal-pages.css"/>
 </head>
-<body>
-  <h1>Terms of Use</h1>
-  <p class="sub">Rules for using SafeAlert NG — a citizen safety network across Nigeria.</p>
+<body data-legal-title="meta.terms_title">
+  <div class="legal-page">
+    <header class="legal-top">
+      <a class="legal-back" href="index.html" aria-label="Back to app">←</a>
+      <span class="legal-top-title" data-i18n="meta.site">SafeAlert NG</span>
+    </header>
 
-  <div class="card">
-    <h2>Citizen-reported data</h2>
-    <p>Map alerts, route scores, and incident reports come from <strong>community members</strong>, not official government sources. Information may be incomplete, outdated, or inaccurate. Always use your own judgment and verify before acting.</p>
-    <p>Alerts need independent confirmations before they are marked verified. False reports harm your community and may lead to account restrictions.</p>
+    <div class="legal-hero">
+      <h1 data-i18n="terms.hero.title">Terms of Use</h1>
+      <p class="lead" data-i18n="terms.hero.lead">Simple rules for using SafeAlert — built by and for Nigerians.</p>
+    </div>
+
+    <div class="legal-highlight warn" data-i18n-html="terms.warn"></div>
+
+    <nav class="legal-nav" aria-label="On this page">
+      <a href="#community" data-i18n="terms.nav.community">Community data</a>
+      <a href="#sos" data-i18n="terms.nav.sos">SOS &amp; helpers</a>
+      <a href="#rules" data-i18n="terms.nav.rules">Rules</a>
+      <a href="#liability" data-i18n="terms.nav.liability">Liability</a>
+    </nav>
+
+    <section class="legal-section" id="community">
+      <h2 data-i18n="terms.sec.community">Community-reported information</h2>
+      <div class="legal-card">
+        <p data-i18n-html="terms.community.p1">Map alerts come from <strong>community members</strong>, not official government sources. Information may be wrong or outdated.</p>
+        <p data-i18n="terms.community.p2">Alerts need independent confirmations before verified. False reports may lead to account restrictions.</p>
+        <p style="margin-top:12px" data-i18n="terms.community.p3">Use your own judgment before travelling or acting on an alert.</p>
+      </div>
+    </section>
+
+    <section class="legal-section" id="sos">
+      <h2 data-i18n="terms.sec.sos">SOS &amp; responding to others</h2>
+      <div class="legal-cards">
+        <article class="legal-card accent">
+          <h2><span class="icon" aria-hidden="true">🆘</span> <span data-i18n="terms.sos.panic">Panic is not emergency services</span></h2>
+          <p data-i18n="terms.sos.panic.body">SOS alerts your safety circle and opted-in helpers. We do not dispatch police, ambulance, or government.</p>
+        </article>
+        <article class="legal-card">
+          <h2><span class="icon" aria-hidden="true">🤝</span> <span data-i18n="terms.sos.helper">Helper safety</span></h2>
+          <p data-i18n-html="terms.sos.helper.body">Responding to a stranger carries real risk. Read our <a href="faq.html#abuse">helper safety guide</a> — go with someone, meet in public.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="legal-section" id="rules">
+      <h2 data-i18n="terms.sec.rules">Acceptable use</h2>
+      <div class="legal-card">
+        <p style="margin-bottom:12px;color:var(--text2);font-size:14px" data-i18n="terms.rules.intro">You agree not to:</p>
+        <ul>
+          <li data-i18n="terms.rules.1">Submit false or malicious reports</li>
+          <li data-i18n="terms.rules.2">Harass users or abuse the panic button</li>
+          <li data-i18n="terms.rules.3">Trigger fake panics to lure or harm responders</li>
+          <li data-i18n="terms.rules.4">Share someone's location without consent</li>
+          <li data-i18n="terms.rules.5">Use the app to stalk or doxx others</li>
+        </ul>
+        <p style="margin-top:14px;font-size:14px;color:var(--text2)" data-i18n="terms.rules.outro">We may suspend accounts or remove content. Repeated abuse leads to a permanent ban.</p>
+      </div>
+      <div class="legal-card" style="margin-top:10px">
+        <h2 style="font-size:15px;margin-bottom:8px" data-i18n="terms.age.title">Age requirement</h2>
+        <p data-i18n-html="terms.age.body">You must be at least <strong>13</strong>. Under 18? Use with a parent or guardian.</p>
+      </div>
+    </section>
+
+    <section class="legal-section" id="liability">
+      <h2 data-i18n="terms.sec.liability">Liability</h2>
+      <div class="legal-card">
+        <p data-i18n-html="terms.liability.body">Map data is provided <strong>without warranty</strong>. SafeAlert is not liable for harm from false reports, network failures, or decisions to travel or meet others.</p>
+        <p style="margin-top:12px"><span data-i18n="terms.liability.link">More detail:</span> <a href="faq.html#legal" data-i18n="terms.liability.link_text">FAQ — Legal</a></p>
+      </div>
+    </section>
+
+    <section class="legal-section">
+      <h2 data-i18n="terms.sec.contact">Contact</h2>
+      <div class="legal-card">
+        <p style="font-size:14px;color:var(--text2)"><span data-i18n="terms.contact.body">Report abuse or ask about these terms:</span> <a href="mailto:support@safealert.ng" data-legal-support>support@safealert.ng</a></p>
+      </div>
+    </section>
+
+    <footer class="legal-footer-nav">
+      <a class="btn btn-primary" href="index.html" data-i18n="common.back">← Back to app</a>
+      <a class="btn btn-ghost" href="faq.html" data-i18n="common.faq">FAQ</a>
+      <a class="btn btn-ghost" href="privacy.html" data-i18n="common.privacy">Privacy</a>
+    </footer>
+
+    <p class="legal-meta"><span data-i18n="common.last_updated">Last updated</span> <span data-legal-updated>June 2026</span> · <span data-i18n="common.terms_agree">By using SafeAlert you agree to these terms.</span></p>
   </div>
-
-  <div class="card warn">
-    <h2>Panic is not emergency services</h2>
-    <p>SafeAlert <strong>does not dispatch police, ambulance, or any government agency</strong>. Panic alerts your chosen safety circle and opted-in nearby helpers. In a life-threatening emergency, call <strong>112</strong> or your local emergency number directly.</p>
-    <p>Responding to a stranger's panic carries real risk (including ambush). Read <a href="faq.html#abuse">Helper safety FAQ</a> before going to a location.</p>
-  </div>
-
-  <div class="card">
-    <h2>Limitation of liability</h2>
-    <p>Community map data is provided <strong>without warranty</strong> — it may be inaccurate or malicious. SafeAlert is not liable for harm from false reports, network failures, third-party services (SMS, WhatsApp, GPS), or decisions you make to travel or meet others. See <a href="faq.html#legal">FAQ — Legal</a> for details.</p>
-  </div>
-
-  <div class="card">
-    <h2>Abuse &amp; moderation</h2>
-    <p>You agree not to:</p>
-    <ul>
-      <li>Submit false or malicious incident reports</li>
-      <li>Harass other users or abuse the panic feature</li>
-      <li>Impersonate others or share another person's location without consent</li>
-      <li>Trigger fake panics to lure or harm responders</li>
-      <li>Use the app to stalk, surveil, or doxx others</li>
-      <li>Attempt to disrupt or scrape the service</li>
-    </ul>
-    <p>We may hide false reports, suspend accounts, or remove content that violates these rules. Repeated abuse results in permanent ban. Report abuse: <a href="mailto:support@safealert.ng">support@safealert.ng</a> · <a href="faq.html">FAQ</a></p>
-  </div>
-
-  <div class="card">
-    <h2>Your responsibilities</h2>
-    <p>By using SafeAlert you confirm that you will use SOS and community reports honestly, that you understand alerts are not verified emergency services, and that helpers respond at their own risk after reading safety guidance in the app.</p>
-  </div>
-
-  <div class="card">
-    <h2>Minimum age</h2>
-    <p>You must be at least <strong>13 years old</strong> to use SafeAlert. If you are under 18, use the app with a parent or guardian's permission.</p>
-  </div>
-
-  <div class="card">
-    <h2>Contact</h2>
-    <p>Report abuse or ask about these terms: <a href="mailto:support@safealert.ng">support@safealert.ng</a></p>
-  </div>
-
-  <p style="font-size:11px;color:var(--text2)">Last updated June 2026</p>
-  <a class="btn" href="index.html">← Back to app</a>
-  <a href="faq.html" style="display:inline-block;margin-left:8px;padding:12px 18px;border:1px solid var(--border);color:var(--text);text-decoration:none;border-radius:10px;font-weight:700">FAQ</a>
+  <script src="js/legal-i18n.js?v=20260612c"></script>
+  <script src="js/legal-bootstrap.js?v=20260612c"></script>
 </body>
 </html>

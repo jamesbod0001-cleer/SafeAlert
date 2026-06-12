@@ -986,7 +986,7 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
   <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="moreGo('trust')">🤝 Community &amp; trust</button>
   <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="closeMoreSheet(); openMedicalCrashSheet()">🏥 Emergency numbers &amp; hospitals</button>
   <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="closeMoreSheet(); openSettingsSheet()">⚙️ Settings &amp; account</button>
-  <a class="btn btn-outline" style="margin-bottom:10px;width:100%;text-align:center;display:block;box-sizing:border-box" href="faq.html">❓ Legal &amp; safety FAQ</a>
+  <a class="btn btn-outline" style="margin-bottom:10px;width:100%;text-align:center;display:block;box-sizing:border-box" href="faq.html">Help &amp; safety FAQ</a>
 </div>
 
 <div id="profile-sheet" class="sheet" onclick="event.stopPropagation()">
@@ -1111,6 +1111,11 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
     </div>
     </div>
     <button class="btn btn-outline" style="margin-top:12px" onclick="signOut()">Sign out</button>
+    <div id="account-delete-block" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <div class="sheet-title" style="font-size:15px;color:var(--red)">Delete account</div>
+      <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:8px 0 10px">Permanently removes your profile, circle, and preferences. Community reports may remain anonymised.</p>
+      <button type="button" class="btn btn-sm" style="background:var(--red-soft);border:1px solid var(--red-border);color:var(--red)" onclick="deleteMyAccount()">Delete my account</button>
+    </div>
     <footer class="legal-footer">
       <a href="faq.html">FAQ</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
     </footer>

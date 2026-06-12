@@ -3,74 +3,113 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>SafeAlert NG — Privacy Policy</title>
-  <style>
-    :root{--bg:#0a0e14;--surface:#121820;--text:#f4f6f8;--text2:#9aa4b2;--green:#12b76a;--amber:#f79009;--border:#2a3441;font-family:system-ui,sans-serif}
-    body{margin:0;background:var(--bg);color:var(--text);padding:20px 18px 40px;max-width:520px;margin:0 auto;line-height:1.55}
-    h1{font-size:22px;margin:0 0 8px}
-    .sub{color:var(--text2);font-size:13px;margin-bottom:20px}
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
-    .card h2{font-size:14px;margin:0 0 10px;color:var(--green)}
-    .card p,.card li{font-size:13px;color:var(--text2);margin:0 0 8px}
-    .card ul{padding-left:18px;margin:0}
-    .card li{margin-bottom:6px}
-    a{color:var(--green)}
-    .btn{display:inline-block;margin-top:16px;padding:12px 18px;background:var(--green);color:#fff;text-decoration:none;border-radius:10px;font-weight:700}
-    code{font-size:12px;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px}
-  </style>
+  <title>Privacy — SafeAlert NG</title>
+  <link rel="icon" type="image/png" href="icons/icon-512.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/legal-pages.css"/>
 </head>
-<body>
-  <h1>Privacy Policy</h1>
-  <p class="sub">How SafeAlert handles your data — citizen network, not government surveillance.</p>
+<body data-legal-title="meta.privacy_title">
+  <div class="legal-page">
+    <header class="legal-top">
+      <a class="legal-back" href="index.html" data-i18n-aria="common.back_aria" aria-label="Back to app">←</a>
+      <span class="legal-top-title" data-i18n="meta.site">SafeAlert NG</span>
+    </header>
 
-  <div class="card">
-    <h2>Data we collect (summary)</h2>
-    <p>Phone (hashed), device ID, live GPS during panic/journey only, encrypted circle contacts, push token, community reports, and preferences. We do not sell personal data.</p>
-    <p>Full breakdown: <a href="faq.html#data">FAQ — Data we collect</a></p>
+    <div class="legal-hero">
+      <h1 data-i18n="privacy.hero.title">Privacy Policy</h1>
+      <p class="lead" data-i18n="privacy.hero.lead">We collect only what we need. We don't sell your data or share it with government by default.</p>
+      <div class="legal-highlight" data-i18n-html="privacy.highlight"></div>
+    </div>
+
+    <nav class="legal-nav" aria-label="On this page">
+      <a href="#collect" data-i18n="privacy.nav.collect">What we collect</a>
+      <a href="#rights" data-i18n="privacy.nav.rights">Your rights</a>
+      <a href="#delete" data-i18n="privacy.nav.delete">Delete account</a>
+      <a href="#contact" data-i18n="privacy.nav.contact">Contact</a>
+    </nav>
+
+    <section class="legal-section" id="collect">
+      <h2 data-i18n="privacy.sec.collect">What we collect</h2>
+      <div class="legal-cards">
+        <article class="legal-card">
+          <h2><span class="icon" aria-hidden="true">📱</span> <span data-i18n="privacy.card.phone">Phone &amp; account</span></h2>
+          <p data-i18n="privacy.card.phone.body">Your number is stored securely (hashed). Used only for sign-in and OTP.</p>
+        </article>
+        <article class="legal-card">
+          <h2><span class="icon" aria-hidden="true">📍</span> <span data-i18n="privacy.card.location">Location</span></h2>
+          <p data-i18n-html="privacy.card.location.body">Live GPS only during SOS or journey, or if you opt in to help nearby. Removed when you tap <strong>I'm Safe</strong> or end a journey.</p>
+        </article>
+        <article class="legal-card">
+          <h2><span class="icon" aria-hidden="true">👥</span> <span data-i18n="privacy.card.circle">Safety circle</span></h2>
+          <p data-i18n="privacy.card.circle.body">Contacts are encrypted. They get alerts only when you start a journey or SOS.</p>
+        </article>
+        <article class="legal-card">
+          <h2><span class="icon" aria-hidden="true">🗺️</span> <span data-i18n="privacy.card.reports">Community reports</span></h2>
+          <p data-i18n="privacy.card.reports.body">Reports you submit may stay on the map in anonymised form after account deletion.</p>
+        </article>
+      </div>
+      <p style="margin-top:16px;font-size:14px;color:var(--text2)">
+        <span data-i18n="privacy.faq_link">Full breakdown:</span>
+        <a href="faq.html#data" data-i18n="privacy.faq_link_text">FAQ — Your data</a>
+      </p>
+    </section>
+
+    <section class="legal-section" id="rights">
+      <h2 data-i18n="privacy.sec.rights">What we never do</h2>
+      <div class="legal-card">
+        <ul>
+          <li data-i18n-html="privacy.rights.1">We do <strong>not</strong> sell phone numbers, locations, or contacts to advertisers.</li>
+          <li data-i18n-html="privacy.rights.2">We do <strong>not</strong> show strangers your exact home address.</li>
+          <li data-i18n-html="privacy.rights.3">We do <strong>not</strong> require national ID, BVN, or government ID.</li>
+          <li data-i18n-html="privacy.rights.4">We do <strong>not</strong> automatically send data to police or government.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="legal-section" id="delete">
+      <h2 data-i18n="privacy.sec.delete">Delete your account</h2>
+      <div class="legal-card">
+        <p style="margin-bottom:14px;color:var(--text2);font-size:14px" data-i18n="privacy.delete.intro">You can remove your profile and personal data at any time.</p>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <span class="step-body" data-i18n="privacy.delete.s1">Sign in to the app</span>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <span class="step-body" data-i18n-html="privacy.delete.s2">Open <strong>Settings & account</strong></span>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <span class="step-body" data-i18n-html="privacy.delete.s3">Tap <strong>Delete my account</strong> and confirm</span>
+          </div>
+        </div>
+        <p style="font-size:14px;color:var(--text2);margin-top:14px" data-i18n-html="privacy.delete.email">Can't access the app? Email <a href="mailto:privacy@safealert.ng" data-legal-privacy>privacy@safealert.ng</a> with your phone number. We handle requests under Nigeria's NDPR.</p>
+        <p style="font-size:13px;color:var(--text3);margin-top:10px" data-i18n="privacy.delete.local">Clearing app storage removes local caches (e.g. offline maps) on that device only.</p>
+      </div>
+    </section>
+
+    <section class="legal-section" id="contact">
+      <h2 data-i18n="privacy.sec.contact">Questions</h2>
+      <div class="legal-card">
+        <p style="font-size:14px;color:var(--text2)"><span data-i18n="privacy.contact.team">Privacy team:</span> <a href="mailto:privacy@safealert.ng" data-legal-privacy>privacy@safealert.ng</a></p>
+        <div class="legal-links-inline">
+          <a href="faq.html" data-i18n="common.safety_faq">Safety FAQ</a>
+          <a href="terms.html" data-i18n="common.terms_full">Terms of Use</a>
+          <a href="transparency.html" data-i18n="common.transparency">Transparency</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="legal-footer-nav">
+      <a class="btn btn-primary" href="index.html" data-i18n="common.back">← Back to app</a>
+      <a class="btn btn-ghost" href="faq.html" data-i18n="common.faq">FAQ</a>
+      <a class="btn btn-ghost" href="terms.html" data-i18n="common.terms">Terms</a>
+    </footer>
+
+    <p class="legal-meta"><span data-i18n="common.last_updated">Last updated</span> <span data-legal-updated>June 2026</span> · <span data-i18n="common.tagline">SafeAlert NG — citizen-powered safety.</span></p>
   </div>
-
-  <div class="card">
-    <h2>Phone numbers</h2>
-    <p>Your phone number is stored as a one-way <strong>SHA-256 hash</strong>, not in plain text. We use the hash only to verify OTP sign-in and match your account. We do not sell or share phone numbers with third parties.</p>
-  </div>
-
-  <div class="card">
-    <h2>Location data</h2>
-    <p>Live GPS is shared only while a <strong>journey</strong> or <strong>panic</strong> is active, or when you opt in to help nearby. When your journey ends or you mark yourself safe after a panic, your live location is <strong>deleted</strong> from our servers.</p>
-  </div>
-
-  <div class="card">
-    <h2>Help nearby (opt-in)</h2>
-    <p>Receiving alerts when someone near you needs help is <strong>off by default</strong>. You must turn on <em>Help nearby</em> in your profile. We never show your exact address in push notifications.</p>
-  </div>
-
-  <div class="card">
-    <h2>Safety circle</h2>
-    <p>Names and phone numbers you add to your safety circle are <strong>encrypted at rest</strong>. Only you can view and manage your circle contacts. They receive alerts only when you trigger panic or start a journey.</p>
-  </div>
-
-  <div class="card">
-    <h2>No government data sharing</h2>
-    <p>SafeAlert does <strong>not</strong> automatically share your data, location, or reports with police, military, or government agencies. Community alerts are citizen-reported. You choose who to call in an emergency.</p>
-  </div>
-
-  <div class="card">
-    <h2>Account deletion</h2>
-    <p>You can delete your account and all associated data at any time by calling <code>DELETE /user/account</code> while signed in. This removes your profile, circle, panic history, and preferences.</p>
-  </div>
-
-  <div class="card">
-    <h2>Legal FAQ</h2>
-    <p>How the app works, helper safety, bad-actor risks, and your rights: <a href="faq.html">Full FAQ</a></p>
-  </div>
-
-  <div class="card">
-    <h2>Contact</h2>
-    <p>Questions about privacy? Email <a href="mailto:privacy@safealert.ng">privacy@safealert.ng</a></p>
-  </div>
-
-  <p style="font-size:11px;color:var(--text2)">Last updated June 2026</p>
-  <a class="btn" href="index.html">← Back to app</a>
-  <a class="btn btn-outline" href="faq.html" style="margin-left:8px;background:transparent;border:1px solid var(--border);color:var(--text)">FAQ</a>
+  <script src="js/legal-i18n.js?v=20260612c"></script>
+  <script src="js/legal-bootstrap.js?v=20260612c"></script>
 </body>
 </html>

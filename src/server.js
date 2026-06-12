@@ -140,6 +140,14 @@ async function bootstrap() {
 }
 
 async function start() {
+  try {
+    const secrets = await require('./config/secretsLoader').hydrateFromSecretsManager();
+    if (secrets.loaded) console.log('[SafeAlert] secrets:', secrets.source);
+  } catch (err) {
+    console.error('[SafeAlert] secrets load failed:', err.message);
+    if (isProduction()) process.exit(1);
+  }
+
   await new Promise((resolve, reject) => {
     server = app.listen(PORT, () => {
       console.log(`\n🛡️  SafeAlert NG API running on port ${PORT}`);

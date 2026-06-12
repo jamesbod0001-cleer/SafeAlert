@@ -3,404 +3,118 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>SafeAlert NG — FAQ (Legal &amp; Safety)</title>
-  <style>
-    :root{--bg:#0a0e14;--surface:#121820;--text:#f4f6f8;--text2:#9aa4b2;--green:#12b76a;--amber:#f79009;--red:#f03e3e;--border:#2a3441;font-family:system-ui,sans-serif}
-    body{margin:0;background:var(--bg);color:var(--text);padding:20px 18px 48px;max-width:560px;margin:0 auto;line-height:1.55}
-    h1{font-size:22px;margin:0 0 8px}
-    .sub{color:var(--text2);font-size:13px;margin-bottom:20px}
-    nav.toc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px}
-    nav.toc a{color:var(--green);text-decoration:none;display:block;margin:6px 0}
-    section{margin-bottom:24px}
-    section>h2{font-size:16px;color:var(--green);margin:0 0 12px;border-bottom:1px solid var(--border);padding-bottom:8px}
-    details{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-    details[open]{border-color:rgba(18,183,106,0.35)}
-    summary{cursor:pointer;font-weight:700;font-size:14px;list-style:none;display:flex;justify-content:space-between;gap:8px}
-    summary::-webkit-details-marker{display:none}
-    summary::after{content:'▾';color:var(--text2);font-size:12px}
-    details[open] summary::after{content:'▴'}
-    .ans{font-size:13px;color:var(--text2);margin-top:10px}
-    .ans p{margin:0 0 10px}
-    .ans ul,.ans ol{padding-left:18px;margin:0 0 10px}
-    .ans li{margin-bottom:6px}
-    .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;margin-right:6px;vertical-align:middle}
-    .tag-live{background:rgba(18,183,106,0.15);color:var(--green);border:1px solid rgba(18,183,106,0.35)}
-    .tag-plan{background:rgba(247,144,9,0.12);color:var(--amber);border:1px solid rgba(247,144,9,0.35)}
-    table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
-    th,td{border:1px solid var(--border);padding:8px;text-align:left;vertical-align:top}
-    th{background:rgba(255,255,255,0.04);color:var(--text)}
-    .warn{color:var(--amber)}
-    a{color:var(--green)}
-    .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-    .btn{display:inline-block;padding:12px 18px;background:var(--green);color:#fff;text-decoration:none;border-radius:10px;font-weight:700;font-size:13px}
-    .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
-  </style>
+  <title>FAQ — SafeAlert NG</title>
+  <link rel="icon" type="image/png" href="icons/icon-512.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/legal-pages.css"/>
 </head>
-<body>
-  <h1>FAQ — Legal &amp; Safety</h1>
-  <p class="sub">How SafeAlert works, what data we collect, your responsibilities, and how we reduce abuse — including bad actors who might misuse SOS.</p>
+<body data-legal-title="meta.faq_title">
+  <div class="legal-page">
+    <header class="legal-top">
+      <a class="legal-back" href="index.html" data-i18n-aria="common.back_aria" aria-label="Back to app">←</a>
+      <span class="legal-top-title" data-i18n="meta.site">SafeAlert NG</span>
+    </header>
 
-  <nav class="toc" aria-label="FAQ sections">
-    <strong>Jump to</strong>
-    <a href="#how-it-works">How the app is used</a>
-    <a href="#data">Data we collect</a>
-    <a href="#legal">Legal &amp; liability</a>
-    <a href="#abuse">Bad actors &amp; helper safety</a>
-    <a href="#safeguards">Safeguards (live vs planned)</a>
-    <a href="#contact">Contact &amp; reports</a>
-  </nav>
+    <div class="legal-hero">
+      <h1 data-i18n="faq.hero.title">Help &amp; Safety FAQ</h1>
+      <p class="lead" data-i18n="faq.hero.lead">Quick answers about SafeAlert, your data, and staying safe.</p>
+    </div>
 
-  <section id="how-it-works">
-    <h2>How the app is used</h2>
+    <nav class="legal-nav" aria-label="FAQ sections">
+      <a href="#how-it-works" data-i18n="faq.nav.how">How it works</a>
+      <a href="#data" data-i18n="faq.nav.data">Your data</a>
+      <a href="#legal" data-i18n="faq.nav.legal">Legal</a>
+      <a href="#abuse" data-i18n="faq.nav.helper">Helper safety</a>
+      <a href="#contact" data-i18n="faq.nav.contact">Contact</a>
+    </nav>
 
-    <details open>
-      <summary>What is SafeAlert?</summary>
-      <div class="ans">
-        <p>SafeAlert NG is a <strong>citizen-powered safety network</strong> for Nigeria. It lets people report dangers on a community map, hold an SOS button to alert trusted contacts, optionally notify opted-in neighbors, track journeys with their circle, and access curated community resources — without routing alerts through police or government dispatch by default.</p>
+    <section class="legal-section" id="how-it-works">
+      <h2 data-i18n="faq.sec.how">How it works</h2>
+      <div class="legal-faq">
+        <details open>
+          <summary data-i18n="faq.q.what">What is SafeAlert?</summary>
+          <div class="legal-ans" data-i18n-html="faq.a.what"></div>
+        </details>
+        <details>
+          <summary data-i18n="faq.q.signin">Do I need to sign in?</summary>
+          <div class="legal-ans" data-i18n-html="faq.a.signin"></div>
+        </details>
+        <details>
+          <summary data-i18n="faq.q.sos">What happens when I hold SOS?</summary>
+          <div class="legal-ans" data-i18n-html="faq.a.sos"></div>
+        </details>
       </div>
-    </details>
+    </section>
 
-    <details>
-      <summary>Do I need to sign in?</summary>
-      <div class="ans">
-        <p><strong>No</strong> for browsing the map, reading alerts, and submitting anonymous community reports. <strong>SOS works without sign-in</strong> via WhatsApp/calls to your locally saved circle.</p>
-        <p>Sign-in (phone + OTP) is needed to sync your safety circle on our servers, reach opted-in nearby helpers via push, use journey watch, check-in timers, and respond to others' panics.</p>
+    <section class="legal-section" id="data">
+      <h2 data-i18n="faq.sec.data">Your data</h2>
+      <div class="legal-faq">
+        <details open>
+          <summary data-i18n="faq.q.notsell">What we never sell or share</summary>
+          <div class="legal-ans" data-i18n-html="faq.a.notsell"></div>
+        </details>
+        <details>
+          <summary data-i18n="faq.q.delete">How do I delete my data?</summary>
+          <div class="legal-ans" data-i18n-html="faq.a.delete"></div>
+        </details>
+        <details id="medical-road">
+          <summary data-i18n="faq.q.medical">Medical &amp; road emergencies</summary>
+          <div class="legal-ans" data-i18n-html="faq.a.medical"></div>
+        </details>
       </div>
-    </details>
+      <p style="margin-top:14px;font-size:14px;color:var(--text2)">
+        <a href="privacy.html" data-i18n="common.privacy">Privacy</a>
+      </p>
+    </section>
 
-    <details>
-      <summary>What happens when I hold PANIC / SOS?</summary>
-      <div class="ans">
-        <ol>
-          <li>You accept a one-time disclaimer: SafeAlert is <strong>not</strong> 112, police, or ambulance dispatch.</li>
-          <li>Your live location is shared while the panic is active (guests: via WhatsApp; signed-in: circle + nearby helpers who opted in).</li>
-          <li>Nearby users see an approximate area — not your exact home address or phone number.</li>
-          <li>When you tap <strong>I'm Safe</strong>, live location sharing stops.</li>
-        </ol>
-        <p>In a life-threatening emergency, call <strong>112</strong> or your local emergency number directly.</p>
+    <section class="legal-section" id="legal">
+      <h2 data-i18n="faq.sec.legal">Legal</h2>
+      <div class="legal-faq">
+        <details open>
+          <summary data-i18n="faq.q.not112">Is SafeAlert an emergency service?</summary>
+          <div class="legal-ans" data-i18n-html="faq.a.not112"></div>
+        </details>
       </div>
-    </details>
+    </section>
 
-    <details>
-      <summary>What are community reports vs verified zones?</summary>
-      <div class="ans">
-        <p>Anyone can report an incident at their GPS location. Reports need <strong>independent confirmations</strong> from other devices before they become verified danger zones. False reports can be flagged and may affect account standing.</p>
-        <p>Route scores and insights come from aggregated community data — not official government advisories.</p>
+    <section class="legal-section" id="abuse">
+      <h2 data-i18n="faq.sec.helper">Staying safe as a helper</h2>
+      <div class="legal-highlight warn" data-i18n-html="faq.helper.warn"></div>
+      <div class="legal-faq" style="margin-top:12px">
+        <details open>
+          <summary data-i18n="faq.q.helper">Before you go to help</summary>
+          <div class="legal-ans" data-i18n-html="faq.a.helper"></div>
+        </details>
       </div>
-    </details>
+    </section>
 
-    <details>
-      <summary>Who receives my alerts?</summary>
-      <div class="ans">
-        <ul>
-          <li><strong>Safety circle</strong> — people you choose (SMS/push when signed in; WhatsApp when guest).</li>
-          <li><strong>Help nearby</strong> — only users who turned on this opt-in preference.</li>
-          <li><strong>Estate / area watch</strong> — neighbors who joined the same estate code (if enabled).</li>
-        </ul>
-        <p>We do <strong>not</strong> automatically send your data to law enforcement or government agencies.</p>
+    <section class="legal-section" id="contact">
+      <h2 data-i18n="faq.sec.contact">Contact us</h2>
+      <div class="legal-cards">
+        <article class="legal-card">
+          <p style="font-size:14px;color:var(--text2);margin-bottom:6px"><strong style="color:var(--text)" data-i18n="faq.contact.abuse">Abuse or false SOS</strong></p>
+          <p style="font-size:14px"><a href="mailto:support@safealert.ng" data-legal-support>support@safealert.ng</a> <span data-i18n="faq.contact.abuse_hint">— include alert reference and time</span></p>
+        </article>
+        <article class="legal-card">
+          <p style="font-size:14px;color:var(--text2);margin-bottom:6px"><strong style="color:var(--text)" data-i18n="faq.contact.privacy">Privacy / NDPR</strong></p>
+          <p style="font-size:14px"><a href="mailto:privacy@safealert.ng" data-legal-privacy>privacy@safealert.ng</a></p>
+        </article>
+        <article class="legal-card">
+          <p style="font-size:14px;color:var(--text2);margin-bottom:6px"><strong style="color:var(--text)" data-i18n="faq.contact.transparency">Transparency</strong></p>
+          <p style="font-size:14px"><a href="transparency.html" data-i18n="faq.contact.view_stats">View platform stats</a></p>
+        </article>
       </div>
-    </details>
-  </section>
+    </section>
 
-  <section id="data">
-    <h2>Data we collect</h2>
+    <footer class="legal-footer-nav">
+      <a class="btn btn-primary" href="index.html" data-i18n="common.back">← Back to app</a>
+      <a class="btn btn-ghost" href="privacy.html" data-i18n="common.privacy">Privacy</a>
+      <a class="btn btn-ghost" href="terms.html" data-i18n="common.terms">Terms</a>
+    </footer>
 
-    <details open>
-      <summary>Summary table</summary>
-      <div class="ans">
-        <table>
-          <thead>
-            <tr><th>Data</th><th>When</th><th>Why</th><th>Retention</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Phone number (SHA-256 hash)</td>
-              <td>Sign-in</td>
-              <td>Account &amp; OTP verification</td>
-              <td>Until account deletion</td>
-            </tr>
-            <tr>
-              <td>Device ID</td>
-              <td>Reports, votes, sessions</td>
-              <td>Spam prevention, deduplication</td>
-              <td>While account active</td>
-            </tr>
-            <tr>
-              <td>Live GPS</td>
-              <td>Active panic or journey only</td>
-              <td>Alert your circle / helpers</td>
-              <td><strong>Deleted</strong> when panic ends or journey ends</td>
-            </tr>
-            <tr>
-              <td>Approximate location (fuzzed)</td>
-              <td>Help-nearby opt-in, periodic ping</td>
-              <td>Match nearby panics without exact address</td>
-              <td>Expires (~45 min); not exact coords in pushes</td>
-            </tr>
-            <tr>
-              <td>Circle contacts (encrypted)</td>
-              <td>You add them</td>
-              <td>Panic &amp; journey notifications</td>
-              <td>Until you remove or delete account</td>
-            </tr>
-            <tr>
-              <td>FCM push token</td>
-              <td>Notifications enabled</td>
-              <td>Deliver alerts</td>
-              <td>Until sign-out or token refresh</td>
-            </tr>
-            <tr>
-              <td>Community reports</td>
-              <td>You submit</td>
-              <td>Map alerts</td>
-              <td>While zone active + audit logs</td>
-            </tr>
-            <tr>
-              <td>Preferences &amp; consent logs</td>
-              <td>Profile settings</td>
-              <td>Help nearby, data saver, language</td>
-              <td>Until account deletion</td>
-            </tr>
-            <tr>
-              <td>Local storage (browser/app)</td>
-              <td>On your device</td>
-              <td>Offline packs, circle cache, disclaimers</td>
-              <td>On your device until cleared</td>
-            </tr>
-          </tbody>
-        </table>
-        <p>See our full <a href="privacy.html">Privacy Policy</a>. Under Nigeria's NDPR, you may request access or deletion via <a href="mailto:privacy@safealert.ng">privacy@safealert.ng</a>.</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>What we do NOT collect or sell</summary>
-      <div class="ans">
-        <ul>
-          <li>We do not sell phone numbers, location history, or contact lists to advertisers or data brokers.</li>
-          <li>We do not share your live location with strangers' exact address in notifications.</li>
-          <li>We do not require national ID, BVN, or government ID to use the app.</li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary>How do I delete my data?</summary>
-      <div class="ans">
-        <p>While signed in, call <code>DELETE /v1/user/account</code> (or use in-app account deletion when available). This removes profile, circle, preferences, and panic history tied to your account.</p>
-        <p>Clearing browser data removes local circle cache and disclaimer flags on that device.</p>
-      </div>
-    </details>
-  </section>
-
-  <section id="legal">
-    <h2>Legal &amp; liability (protecting users and SafeAlert)</h2>
-
-    <details open>
-      <summary>Is SafeAlert an emergency service?</summary>
-      <div class="ans">
-        <p><strong class="warn">No.</strong> SafeAlert is not a replacement for <strong>112</strong>, police, ambulance, fire service, or any licensed emergency dispatcher. We do not guarantee response time, arrival of help, or accuracy of community reports.</p>
-        <p>By using the app you agree that you are responsible for your own safety decisions. See <a href="terms.html">Terms of Use</a>.</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>Are map alerts guaranteed accurate?</summary>
-      <div class="ans">
-        <p><strong>No.</strong> Alerts are citizen-reported and may be wrong, outdated, or malicious. SafeAlert provides information <em>as submitted by the community</em> without warranty. Do not travel or intervene based solely on the app — verify independently.</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>Limitation of liability</summary>
-      <div class="ans">
-        <p>To the fullest extent permitted by Nigerian law, SafeAlert and its operators are not liable for:</p>
-        <ul>
-          <li>Harm arising from false reports, delayed notifications, or network outages</li>
-          <li>Actions taken by other users (helpers, reporters, or bad actors)</li>
-          <li>Decisions you make to travel to a panic location or meet strangers</li>
-          <li>Failure of third-party services (SMS, WhatsApp, GPS, cloud providers)</li>
-        </ul>
-        <p>Your use of the service is at your own risk. Where liability cannot be excluded, it is limited to the amount you paid us in the past 12 months (typically ₦0 for free users).</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>Can I sue SafeAlert if something goes wrong?</summary>
-      <div class="ans">
-        <p>We design for safety and comply with applicable privacy law, but no app can eliminate all risk in a citizen network. Our Terms describe dispute resolution, acceptable use, and moderation. If you believe the service was misused, contact <a href="mailto:support@safealert.ng">support@safealert.ng</a> with evidence (panic ID, screenshots, timestamps).</p>
-        <p>Serious crimes should be reported to <strong>112</strong> and relevant authorities — SafeAlert is a community tool, not a law-enforcement channel.</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>Minimum age &amp; parental consent</summary>
-      <div class="ans">
-        <p>Users must be at least <strong>13</strong>. Users under 18 should use the app with a parent or guardian. Parents are responsible for minors' circle contacts and SOS use.</p>
-      </div>
-    </details>
-  </section>
-
-  <section id="abuse">
-    <h2>Bad actors &amp; helper safety</h2>
-
-    <details open>
-      <summary>Can a kidnapper use SOS to lure helpers into a trap?</summary>
-      <div class="ans">
-        <p><strong>Yes — this is a real risk</strong> in any citizen response system. A criminal could trigger a fake panic to attract well-meaning neighbors. SafeAlert reduces but cannot eliminate this risk.</p>
-        <p><strong>If you are responding to a stranger's panic:</strong></p>
-        <ul>
-          <li>Do <strong>not</strong> go alone — use the buddy system or inform someone where you are going</li>
-          <li>Prefer meeting in a <strong>public, lit area</strong> — not an isolated bush road or private compound</li>
-          <li>Share the alert ID and map link with a trusted contact before you leave</li>
-          <li>If something feels wrong, <strong>stop</strong>, call 112, and use <em>Report abuse</em></li>
-          <li>Consider calling the victim on WhatsApp/voice first — verify the situation when safe</li>
-        </ul>
-        <p>SafeAlert shows <strong>fuzzed coordinates</strong> (~hundreds of metres) to non-victims so exact ambush points are harder to weaponise.</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>Can someone fake danger reports to cause panic?</summary>
-      <div class="ans">
-        <p>Possible. Mitigations include: device deduplication on zone votes, rate limits, community false-report flags, reputation scoring, and admin moderation. Verified status requires multiple independent confirmations.</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>Can someone spam SOS?</summary>
-      <div class="ans">
-        <p>Signed-in users face a <strong>panic cooldown</strong> (typically 15 minutes between activations). Abuse may lead to account suspension. Guest SOS uses local WhatsApp — we cannot cooldown device-local actions, which is why sign-in unlocks broader network alerts with accountability.</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>Will I see the victim's phone number?</summary>
-      <div class="ans">
-        <p><strong>No</strong> — strangers do not receive the victim's phone number through the app. Responders see an alert ID, approximate area, and first name or label only. Direct contact happens outside the app if both parties choose to share details.</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>What should victims do if abuse is suspected?</summary>
-      <div class="ans">
-        <ul>
-          <li>End panic when safe — location sharing stops</li>
-          <li>Report the account or panic via <a href="mailto:support@safealert.ng">support@safealert.ng</a></li>
-          <li>Block suspicious helpers — do not meet alone</li>
-          <li>Contact 112 for immediate danger</li>
-        </ul>
-      </div>
-    </details>
-  </section>
-
-  <section id="medical-road">
-    <h2>Medical emergencies &amp; road crashes (Nigeria)</h2>
-
-    <details open>
-      <summary>Does SafeAlert dispatch ambulance or FRSC?</summary>
-      <div class="ans">
-        <p><strong>No.</strong> SafeAlert is a <strong>citizen layer</strong> — your safety circle, WhatsApp, and opted-in neighbors with first-aid or mechanic skills. You tap to call <strong>112</strong>, <strong>122 (FRSC)</strong>, Red Cross, or a hospital yourself. We never auto-dial government or private ambulance services.</p>
-        <p>Emergency response in Nigeria is fragmented: numbers vary by state/LGA, lines may be busy, and there is no guaranteed national ambulance app. Plan ahead — save hospital numbers for routes you travel.</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>Medical SOS vs calling 112</summary>
-      <div class="ans">
-        <ul>
-          <li><strong>Medical SOS</strong> — alerts your circle + nearby users with first-aid skills; share ICE (blood group, allergies) via WhatsApp</li>
-          <li><strong>112</strong> — national emergency routing; availability and response time vary</li>
-          <li><strong>Nearest hospital</strong> — NGO-curated list in the app; verify numbers locally before you travel</li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary>Road crashes &amp; bad highways</summary>
-      <div class="ans">
-        <ul>
-          <li><strong>Crash SOS</strong> — prioritizes first-aid, mechanic, and driver helpers nearby plus your circle</li>
-          <li><strong>FRSC 122</strong> — federal road crashes; may not cover all inner-city roads</li>
-          <li><strong>Witness report</strong> — mark a crash on the community map so other travelers can avoid or help</li>
-          <li>Do not move seriously injured people unless there is fire risk — share location and call for help</li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary>What is Medical ICE?</summary>
-      <div class="ans">
-        <p>ICE (In Case of Emergency) stores blood group, allergies, conditions, and an emergency contact in your profile. It is included when you share WhatsApp SOS — visible only to people you send it to, not broadcast to government.</p>
-      </div>
-    </details>
-  </section>
-
-  <section id="safeguards">
-    <h2>Safeguards — live today vs planned</h2>
-
-    <details open>
-      <summary>What is already implemented?</summary>
-      <div class="ans">
-        <ul>
-          <li><span class="tag tag-live">LIVE</span> One-time panic disclaimer (not government dispatch)</li>
-          <li><span class="tag tag-live">LIVE</span> Panic cooldown &amp; rate limits for signed-in users</li>
-          <li><span class="tag tag-live">LIVE</span> Fuzzed GPS for bystanders viewing active panics</li>
-          <li><span class="tag tag-live">LIVE</span> Victim phone hidden from non-circle strangers</li>
-          <li><span class="tag tag-live">LIVE</span> Responder list visible only to victim &amp; responders on that panic</li>
-          <li><span class="tag tag-live">LIVE</span> Help-nearby &amp; estate alerts are <strong>opt-in</strong></li>
-          <li><span class="tag tag-live">LIVE</span> Zone vote deduplication &amp; per-IP rate limits</li>
-          <li><span class="tag tag-live">LIVE</span> Convoy members must be in organizer's safety circle</li>
-          <li><span class="tag tag-live">LIVE</span> Webhook signature verification (SMS/WhatsApp)</li>
-          <li><span class="tag tag-live">LIVE</span> Helper safety prompt before "I'm on my way"</li>
-          <li><span class="tag tag-live">LIVE</span> False zone reporting &amp; reputation badges</li>
-          <li><span class="tag tag-live">LIVE</span> Live location deleted when panic/journey ends</li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary>What can we add to reduce exploitation further?</summary>
-      <div class="ans">
-        <p>Roadmap items under consideration (not all live yet):</p>
-        <ul>
-          <li><span class="tag tag-live">LIVE</span> Women's safety mode — home hub, check-in shortcuts, prefer women helpers on SOS</li>
-          <li><span class="tag tag-live">LIVE</span> Emergency numbers &amp; hospitals — in More / Profile (not on home SOS path)</li>
-          <li><span class="tag tag-live">LIVE</span> Women responder opt-in — helpers who choose to support women nearby</li>
-          <li><span class="tag tag-plan">PLANNED</span> <strong>Verified responder</strong> badge (ID check, community vouch, or NGO partner)</li>
-          <li><span class="tag tag-plan">PLANNED</span> <strong>Staged location reveal</strong> — wider area first; exact pin only after victim confirms helper</li>
-          <li><span class="tag tag-plan">PLANNED</span> <strong>Respond in pairs</strong> — prompt to bring a second person; convoy-style response</li>
-          <li><span class="tag tag-plan">PLANNED</span> <strong>Strike system</strong> — auto-suspend accounts with repeated false panics/reports</li>
-          <li><span class="tag tag-plan">PLANNED</span> <strong>CAPTCHA</strong> on web panic after abuse signals</li>
-          <li><span class="tag tag-plan">PLANNED</span> <strong>Voice/video verify</strong> optional check before high-trust responder status</li>
-          <li><span class="tag tag-plan">PLANNED</span> <strong>Time-limited respond window</strong> — panic auto-expires if not confirmed</li>
-          <li><span class="tag tag-plan">PLANNED</span> <strong>Integration with 112</strong> where officially partnered (not default today)</li>
-        </ul>
-        <p>Community leaders and estate admins can help verify members — see Community &amp; trust in the app.</p>
-      </div>
-    </details>
-  </section>
-
-  <section id="contact">
-    <h2>Contact &amp; abuse reports</h2>
-    <details open>
-      <summary>How to report abuse or legal questions</summary>
-      <div class="ans">
-        <ul>
-          <li><strong>Abuse / false SOS:</strong> <a href="mailto:support@safealert.ng">support@safealert.ng</a> — include panic ID (#XXXXXX), time, and screenshots</li>
-          <li><strong>Privacy / NDPR:</strong> <a href="mailto:privacy@safealert.ng">privacy@safealert.ng</a></li>
-          <li><strong>Transparency stats:</strong> <a href="transparency.html">transparency page</a></li>
-        </ul>
-      </div>
-    </details>
-  </section>
-
-  <div class="btn-row">
-    <a class="btn" href="index.html">← Back to app</a>
-    <a class="btn btn-outline" href="privacy.html">Privacy</a>
-    <a class="btn btn-outline" href="terms.html">Terms</a>
+    <p class="legal-meta"><span data-i18n="common.last_updated">Last updated</span> <span data-legal-updated>June 2026</span> · <span data-i18n="common.tagline">SafeAlert NG — citizen-powered safety.</span></p>
   </div>
-
-  <p style="font-size:11px;color:var(--text2);margin-top:24px">Last updated June 2026 · SafeAlert NG — citizen-powered safety, not government surveillance.</p>
+  <script src="js/legal-i18n.js?v=20260612c"></script>
+  <script src="js/legal-bootstrap.js?v=20260612c"></script>
 </body>
 </html>

@@ -30,6 +30,13 @@ def load_env(path):
     return env
 
 
+SECRET_ENV_KEYS = {
+    'JWT_SECRET', 'HASH_SECRET', 'ENCRYPTION_KEY', 'FIREBASE_PRIVATE_KEY',
+    'AT_API_KEY', 'OPENAI_API_KEY', 'ACLED_API_KEY', 'ACLED_PASSWORD',
+    'IMPORT_JOB_SECRET', 'ADMIN_SECRET', 'WHATSAPP_VERIFY_TOKEN', 'WHATSAPP_WEBHOOK_SECRET',
+}
+
+
 def main():
     account = os.environ.get('AWS_ACCOUNT_ID') or sys.argv[1]
     region = os.environ.get('AWS_DEFAULT_REGION', 'us-east-1')
@@ -46,6 +53,13 @@ def main():
     )
 
     file_env = load_env(ENV_PATH)
+    secrets_arn = (
+        os.environ.get('AWS_SECRETS_ARN')
+        or os.environ.get('SAFEALERT_SECRETS_ARN')
+        or file_env.get('AWS_SECRETS_ARN')
+        or file_env.get('SAFEALERT_SECRETS_ARN')
+        or ''
+    )
     runtime = {
         'NODE_ENV': 'production',
         'PORT': '8080',
@@ -125,6 +139,10 @@ def main():
         'IMPORT_JOB_SECRET': file_env.get('IMPORT_JOB_SECRET') or os.environ.get('IMPORT_JOB_SECRET', ''),
         'ADMIN_SECRET': file_env.get('ADMIN_SECRET') or os.environ.get('ADMIN_SECRET', ''),
     }
+    if secrets_arn:
+        runtime['AWS_SECRETS_ARN'] = secrets_arn
+        for key in list(SECRET_ENV_KEYS):
+            runtime.pop(key, None)
     # Drop empty optional keys
     runtime = {k: v for k, v in runtime.items() if v is not None and str(v) != ''}
 

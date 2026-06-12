@@ -6,6 +6,7 @@ const { sendOTP } = require('./smsService');
 const { randomUUID: uuidv4 } = require('crypto');
 const logger = require('../utils/logger');
 const appConfig = require('../config/appConfig');
+const { requireSecret } = require('../config/requireSecret');
 
 const otpStore = require('./otpStore');
 const { isProduction } = require('../config/envValidate');
@@ -21,38 +22,51 @@ function shouldExposeSandboxOtp() {
   return isSandboxMode() || process.env.EXPOSE_SANDBOX_OTP === 'true';
 }
 
+function jwtSecret() {
+  return requireSecret('JWT_SECRET');
+}
+
+function hashSecret() {
+  return process.env.HASH_SECRET || jwtSecret();
+}
+
 // Lightweight JWT using built-in crypto (no jsonwebtoken package required)
 // Falls back to jsonwebtoken if installed
 function signToken(payload) {
+  const secret = jwtSecret();
   try {
     const jwt = require('jsonwebtoken');
-    return jwt.sign(payload, process.env.JWT_SECRET||'dev-secret', { expiresIn:'7d' });
+    return jwt.sign(payload, secret, { expiresIn: '7d' });
   } catch {
-    // Fallback: simple HMAC token for testing
-    const data = Buffer.from(JSON.stringify({ ...payload, exp: Date.now()+7*24*3600*1000 })).toString('base64url');
-    const sig = crypto.createHmac('sha256', process.env.JWT_SECRET||'dev-secret').update(data).digest('base64url');
+    const data = Buffer.from(JSON.stringify({ ...payload, exp: Date.now() + 7 * 24 * 3600 * 1000 })).toString(
+      'base64url'
+    );
+    const sig = crypto.createHmac('sha256', secret).update(data).digest('base64url');
     return `${data}.${sig}`;
   }
 }
 
 function verifyToken(token) {
+  const secret = jwtSecret();
   try {
     const jwt = require('jsonwebtoken');
-    return jwt.verify(token, process.env.JWT_SECRET||'dev-secret');
+    return jwt.verify(token, secret);
   } catch {
     try {
       const [data, sig] = token.split('.');
-      const expected = crypto.createHmac('sha256', process.env.JWT_SECRET||'dev-secret').update(data).digest('base64url');
+      const expected = crypto.createHmac('sha256', secret).update(data).digest('base64url');
       if (sig !== expected) return null;
       const payload = JSON.parse(Buffer.from(data, 'base64url').toString());
       if (payload.exp < Date.now()) return null;
       return payload;
-    } catch { return null; }
+    } catch {
+      return null;
+    }
   }
 }
 
 function getOtpSessionSecret() {
-  return process.env.HASH_SECRET || process.env.JWT_SECRET || 'dev-secret';
+  return hashSecret();
 }
 
 function signOtpSession({ phoneHash, otp, expires = Date.now() + OTP_TTL_MS }) {
@@ -383,6 +397,25 @@ function getPreferences(user) {
   };
 }
 
+async function deleteUserAccount(userId) {
+  const database = db();
+  await database.collection('locations').doc(userId).delete().catch(() => {});
+
+  const activePanics = await database
+    .collection('panic_events')
+    .where('user_id', '==', userId)
+    .where('active', '==', true)
+    .get();
+  const now = new Date().toISOString();
+  for (const doc of activePanics.docs) {
+    await doc.ref.update({ active: false, ended_at: now, ended_reason: 'account_deleted' });
+  }
+
+  await database.collection('users').doc(userId).delete();
+  logger.info(`[Auth] Account deleted: ${userId}`);
+  return { success: true };
+}
+
 module.exports = {
   requestOTP,
   verifyOTP,
@@ -392,4 +425,5 @@ module.exports = {
   sanitiseUser,
   getPreferences,
   normalisePhone,
+  deleteUserAccount,
 };

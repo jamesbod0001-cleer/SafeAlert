@@ -80,7 +80,7 @@ class SafeAlertApi {
   Future<void> updateFcmToken(String t) => put('/user/fcm-token', body: {'token': t}).then((_) {});
   Future<void> updateResponderProfile({required List<String> skills, required bool available}) =>
       put('/user/responder-profile', body: {'skills': skills, 'available': available}).then((_) {});
-  Future<void> testNotification() => post('/user/test-notification').then((_) {});
+  Future<void> deleteAccount() => delete('/user/account').then((_) {});
   Future<Map<String, dynamic>> medicalIce() async => (await get('/user/medical-ice'))['medical_ice'] as Map<String, dynamic>? ?? {};
   Future<void> updateMedicalIce(Map<String, dynamic> patch) => put('/user/medical-ice', body: patch).then((_) {});
   Future<List<dynamic>> nearbyResources(double lat, double lng, {double radiusKm = 40, String? type}) async =>

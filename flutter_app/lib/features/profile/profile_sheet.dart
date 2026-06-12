@@ -100,6 +100,43 @@ class _ProfileBodyState extends State<_ProfileBody> {
                   child: const Text('Sign out'),
                 ),
               ),
+              const Divider(height: 24),
+              const Text('Delete account', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.red)),
+              const Text(
+                'Permanently removes your profile, circle, and preferences.',
+                style: TextStyle(fontSize: 11, color: AppColors.text2, height: 1.45),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () async {
+                  final ok = await showDialog<bool>(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text('Delete account?'),
+                      content: const Text(
+                        'This permanently removes your profile, circle, and preferences. This cannot be undone.',
+                      ),
+                      actions: [
+                        TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+                        TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Delete')),
+                      ],
+                    ),
+                  );
+                  if (ok != true || !context.mounted) return;
+                  try {
+                    await app.api.deleteAccount();
+                    app.signOut();
+                    if (context.mounted) Navigator.pop(context);
+                  } catch (_) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Could not delete account — email privacy@safealert.ng for help')),
+                      );
+                    }
+                  }
+                },
+                child: const Text('Delete my account', style: TextStyle(color: AppColors.red)),
+              ),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
                 title: const Text('Available as helper'),
@@ -211,15 +248,13 @@ class _ProfileBodyState extends State<_ProfileBody> {
             ),
             TextButton(
               onPressed: () {
-                final base = AppConfig.apiBase.replaceFirst(RegExp(r'/v1/?$'), '');
-                launchUrl(Uri.parse('$base/faq.html#medical-road'), mode: LaunchMode.externalApplication);
+                launchUrl(Uri.parse('${AppConfig.webAppBase}/faq.html#medical-road'), mode: LaunchMode.externalApplication);
               },
               child: const Text('Medical & road FAQ'),
             ),
             TextButton(
               onPressed: () {
-                final base = AppConfig.apiBase.replaceFirst(RegExp(r'/v1/?$'), '');
-                launchUrl(Uri.parse('$base/faq.html'), mode: LaunchMode.externalApplication);
+                launchUrl(Uri.parse('${AppConfig.webAppBase}/faq.html'), mode: LaunchMode.externalApplication);
               },
               child: const Text('Legal & safety FAQ'),
             ),

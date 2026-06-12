@@ -4,6 +4,7 @@ const { isMemoryDb } = require('../config/firebase');
 const { validateProductionEnv } = require('../config/envValidate');
 const fallbackData = require('../services/fallbackDataService');
 const runtimeSettings = require('../services/runtimeSettingsService');
+const { legalConfig } = require('../config/legalContent');
 
 async function healthHandler(req, res) {
   const envCheck = validateProductionEnv();
@@ -115,6 +116,7 @@ function configPublicHandler(req, res) {
     emergency_contacts_grouped: appConfig.emergencyContactsGrouped,
     emergency_contacts_disclaimer: appConfig.emergencyContactsDisclaimer,
     panic_reasons: ['medical', 'road_accident', 'security', 'other'],
+    legal: legalConfig(),
   });
 }
 

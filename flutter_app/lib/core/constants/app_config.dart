@@ -4,6 +4,12 @@ class AppConfig {
     'SAFEALERT_API',
     defaultValue: 'https://qrhtc5kg79.us-east-1.awsapprunner.com/v1',
   );
+
+  /// Web PWA base (legal pages live under /app/).
+  static String get webAppBase {
+    final root = apiBase.replaceFirst(RegExp(r'/v1/?$'), '');
+    return root.endsWith('/app') ? root : '$root/app';
+  }
   static const appName = 'SafeAlert NG';
   static const tagline = 'Your people. Not government.';
   static const ussdDefault = '*384*911#';
