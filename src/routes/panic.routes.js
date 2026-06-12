@@ -103,7 +103,7 @@ router.post('/panic/:id/respond', requireAuth, async (req, res) => {
 });
 
 router.post('/panic/activate', requireAuth, panicLimiter, validate('activatePanic'), async (req, res) => {
-  const { lat, lng } = req.body;
+  const { lat, lng, reason } = req.body;
   const user = req.user;
 
   const existing = await panicService.getActivePanicForUser(user.id);
@@ -122,7 +122,7 @@ router.post('/panic/activate', requireAuth, panicLimiter, validate('activatePani
     });
   }
 
-  const event = await panicService.createPanicEvent(user, lat, lng);
+  const event = await panicService.createPanicEvent(user, lat, lng, { reason });
   const now = new Date().toISOString();
 
   await db().collection('users').doc(user.id).update({
@@ -130,9 +130,16 @@ router.post('/panic/activate', requireAuth, panicLimiter, validate('activatePani
     panic_started_at: now,
     last_panic_at: now,
     active_panic_id: event.id,
+    active_panic_reason: event.reason,
   });
 
-  const updatedUser = { ...user, panic_active: true, journey_active: false, active_panic_id: event.id };
+  const updatedUser = {
+    ...user,
+    panic_active: true,
+    journey_active: false,
+    active_panic_id: event.id,
+    active_panic_reason: event.reason,
+  };
   await locationService.upsertUserLocation(updatedUser, lat, lng, null, {
     journey_active: false,
     panic_active: true,
@@ -153,6 +160,7 @@ router.post('/panic/activate', requireAuth, panicLimiter, validate('activatePani
     message: 'Panic activated — notifications sending',
     panic_id: event.id,
     short_id: panicService.shortPanicId(event.id),
+    reason: event.reason,
     circle_queued: circlePhones.length,
     notifications_async: true,
   });
@@ -164,6 +172,7 @@ router.post('/panic/deactivate', requireAuth, async (req, res) => {
     panic_active: false,
     panic_started_at: null,
     active_panic_id: null,
+    active_panic_reason: null,
   });
   await db().collection('locations').doc(req.user.id).delete();
   res.json({ success: true, message: 'Panic deactivated. Glad you\'re safe.' });

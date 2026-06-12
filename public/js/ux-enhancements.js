@@ -157,15 +157,13 @@
   window.saveModePrefs = async function saveModePrefs() {
     if (!window.state?.token) return;
     const night = !!document.getElementById('pref-night-mode')?.checked;
-    const women = !!document.getElementById('pref-women-mode')?.checked;
     try {
       await window.api('/user/preferences', {
         method: 'PUT',
-        body: JSON.stringify({ night_mode: night, women_mode: women }),
+        body: JSON.stringify({ night_mode: night }),
       });
       if (window.state?.preferences) {
         window.state.preferences.night_mode = night;
-        window.state.preferences.women_mode = women;
       }
       document.documentElement.classList.toggle('night-mode', night);
       toast('Preferences saved', 'ok');
@@ -188,7 +186,7 @@
         .map(
           (r) => `<div class="pov-member">
         <div class="pov-member-dot" style="background:var(--green)"></div>
-        <span style="font-size:12px;color:rgba(255,255,255,0.9);flex:1">${escapeHtml(r.display_name)}${r.is_you ? ' (you)' : ''} — en route</span>
+        <span style="font-size:12px;color:rgba(255,255,255,0.9);flex:1">${escapeHtml(r.display_name)}${r.women_helper ? ' 💜' : ''}${r.is_you ? ' (you)' : ''} — en route</span>
       </div>`
         )
         .join('');
@@ -293,7 +291,6 @@
       if (step >= steps.length) {
         localStorage.setItem(ONBOARDING_KEY, '1');
         ob.classList.remove('show');
-        if (!window.state?.token && typeof openProfile === 'function') openProfile();
         return;
       }
       if (step === 2 && typeof window.initOnboardingStateStep === 'function') {

@@ -1,7 +1,9 @@
 /**
  * WhatsApp webhook — meet users where they already are.
  * Configure WHATSAPP_VERIFY_TOKEN + WHATSAPP_WEBHOOK_SECRET in .env.
+ * POST verifies Meta X-Hub-Signature-256 (HMAC-SHA256 of raw body) when secret is set.
  */
+const crypto = require('crypto');
 const { db } = require('../config/db');
 const appConfig = require('../config/appConfig');
 const routeService = require('../services/routeService');
@@ -12,6 +14,27 @@ function verifyWebhook(mode, token, challenge) {
     return challenge;
   }
   return null;
+}
+
+/**
+ * Meta Cloud API signature — sha256 HMAC of raw JSON body using app secret.
+ * @param {Buffer|string} rawBody
+ * @param {string|undefined} signatureHeader e.g. sha256=abc...
+ */
+function verifyPostSignature(rawBody, signatureHeader) {
+  const secret = appConfig.whatsappWebhookSecret;
+  if (!secret) return true;
+  if (!signatureHeader || typeof signatureHeader !== 'string') return false;
+  const prefix = 'sha256=';
+  if (!signatureHeader.startsWith(prefix)) return false;
+  const provided = signatureHeader.slice(prefix.length);
+  const body = Buffer.isBuffer(rawBody) ? rawBody : Buffer.from(String(rawBody || ''), 'utf8');
+  const expected = crypto.createHmac('sha256', secret).update(body).digest('hex');
+  try {
+    return crypto.timingSafeEqual(Buffer.from(expected, 'hex'), Buffer.from(provided, 'hex'));
+  } catch {
+    return false;
+  }
 }
 
 function parseInboundMessage(body) {
@@ -115,4 +138,10 @@ async function processWebhook(body) {
   return { handled: true, reply, to: msg.from };
 }
 
-module.exports = { verifyWebhook, processWebhook, parseInboundMessage, handleTextMessage };
+module.exports = {
+  verifyWebhook,
+  verifyPostSignature,
+  processWebhook,
+  parseInboundMessage,
+  handleTextMessage,
+};

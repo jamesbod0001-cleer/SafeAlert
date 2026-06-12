@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../core/i18n/app_i18n.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../app/app_controller.dart';
@@ -31,14 +32,34 @@ class _PanicOverlayState extends State<PanicOverlay> {
     super.dispose();
   }
 
+  Future<void> _deactivate(AppController app) async {
+    await app.deactivatePanic();
+    if (!mounted || !app.pendingPanicFeedback) return;
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Did help arrive?'),
+        content: const Text('Quick feedback helps improve SafeAlert for everyone.'),
+        actions: [
+          TextButton(onPressed: () { app.clearPanicFeedbackPrompt(); Navigator.pop(ctx); }, child: const Text('Not yet')),
+          ElevatedButton(onPressed: () { app.clearPanicFeedbackPrompt(); Navigator.pop(ctx); }, child: const Text('Yes, I got help')),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppController>();
-    if (!app.panicActive || app.activePanic == null) return const SizedBox.shrink();
+    if (!app.panicActive) return const SizedBox.shrink();
 
-    final p = app.activePanic!;
-    final lat = app.position?.latitude ?? p.lat;
-    final lng = app.position?.longitude ?? p.lng;
+    final p = app.activePanic;
+    final lat = app.position?.latitude ?? p?.lat ?? 9.082;
+    final lng = app.position?.longitude ?? p?.lng ?? 8.675;
+    final lang = app.lang;
+    final sub = app.localOnlyPanic
+        ? AppI18n.t(lang, 'panic_sub_local')
+        : 'Your circle + nearby helpers — not government dispatch';
 
     return Material(
       color: const Color(0xEE0A0E1A),
@@ -47,17 +68,20 @@ class _PanicOverlayState extends State<PanicOverlay> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const Text('● CITIZEN SOS ACTIVE', style: TextStyle(color: AppColors.red, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
+              Text('● ${AppI18n.t(lang, 'sos').toUpperCase()} ACTIVE', style: const TextStyle(color: AppColors.red, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
               const SizedBox(height: 8),
-              Text(app.panicTimerText, style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w800, fontFeatures: [])),
-              const Text('Your circle + nearby helpers — not government dispatch', style: TextStyle(color: AppColors.text2, fontSize: 12)),
+              Text(app.panicTimerText, style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w800)),
+              Text(sub, textAlign: TextAlign.center, style: const TextStyle(color: AppColors.text2, fontSize: 12)),
               Text(formatCoords(lat, lng), style: const TextStyle(color: AppColors.text3, fontSize: 11)),
               const SizedBox(height: 20),
               Expanded(
                 child: ListView(
                   children: [
                     const Text('🆘 Your people are being alerted', style: TextStyle(fontWeight: FontWeight.w600)),
-                    const Text('Push to circle & opted-in neighbors', style: TextStyle(fontSize: 11, color: AppColors.text3)),
+                    Text(
+                      app.localOnlyPanic ? 'Use WhatsApp & calls below' : 'Push to circle & opted-in neighbors',
+                      style: const TextStyle(fontSize: 11, color: AppColors.text3),
+                    ),
                     const SizedBox(height: 12),
                     if (app.circle.isNotEmpty)
                       ...app.circle.map((m) => ListTile(
@@ -87,7 +111,7 @@ class _PanicOverlayState extends State<PanicOverlay> {
                     onPressed: () => launchUrl(Uri.parse(whatsAppSosUrl(lat: lat, lng: lng)), mode: LaunchMode.externalApplication),
                     child: const Text('💬 WhatsApp SOS'),
                   ),
-                  OutlinedButton(onPressed: () => app.deactivatePanic(), child: const Text("✓ I'm Safe")),
+                  OutlinedButton(onPressed: () => _deactivate(app), child: Text(AppI18n.t(lang, 'im_safe'))),
                   OutlinedButton(onPressed: () => app.broadcastPanic(), child: const Text('📢 Ask neighbors')),
                   OutlinedButton(
                     onPressed: () => Share.share('SOS location: ${mapsUrl(lat, lng)}'),

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
 <title>SafeAlert NG</title>
 <link rel="icon" type="image/png" href="icons/icon-512.png"/>
 <link rel="apple-touch-icon" href="icons/icon-512.png"/>
@@ -446,6 +446,40 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
 #toast.toast-ok{border-color:var(--green-border);color:var(--green)}
 #toast.toast-err{border-color:var(--red-border);color:var(--red)}
 
+/* ── COMMUNITY TOOLS ── */
+.trust-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.trust-refresh{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0}
+.trust-refresh:active{transform:scale(0.94)}
+.trust-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px;margin-bottom:10px}
+.trust-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.trust-card-title{font-size:14px;font-weight:800;line-height:1.3}
+.trust-card-hint{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:10px}
+.trust-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border);gap:8px}
+.trust-row:last-child{border-bottom:none}
+.trust-pack-grid{display:flex;flex-wrap:wrap;gap:6px;max-height:160px;overflow-y:auto;padding:2px 0}
+.trust-pack-btn{font-size:11px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;font-weight:600}
+.trust-pack-btn.saved{border-color:var(--green-border);color:var(--green);background:var(--green-soft)}
+.trust-pack-btn.home{border-color:var(--amber);color:var(--amber)}
+.trust-pack-btn:active{transform:scale(0.97)}
+.trust-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.trust-empty{font-size:12px;color:var(--text3);padding:6px 0;line-height:1.5}
+.trust-score-pill{font-size:11px;font-weight:800;color:var(--green);background:var(--green-soft);border:1px solid var(--green-border);padding:4px 10px;border-radius:999px;white-space:nowrap}
+.trust-details summary{font-size:13px;font-weight:700;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0}
+.trust-details summary::-webkit-details-marker{display:none}
+.trust-details[open] summary{margin-bottom:10px;color:var(--green)}
+.trust-tip{border-top:1px solid var(--border);padding-top:10px;margin-top:10px}
+.trust-tip:first-child{border-top:none;padding-top:0;margin-top:0}
+
+/* ── Women's safety mode ── */
+html.women-safety-mode #panic-hero{border-color:rgba(236,72,153,0.35);background:linear-gradient(180deg,rgba(236,72,153,0.06),transparent)}
+html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,72,153,0.45)}
+.women-safety-hub{border:1px solid rgba(236,72,153,0.35);background:linear-gradient(135deg,rgba(236,72,153,0.08),rgba(18,183,106,0.06));border-radius:var(--r);padding:14px;margin-bottom:12px}
+.women-safety-hub h3{font-size:15px;font-weight:800;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.women-safety-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.women-safety-actions .btn{font-size:11px;padding:10px 8px;min-height:44px}
+.women-prefs-block{padding:12px;background:rgba(236,72,153,0.06);border:1px solid rgba(236,72,153,0.25);border-radius:var(--r-sm);margin:10px 0 14px}
+.women-prefs-block .sub-opt{margin:8px 0 0 24px;font-size:12px;color:var(--text2);line-height:1.45}
+
 /* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}}
 .fade-up{animation:fadeUp .35s ease both}
@@ -486,10 +520,19 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
         📉 <strong>Data Saver</strong> is on — fewer background updates. Map loads when you open it. Turn off in Profile if you need live refresh.
       </div>
 
+      <div class="card card-sm" id="guest-sos-banner" style="margin-bottom:12px;border-color:var(--amber);background:rgba(245,158,11,0.08);display:none;align-items:flex-start;gap:10px">
+        <div style="font-size:20px">🆘</div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:800;margin-bottom:4px">SOS works without sign-in</div>
+          <p style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:8px">Hold PANIC to alert your circle on WhatsApp. Sign in to reach nearby helpers too.</p>
+          <button type="button" class="btn btn-outline btn-sm" onclick="openSignInSheet()">Sign in (optional)</button>
+        </div>
+      </div>
+
       <div class="card card-sm" style="margin-bottom:12px;border-color:var(--green-border);background:var(--green-soft);display:none" id="circle-setup-nudge">
         <div style="font-size:14px;font-weight:800;margin-bottom:6px">👥 Set up your safety circle first</div>
         <p style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:10px">Add 3–5 people you trust. When you panic, they get your live location — your people, not government.</p>
-        <button type="button" class="btn btn-green btn-sm" onclick="openProfile()">Add trusted contacts</button>
+        <button type="button" class="btn btn-green btn-sm" onclick="openProfile('signin')">Add trusted contacts</button>
       </div>
 
       <!-- PANIC HERO -->
@@ -511,6 +554,22 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
           <div class="panic-hint" id="panic-hint" data-i18n="panic_hold">Hold 3 seconds to activate</div>
         </div>
       </div>
+
+      <div class="women-safety-hub" id="women-safety-hub" style="display:none">
+        <h3><span aria-hidden="true">💜</span> Women's safety mode</h3>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:0">Quick tools — SOS prioritizes trusted female helpers when available. You stay in control.</p>
+        <div class="women-safety-actions">
+          <button type="button" class="btn btn-green btn-sm" onclick="womenQuickCheckIn(1)">⏰ Check-in 1h</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="go('circle')">👥 My circle</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="womenShareLiveTip()">📍 Share journey</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="womenSafetyTips()">💡 Safety tips</button>
+        </div>
+        <p id="women-checkin-nudge" style="display:none;font-size:10px;color:var(--amber);margin:10px 0 0;line-height:1.45">Tip: schedule a check-in when traveling alone — your circle is notified if you miss it.</p>
+      </div>
+
+      <!-- Secondary tools (collapsed on small screens) -->
+      <details class="home-more-tools" id="home-more-tools" style="margin-bottom:12px">
+        <summary style="font-size:13px;font-weight:800;padding:10px 0;cursor:pointer;list-style:none">More safety tools ▾</summary>
 
       <!-- JOURNEY WATCH -->
       <div class="card" style="margin-bottom:12px">
@@ -568,9 +627,11 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
       <!-- NEARBY PANICS (helpers) -->
       <div class="card" style="margin-bottom:12px;display:none" id="nearby-panic-card">
         <div style="font-size:15px;font-weight:800;margin-bottom:4px">🆘 Active panics nearby</div>
-        <p style="font-size:10px;color:var(--text3);margin-bottom:10px;line-height:1.45">Each alert has a unique ID (#XXXXXX). Tap to respond — they get a push when you’re on the way.</p>
+        <p style="font-size:10px;color:var(--text3);margin-bottom:10px;line-height:1.45">Each alert has a unique ID (#XXXXXX). Location is approximate for helpers. Read <a href="faq.html#abuse" style="color:var(--green)">safety tips</a> before responding.</p>
         <div id="nearby-panic-list" style="font-size:12px;color:var(--text2)">Loading…</div>
       </div>
+
+      </details>
 
       <!-- STATS -->
       <div class="stats-row">
@@ -734,6 +795,16 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
       <div id="estate-area-panel" style="margin-bottom:20px"></div>
 
       <div class="sec-head">Community broadcast groups</div>
+      <p style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5">Unions, markets, estates — members get alerts inside your area.</p>
+      <details class="card card-sm" style="margin-bottom:12px;padding:12px">
+        <summary style="font-size:13px;font-weight:700;cursor:pointer">+ Create a group</summary>
+        <label class="field-lbl" style="margin-top:10px">Group name</label>
+        <input class="field-inp" id="group-create-name" placeholder="e.g. Mile 12 Market Association"/>
+        <label class="field-lbl">Alert radius (km)</label>
+        <input class="field-inp" id="group-create-radius" type="number" min="1" max="25" step="1" value="5"/>
+        <p style="font-size:10px;color:var(--text3);margin-bottom:10px">Uses your GPS as the center. Sign in required.</p>
+        <button type="button" class="btn btn-green btn-sm" onclick="createCommunityGroup()">Create group</button>
+      </details>
       <div id="groups-list"></div>
 
       <div class="sec-head" style="margin-top:24px">Community support (optional)</div>
@@ -771,7 +842,9 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
         <button type="button" class="quick-chip" onclick="quickReport('kidnap')">🚨 Kidnap</button>
         <button type="button" class="quick-chip" onclick="quickReport('roadblock')">🚧 Roadblock</button>
         <button type="button" class="quick-chip" onclick="quickReport('protest')">✊ Protest</button>
-        <button type="button" class="quick-chip" onclick="quickReport('flood')">🌊 Flood</button>
+        <button type="button" class="quick-chip" onclick="reportQuickType('road_accident')">🚗 Crash</button>
+        <button type="button" class="quick-chip" onclick="reportQuickType('medical_emergency')">🏥 Medical</button>
+        <button type="button" class="quick-chip" onclick="reportQuickType('vehicle_breakdown')">🔧 Breakdown</button>
       </div>
 
       <!-- Step 2 -->
@@ -799,7 +872,7 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
     </div>
   </div>
 
-  <!-- BOTTOM NAV -->
+  <!-- BOTTOM NAV (Home · Map · Circle · Report · More) -->
   <div id="nav" role="tablist" aria-label="Main navigation">
     <button type="button" class="nav-item active" id="nb-home" role="tab" aria-selected="true" aria-label="Home" onclick="go('home')">
       <div class="nav-indicator"></div>
@@ -811,16 +884,6 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
       <div class="nav-icon" aria-hidden="true">🗺</div>
       <span class="nav-label" data-i18n="map">Map</span>
     </button>
-    <button type="button" class="nav-item" id="nb-insights" role="tab" aria-selected="false" aria-label="Insights" onclick="go('insights')">
-      <div class="nav-indicator"></div>
-      <div class="nav-icon" aria-hidden="true">📊</div>
-      <span class="nav-label" data-i18n="insights_tab">Insights</span>
-    </button>
-    <button type="button" class="nav-item" id="nb-routes" role="tab" aria-selected="false" aria-label="Routes" onclick="go('routes')">
-      <div class="nav-indicator"></div>
-      <div class="nav-icon" aria-hidden="true">🛣</div>
-      <span class="nav-label" data-i18n="routes_tab">Routes</span>
-    </button>
     <button type="button" class="nav-item" id="nb-circle" role="tab" aria-selected="false" aria-label="Safety circle" onclick="go('circle')">
       <div class="nav-indicator"></div>
       <div class="nav-icon" aria-hidden="true">👥</div>
@@ -830,6 +893,11 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
       <div class="nav-indicator"></div>
       <div class="nav-icon" aria-hidden="true">📍</div>
       <span class="nav-label" data-i18n="report_tab">Report</span>
+    </button>
+    <button type="button" class="nav-item" id="nb-more" role="tab" aria-selected="false" aria-label="More" onclick="openMoreSheet()">
+      <div class="nav-indicator"></div>
+      <div class="nav-icon" aria-hidden="true">⋯</div>
+      <span class="nav-label" data-i18n="nav_more">More</span>
     </button>
   </div>
 
@@ -857,6 +925,7 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
       <div class="pov-responders-title">HELPERS EN ROUTE</div>
       <div id="pov-responders"></div>
     </div>
+    <div id="pov-medical-actions" style="display:none;margin:12px 0;padding:12px;background:rgba(59,130,246,0.12);border-radius:12px;border:1px solid rgba(59,130,246,0.25)"></div>
     <div class="pov-btns">
       <button class="btn btn-green btn-sm" style="flex:1" onclick="SafeAlertCitizenSOS.sharePanicWhatsApp()">💬 WhatsApp SOS</button>
       <button class="btn btn-outline btn-sm" onclick="deactivatePanic()">✓ I'm Safe Now</button>
@@ -908,6 +977,18 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
   </div>
   <button type="button" class="btn btn-outline btn-sm" onclick="dismissJourneyFeedbackPrompt()">Not now</button>
 </div>
+<div id="more-sheet" class="sheet" onclick="event.stopPropagation()">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">More</div>
+  <div class="sheet-sub">Insights, routes, community tools &amp; settings</div>
+  <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="moreGo('insights')">📊 Safety insights</button>
+  <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="moreGo('routes')">🛣 Safe routes</button>
+  <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="moreGo('trust')">🤝 Community &amp; trust</button>
+  <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="closeMoreSheet(); openMedicalCrashSheet()">🏥 Emergency numbers &amp; hospitals</button>
+  <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="closeMoreSheet(); openSettingsSheet()">⚙️ Settings &amp; account</button>
+  <a class="btn btn-outline" style="margin-bottom:10px;width:100%;text-align:center;display:block;box-sizing:border-box" href="faq.html">❓ Legal &amp; safety FAQ</a>
+</div>
+
 <div id="profile-sheet" class="sheet" onclick="event.stopPropagation()">
   <div class="sheet-handle"></div>
   <div class="sheet-title">Your account</div>
@@ -925,6 +1006,7 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
   </div>
   <div id="profile-signed-in" style="display:none">
     <div class="card card-sm" id="profile-card"></div>
+    <div id="profile-settings-wrap">
     <div id="prefs-block" style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
       <div class="sheet-title" style="font-size:15px">Help nearby</div>
       <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:8px 0 12px">Opt in to get FCM alerts when someone near you triggers panic. We never show your exact address in notifications.</p>
@@ -968,10 +1050,42 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
         <input type="checkbox" id="pref-night-mode" onchange="saveModePrefs()"/>
         <span style="font-size:13px;font-weight:600">Night mode (high contrast)</span>
       </label>
-      <label style="display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer">
-        <input type="checkbox" id="pref-women-mode" onchange="saveModePrefs()"/>
-        <span style="font-size:13px;font-weight:600">Women's safety mode (extra alerts)</span>
-      </label>
+      <div id="medical-ice-block" style="margin:14px 0;padding-top:14px;border-top:1px solid var(--border)">
+        <div class="sheet-title" style="font-size:15px">Medical ICE (In Case of Emergency)</div>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:8px 0 10px">Shared with your circle when you tap Share ICE on SOS. Not sent to government.</p>
+        <label class="field-lbl" for="ice-blood">Blood group</label>
+        <input class="field-inp" id="ice-blood" placeholder="e.g. O+" style="margin-bottom:8px"/>
+        <label class="field-lbl" for="ice-allergies">Allergies</label>
+        <input class="field-inp" id="ice-allergies" placeholder="e.g. penicillin" style="margin-bottom:8px"/>
+        <label class="field-lbl" for="ice-conditions">Conditions</label>
+        <input class="field-inp" id="ice-conditions" placeholder="e.g. asthma, diabetes" style="margin-bottom:8px"/>
+        <label class="field-lbl" for="ice-name">ICE contact name</label>
+        <input class="field-inp" id="ice-name" placeholder="Spouse, parent…" style="margin-bottom:8px"/>
+        <label class="field-lbl" for="ice-phone">ICE phone</label>
+        <input class="field-inp" id="ice-phone" placeholder="080…" style="margin-bottom:10px"/>
+        <button type="button" class="btn btn-outline btn-sm" onclick="saveMedicalIce()">Save medical ICE</button>
+      </div>
+      <div class="women-prefs-block" id="women-prefs-block">
+        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">
+          <input type="checkbox" id="pref-women-mode" onchange="onWomenModeToggle()"/>
+          <span style="font-size:13px;font-weight:600;line-height:1.45"><strong>Women's safety mode</strong><br/><span style="font-weight:500;color:var(--text2);font-size:11px">Home hub, check-in shortcuts, trusted helpers on SOS</span></span>
+        </label>
+        <div id="women-safety-subopts" style="display:none">
+          <label class="sub-opt" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;margin-top:10px">
+            <input type="checkbox" id="pref-women-prefer-helpers" onchange="saveWomenSafetyPrefs()"/>
+            <span>Prefer women helpers nearby when I SOS (falls back to all helpers if none)</span>
+          </label>
+          <label class="sub-opt" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer">
+            <input type="checkbox" id="pref-women-checkin-nudge" onchange="saveWomenSafetyPrefs()"/>
+            <span>Show check-in reminders on home</span>
+          </label>
+          <label class="sub-opt" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer">
+            <input type="checkbox" id="pref-women-responder" onchange="saveWomenSafetyPrefs()"/>
+            <span>I can help other women nearby (opt-in responder)</span>
+          </label>
+          <p id="women-help-nearby-nudge" style="display:none;font-size:10px;color:var(--amber);margin:8px 0 0 24px;line-height:1.45">Turn on <em>Help nearby</em> above to receive women's safety alerts from others.</p>
+        </div>
+      </div>
       <button class="btn btn-outline btn-sm" style="margin-bottom:8px" onclick="testPushNotification()">🔔 Test notification</button>
       <button class="btn btn-outline btn-sm" onclick="shareCircleInvite()">Invite circle via WhatsApp</button>
     </div>
@@ -995,21 +1109,74 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
       <input class="field-inp" id="c-rel" placeholder="Mother, Friend…"/>
       <button class="btn btn-green btn-sm" onclick="saveCircleMember()">Save member</button>
     </div>
+    </div>
     <button class="btn btn-outline" style="margin-top:12px" onclick="signOut()">Sign out</button>
     <footer class="legal-footer">
-      <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+      <a href="faq.html">FAQ</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
     </footer>
   </div>
   <footer class="legal-footer" id="profile-legal-footer-guest">
-    <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+    <a href="faq.html">FAQ</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
   </footer>
+</div>
+
+<div id="women-tips-sheet" class="sheet" onclick="event.stopPropagation()">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">Women's safety tips</div>
+  <div class="sheet-sub">Built for real journeys — not government dispatch</div>
+  <ul style="font-size:12px;color:var(--text2);line-height:1.55;padding-left:18px;margin:0 0 16px">
+    <li>Add 3–5 trusted people to your circle before you travel</li>
+    <li>Schedule a check-in when alone at night or on long trips</li>
+    <li>Share your journey plan on WhatsApp — use <em>Share journey</em> above</li>
+    <li>Hold SOS if threatened — helpers see approximate area, not your exact door</li>
+    <li>Meet helpers in public, lit places — read <a href="faq.html#abuse" style="color:var(--green)">helper safety FAQ</a></li>
+    <li>Call <strong>112</strong> for immediate danger — SafeAlert supplements, not replaces</li>
+  </ul>
+  <button type="button" class="btn btn-outline btn-sm" style="width:100%" onclick="closeAllSheets()">Close</button>
+</div>
+
+<div id="helper-safety-sheet" class="sheet" onclick="event.stopPropagation()">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">Before you respond</div>
+  <div class="sheet-sub">Fake panics can be used to lure helpers. Stay safe.</div>
+  <ul style="font-size:12px;color:var(--text2);line-height:1.55;padding-left:18px;margin:0 0 16px">
+    <li>Do not go alone — tell someone where you are going</li>
+    <li>Meet in a public, lit area if possible</li>
+    <li>Location shown is approximate (~hundreds of metres)</li>
+    <li>If it feels wrong, stop and call <strong>112</strong></li>
+  </ul>
+  <p style="font-size:11px;color:var(--text3);margin-bottom:14px"><a href="faq.html#abuse" style="color:var(--green)">Full helper safety FAQ</a></p>
+  <div class="sheet-actions">
+    <button type="button" class="btn btn-outline" id="helper-safety-cancel">Cancel</button>
+    <button type="button" class="btn btn-green" id="helper-safety-accept">I understand — respond</button>
+  </div>
+</div>
+
+<div id="medical-crash-sheet" class="sheet" onclick="event.stopPropagation()">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">Emergency numbers &amp; hospitals</div>
+  <div class="sheet-sub">Tap to call — SafeAlert never auto-dials. Lines vary by state/LGA. Hold PANIC on home for SOS.</div>
+  <div id="medical-emergency-list" style="margin-bottom:12px"></div>
+  <div class="sheet-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <button type="button" class="btn btn-outline btn-sm" onclick="SafeAlertMedical.nearestHospital()">🏥 Nearest hospital</button>
+    <button type="button" class="btn btn-outline btn-sm" onclick="SafeAlertMedical.witnessReport('road_accident')">Report crash (witness)</button>
+    <button type="button" class="btn btn-outline btn-sm" style="grid-column:1/-1" onclick="SafeAlertMedical.closeSheet()">Close</button>
+  </div>
+</div>
+
+<div id="nearest-hospital-sheet" class="sheet" onclick="event.stopPropagation()">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">Nearest hospitals &amp; clinics</div>
+  <div class="sheet-sub">NGO-curated pointers — verify numbers before you travel.</div>
+  <div id="nearest-hospital-list"></div>
+  <button type="button" class="btn btn-outline btn-sm" style="margin-top:12px" onclick="document.getElementById('nearest-hospital-sheet').classList.remove('show');if(!document.querySelector('.sheet.show'))document.getElementById('sheet-bg').classList.remove('show')">Close</button>
 </div>
 
 <div id="panic-disclaimer-sheet" class="sheet" onclick="event.stopPropagation()">
   <div class="sheet-handle"></div>
   <div class="sheet-title">Before you activate SOS</div>
   <div class="sheet-sub">SafeAlert alerts your circle and nearby helpers. It does not dispatch police or ambulance.</div>
-  <p style="font-size:12px;color:var(--text2);line-height:1.55;margin-bottom:16px">In a life-threatening emergency, call <strong>112</strong> or your local emergency number. You only need to accept this once.</p>
+  <p style="font-size:12px;color:var(--text2);line-height:1.55;margin-bottom:16px">In a life-threatening emergency, call <strong>112</strong> or your local emergency number. Misusing SOS to lure helpers is prohibited — see <a href="faq.html#abuse" style="color:var(--green)">helper safety FAQ</a>. You only need to accept this once.</p>
   <div class="sheet-actions">
     <button type="button" class="btn btn-outline" id="panic-disclaimer-cancel">Cancel</button>
     <button type="button" class="btn btn-green" id="panic-disclaimer-accept">I understand</button>
@@ -1033,6 +1200,16 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
   <div class="sheet-title">Live activity</div>
   <div id="active-stats-body"></div>
   <button class="btn btn-outline btn-sm" style="margin-top:14px;width:100%" onclick="closeAllSheets()">Close</button>
+</div>
+<div id="community-form-sheet" class="sheet" onclick="event.stopPropagation()">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title" id="community-form-title">Community form</div>
+  <div class="sheet-sub" id="community-form-sub"></div>
+  <div id="community-form-body"></div>
+  <div class="sheet-actions">
+    <button type="button" class="btn btn-outline" onclick="closeAllSheets()">Cancel</button>
+    <button type="button" class="btn btn-green" id="community-form-submit">Submit</button>
+  </div>
 </div>
 
 <div id="onboarding">
@@ -1088,9 +1265,29 @@ textarea.field:focus{border-color:rgba(255,255,255,0.2)}
 <script src="js/icon-mode.js?v=20260601a"></script>
 <script src="js/onboarding-state.js?v=20260605a"></script>
 <script src="js/ux-enhancements.js?v=20260601b"></script>
-<script src="app.js?v=20260601e"></script>
+<script src="js/app/01-config.js?v=20260605b"></script>
+<script src="js/app/02-api.js?v=20260605b"></script>
+<script src="js/app/03-stats-insights.js?v=20260605b"></script>
+<script src="js/app/04-utils.js?v=20260605b"></script>
+<script src="js/app/05-auth-core.js?v=20260605b"></script>
+<script src="js/app/06-data.js?v=20260605b"></script>
+<script src="js/app/07-routes-ui.js?v=20260605b"></script>
+<script src="js/app/08-profile-auth.js?v=20260605b"></script>
+<script src="js/app/09-nav.js?v=20260605b"></script>
+<script src="js/app/10-map.js?v=20260605b"></script>
+<script src="js/app/11-gps.js?v=20260605b"></script>
+<script src="js/app/12-panic.js?v=20260605b"></script>
+<script src="js/app/13-journey.js?v=20260605b"></script>
+<script src="js/app/14-report-home.js?v=20260605b"></script>
+<script src="js/app/15-community.js?v=20260605b"></script>
+<script src="js/app/16-ui-core.js?v=20260605b"></script>
+<script src="js/medical-emergency.js?v=20260606b"></script>
+<script src="js/women-safety-mode.js?v=20260606a"></script>
+<script src="js/app/17-bootstrap.js?v=20260605b"></script>
+<script src="js/app/18-mobile-more.js?v=20260605b"></script>
+<script src="app.js?v=20260605b"></script>
 <script src="js/insights-ui.js?v=20260525a"></script>
-<script src="js/estate-area.js?v=20260530b"></script>
-<script src="js/tier-features.js?v=20260525a"></script>
+<script src="js/estate-area.js?v=20260607a"></script>
+<script src="js/tier-features.js?v=20260607a"></script>
 </body>
 </html>

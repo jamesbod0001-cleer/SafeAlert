@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
+import '../../core/accessibility/voice_service.dart';
 import '../../core/api/api_exception.dart';
 import '../../core/api/safealert_api.dart';
 import '../../core/notifications/push_service.dart';
+import '../../core/i18n/app_i18n.dart';
 import '../../core/storage/local_storage.dart';
 import '../../core/storage/offline_pack_storage.dart';
+import '../../core/utils/friendly_errors.dart';
 import '../../data/models/models.dart';
 
 /// Central app state — mirrors web `app.js` session + data refresh loops.
@@ -30,6 +33,12 @@ class AppController extends ChangeNotifier {
   String? deviceId;
   String lang = 'en';
   bool onboardingDone = false;
+  bool iconOnlyMode = false;
+  bool voiceMode = false;
+  bool dataSaver = true;
+  bool offline = false;
+  bool localPanicActive = false;
+  bool localOnlyPanic = false;
   String? error;
   String? toast;
   String? deepLinkedZoneId;
@@ -74,7 +83,9 @@ class AppController extends ChangeNotifier {
   List<dynamic> reputationBoard = [];
 
   bool get isSignedIn => token != null && token!.isNotEmpty;
-  bool get panicActive => activePanic != null;
+  bool get panicActive => activePanic != null || localPanicActive;
+  bool get womenSafetyMode => preferences['women_mode'] == true;
+  bool get womenPreferFemaleHelpers => preferences['women_prefer_female_helpers'] != false;
 
   SafeAlertApi get api => _api;
 
@@ -87,11 +98,19 @@ class AppController extends ChangeNotifier {
       deviceId = await _storage.getDeviceId() ?? _genDeviceId();
       await _storage.setDeviceId(deviceId!);
       lang = await _storage.getLang();
+      iconOnlyMode = await _storage.iconOnlyMode();
+      voiceMode = await _storage.voiceMode();
+      dataSaver = await _storage.dataSaver();
       onboardingDone = await _storage.onboardingDone();
       _api.token = token;
       _api.deviceId = deviceId;
 
       await _loadPublicConfig();
+      if (!isSignedIn) {
+        final guestWomen = await _storage.guestWomenPrefs();
+        preferences = {...preferences, ...guestWomen};
+        preferences['medical_ice'] = await _storage.guestMedicalIce();
+      }
       await refreshAll(silent: true);
       _startRefreshLoop();
       if (isSignedIn) {
@@ -112,7 +131,49 @@ class AppController extends ChangeNotifier {
 
   void _startRefreshLoop() {
     _refreshTimer?.cancel();
-    _refreshTimer = Timer.periodic(const Duration(seconds: 45), (_) => refreshAll(silent: true));
+    final secs = dataSaver ? 90 : 45;
+    _refreshTimer = Timer.periodic(Duration(seconds: secs), (_) => refreshAll(silent: true));
+  }
+
+  Future<void> setDataSaver(bool on) async {
+    dataSaver = on;
+    await _storage.setDataSaver(on);
+    _startRefreshLoop();
+    notifyListeners();
+  }
+
+  Future<void> setWomenSafetyPrefs({
+    bool? womenMode,
+    bool? preferFemaleHelpers,
+    bool? checkinNudge,
+    bool? responderOptIn,
+  }) async {
+    if (womenMode != null) preferences['women_mode'] = womenMode;
+    if (preferFemaleHelpers != null) preferences['women_prefer_female_helpers'] = preferFemaleHelpers;
+    if (checkinNudge != null) preferences['women_checkin_nudge'] = checkinNudge;
+    if (responderOptIn != null) preferences['women_responder_opt_in'] = responderOptIn;
+    notifyListeners();
+
+    if (isSignedIn) {
+      try {
+        await _api.updatePreferences({
+          if (womenMode != null) 'women_mode': womenMode,
+          if (preferFemaleHelpers != null) 'women_prefer_female_helpers': preferFemaleHelpers,
+          if (checkinNudge != null) 'women_checkin_nudge': checkinNudge,
+          if (responderOptIn != null) 'women_responder_opt_in': responderOptIn,
+        });
+      } catch (_) {}
+    } else {
+      await _storage.setGuestWomenPrefs({
+        'women_mode': preferences['women_mode'] == true,
+        'women_prefer_female_helpers': preferences['women_prefer_female_helpers'] != false,
+        'women_checkin_nudge': preferences['women_checkin_nudge'] != false,
+        'women_responder_opt_in': preferences['women_responder_opt_in'] == true,
+      });
+    }
+    if (womenMode == true) {
+      showToast('Women\'s safety mode on');
+    }
   }
 
   Future<void> refreshAll({bool silent = false}) async {
@@ -130,8 +191,10 @@ class AppController extends ChangeNotifier {
         if (position != null) _loadNearby(),
       ]);
       error = null;
+      offline = false;
     } catch (e) {
-      if (!silent) error = e.toString();
+      offline = true;
+      if (!silent) error = friendlyError(e);
     } finally {
       if (!silent) loading = false;
       notifyListeners();
@@ -355,6 +418,28 @@ class AppController extends ChangeNotifier {
   Future<void> setLanguage(String value) async {
     lang = value;
     await _storage.setLang(value);
+    await VoiceService.instance.init(value);
+    notifyListeners();
+  }
+
+  Future<void> setIconOnlyMode(bool value) async {
+    iconOnlyMode = value;
+    await _storage.setIconOnlyMode(value);
+    notifyListeners();
+  }
+
+  Future<void> setVoiceMode(bool value) async {
+    voiceMode = value;
+    await _storage.setVoiceMode(value);
+    if (value) {
+      await VoiceService.instance.init(lang);
+      await VoiceService.instance.speak(
+        AppI18n.t(lang, 'app_tagline'),
+        enabled: true,
+      );
+    } else {
+      await VoiceService.instance.stop();
+    }
     notifyListeners();
   }
 
@@ -394,29 +479,43 @@ class AppController extends ChangeNotifier {
   }
 
   // ── Panic ──
-  Future<bool> activatePanic() async {
-    if (!isSignedIn) {
-      error = 'Sign in to use Citizen SOS';
-      notifyListeners();
-      return false;
-    }
+  Future<bool> activatePanic({String reason = 'security'}) async {
+    error = null;
+    reason = 'security';
     if (position == null) await _refreshLocation();
     if (position == null) {
-      error = 'Location required for SOS';
+      error = 'Turn on location for SOS';
       notifyListeners();
       return false;
     }
+
+    localPanicActive = true;
+    localOnlyPanic = !isSignedIn;
+    panicStartedAt = DateTime.now();
+    panicReason = reason;
+    notifyListeners();
+
+    if (voiceMode) {
+      unawaited(VoiceService.instance.speak(AppI18n.t(lang, 'panic_active_voice'), enabled: true));
+    }
+
+    if (!isSignedIn) {
+      showToast(AppI18n.t(lang, 'panic_guest_toast'));
+      return true;
+    }
+
     try {
-      final res = await _api.activatePanic(position!.latitude, position!.longitude);
+      final res = await _api.activatePanic(position!.latitude, position!.longitude, reason: reason);
       activePanic = PanicAlert.fromJson(Map<String, dynamic>.from(res['panic'] as Map? ?? res));
-      panicStartedAt = DateTime.now();
+      localOnlyPanic = false;
       _startPanicPolling();
       notifyListeners();
       return true;
     } on ApiException catch (e) {
-      error = e.message;
+      error = friendlyError(e);
+      showToast(AppI18n.t(lang, 'panic_offline_toast'));
       notifyListeners();
-      return false;
+      return true;
     }
   }
 
@@ -436,17 +535,69 @@ class AppController extends ChangeNotifier {
   }
 
   Future<void> deactivatePanic() async {
+    final wasActive = panicActive;
     try {
-      await _api.deactivatePanic();
+      if (isSignedIn && activePanic != null) await _api.deactivatePanic();
     } catch (_) {}
     activePanic = null;
+    localPanicActive = false;
+    localOnlyPanic = false;
     panicStartedAt = null;
     panicResponders = [];
     _panicTimer?.cancel();
     notifyListeners();
+    if (wasActive) pendingPanicFeedback = true;
+  }
+
+  bool pendingPanicFeedback = false;
+  String panicReason = 'security';
+
+  Map<String, dynamic> get medicalIce =>
+      (preferences['medical_ice'] as Map?)?.map((k, v) => MapEntry(k.toString(), v)) ?? {};
+
+  String buildSosWhatsAppText() {
+    final p = position;
+    final map = p != null ? 'https://maps.google.com/?q=${p.latitude},${p.longitude}' : '';
+    final headline = panicReason == 'medical'
+        ? '🏥 MEDICAL SOS'
+        : panicReason == 'road_accident'
+            ? '🚗 ROAD CRASH SOS'
+            : '🆘 SOS';
+    final ice = medicalIce;
+    final iceLines = <String>[];
+    if (ice['blood_group']?.toString().isNotEmpty == true) iceLines.add('Blood: ${ice['blood_group']}');
+    if (ice['allergies']?.toString().isNotEmpty == true) iceLines.add('Allergies: ${ice['allergies']}');
+    if (ice['conditions']?.toString().isNotEmpty == true) iceLines.add('Conditions: ${ice['conditions']}');
+    if (ice['ice_name']?.toString().isNotEmpty == true) {
+      iceLines.add('ICE: ${ice['ice_name']}${ice['ice_phone'] != null ? ' (${ice['ice_phone']})' : ''}');
+    }
+    final iceBlock = iceLines.isEmpty ? '' : '\n\n🏥 Medical info:\n${iceLines.join('\n')}';
+    return '$headline — I NEED HELP NOW!\n${map.isNotEmpty ? '📍 $map\n' : ''}Citizen SafeAlert — not government dispatch.$iceBlock';
+  }
+
+  Future<void> setMedicalIce(Map<String, String> patch) async {
+    final merged = {...medicalIce, ...patch};
+    preferences['medical_ice'] = merged;
+    notifyListeners();
+    if (isSignedIn) {
+      try {
+        await _api.updateMedicalIce(merged);
+      } catch (_) {}
+    } else {
+      await _storage.setGuestMedicalIce(merged);
+    }
+  }
+
+  void clearPanicFeedbackPrompt() {
+    pendingPanicFeedback = false;
+    notifyListeners();
   }
 
   Future<void> broadcastPanic() async {
+    if (!isSignedIn || localOnlyPanic) {
+      showToast(AppI18n.t(lang, 'panic_whatsapp_hint'));
+      return;
+    }
     await _api.broadcastPanic();
     showToast('Neighbors alerted');
   }

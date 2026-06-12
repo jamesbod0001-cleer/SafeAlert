@@ -46,6 +46,7 @@ const STATIC_SCHEMA_NAMES = new Set([
   'updateCircle',
   'updateLocation',
   'activatePanic',
+  'updateMedicalIce',
   'ussd',
 ]);
 
@@ -76,6 +77,9 @@ function buildSchemas(incidentTypes = defaultIncidentTypes) {
       estate_watch_enabled: Joi.boolean().optional(),
       night_mode: Joi.boolean().optional(),
       women_mode: Joi.boolean().optional(),
+      women_prefer_female_helpers: Joi.boolean().optional(),
+      women_checkin_nudge: Joi.boolean().optional(),
+      women_responder_opt_in: Joi.boolean().optional(),
       language: Joi.string().valid('en', 'ha', 'yo', 'ig', 'pcm').optional(),
       data_saver: Joi.boolean().optional(),
     }),
@@ -199,6 +203,15 @@ function buildSchemas(incidentTypes = defaultIncidentTypes) {
     activatePanic: Joi.object({
       lat: Joi.number().min(4.0).max(14.0).required(),
       lng: Joi.number().min(2.7).max(15.0).required(),
+      reason: Joi.string().valid('medical', 'road_accident', 'security', 'other').optional(),
+      message: Joi.string().max(300).optional(),
+    }),
+    updateMedicalIce: Joi.object({
+      blood_group: Joi.string().max(10).optional().allow(''),
+      allergies: Joi.string().max(500).optional().allow(''),
+      conditions: Joi.string().max(500).optional().allow(''),
+      ice_name: Joi.string().max(80).optional().allow(''),
+      ice_phone: Joi.string().max(20).optional().allow(''),
     }),
     ussd: Joi.object({
       sessionId: Joi.string().required(),

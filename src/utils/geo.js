@@ -16,10 +16,10 @@ function zonesNearPoint(zones, lat, lng, radiusKm) {
 }
 
 const NIGERIAN_STATES = require('../config/nigeriaStates.json');
+const statePolygons = require('./statePolygons');
 
 function guessState(lat, lng) {
-  const match = NIGERIAN_STATES.find(s => lat>=s.minLat && lat<=s.maxLat && lng>=s.minLng && lng<=s.maxLng);
-  return match ? match.name : 'Nigeria';
+  return statePolygons.resolveState(lat, lng);
 }
 
 function boundingBox(lat, lng, radiusKm) {

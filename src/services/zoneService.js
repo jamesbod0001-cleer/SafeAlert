@@ -195,11 +195,23 @@ async function createZone({ lat, lng, type, description, deviceId, photoUrls = [
 async function confirmZone(id, deviceId) {
   const zone = await getZoneById(id);
   if (!zone || !zone.active) return { error: 'Zone not found or inactive' };
+  const voterHash = hashAnonymous(deviceId || 'anonymous');
+  const priorVoters = zone.danger_voters || [];
+  if (priorVoters.includes(voterHash)) {
+    return {
+      zone,
+      justVerified: false,
+      becameCritical: false,
+      already_voted: true,
+    };
+  }
+  const danger_voters = [...priorVoters, voterHash];
   const newVotes = (zone.votes_danger || 0) + 1;
   const newSeverity = calcSeverity(newVotes);
   const wasVerified = zone.verified;
   const updates = {
     votes_danger: newVotes,
+    danger_voters,
     reports: (zone.reports || 0) + 1,
     severity: newSeverity,
     verified: newVotes >= 3,
@@ -217,12 +229,24 @@ async function confirmZone(id, deviceId) {
 async function clearZone(id, deviceId) {
   const zone = await getZoneById(id);
   if (!zone || !zone.active) return { error: 'Zone not found or inactive' };
+  const voterHash = hashAnonymous(deviceId || 'anonymous');
+  const priorVoters = zone.clear_voters || [];
+  if (priorVoters.includes(voterHash)) {
+    return {
+      zone,
+      deactivated: false,
+      clearRatio: Math.round(((zone.votes_cleared || 0) / Math.max(zone.votes_danger, 1)) * 100),
+      already_voted: true,
+    };
+  }
+  const clear_voters = [...priorVoters, voterHash];
   const newCleared = (zone.votes_cleared || 0) + 1;
   const clearRatio = newCleared / Math.max(zone.votes_danger, 1);
   const threshold = appConfig.zoneClearThreshold;
   const shouldDeactivate = clearRatio >= threshold && newCleared >= 3;
   const updates = {
     votes_cleared: newCleared,
+    clear_voters,
     active: !shouldDeactivate,
     updated_at: new Date().toISOString(),
   };

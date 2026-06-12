@@ -52,6 +52,7 @@
     const lat = opts.lat ?? window.uLat;
     const lng = opts.lng ?? window.uLng;
     const tag = opts.shortId || window.SafeAlertUX?.activePanicShortId || '';
+    const reason = opts.reason || window.SafeAlertMedical?.getPendingReason?.() || 'security';
     const idLine = tag ? `Alert #${tag}\n` : '';
     const map = mapsUrl(lat, lng);
     const time = new Date().toLocaleTimeString('en-NG', {
@@ -60,20 +61,24 @@
       hour12: true,
       timeZone: 'Africa/Lagos',
     });
+    let headline = '🆘 SOS — I NEED HELP NOW!';
+    if (reason === 'medical') headline = '🏥 MEDICAL SOS — I NEED HELP NOW!';
+    else if (reason === 'road_accident') headline = '🚗 ROAD CRASH SOS — I NEED HELP NOW!';
+    const ice = window.SafeAlertMedical?.buildIceShareText?.() || '';
     const lang = localStorage.getItem('safealert_lang') || 'en';
     if (lang === 'pcm') {
       return (
-        `🆘 SOS — I NEED HELP NOW!\n${idLine}` +
+        `${headline}\n${idLine}` +
         (map ? `📍 My location: ${map}\n` : '') +
-        `🕐 Time: ${time}\n\n` +
+        `🕐 Time: ${time}${ice}\n\n` +
         `Na SafeAlert citizen alert — abeg call or come if you fit. No wait for government.\n` +
         `Share give people wey fit help.`
       );
     }
     return (
-      `🆘 SOS — I NEED HELP NOW!\n${idLine}` +
+      `${headline}\n${idLine}` +
       (map ? `📍 My live location: ${map}\n` : 'Open SafeAlert for my location.\n') +
-      `🕐 Time: ${time}\n\n` +
+      `🕐 Time: ${time}${ice}\n\n` +
       `Citizen SafeAlert alert — please call or come if you can safely help.\n` +
       `Share with trusted people nearby. We are not waiting on government dispatch.`
     );
@@ -148,9 +153,12 @@
   }
 
   /** If API panic fails — still alert people via phone/WhatsApp (no server). */
-  function activateLocalFallback(errMsg) {
-    navigator.vibrate?.([200, 100, 200, 100, 400]);
-    document.getElementById('pov')?.classList.add('show');
+  function activateLocalFallback(errMsg, opts = {}) {
+    const alreadyVisible = opts.alreadyVisible || document.getElementById('pov')?.classList.contains('show');
+    if (!alreadyVisible) {
+      navigator.vibrate?.([200, 100, 200, 100, 400]);
+      document.getElementById('pov')?.classList.add('show');
+    }
     const hint = document.getElementById('panic-hint');
     if (hint) hint.textContent = 'Offline SOS — alert your circle on WhatsApp now';
     const sub = document.querySelector('#pov .pov-sub');
@@ -164,15 +172,16 @@
       );
     }
     renderPovCircleActions();
-    sharePanicWhatsApp();
+    if (!alreadyVisible) sharePanicWhatsApp();
   }
 
   function warnIfCircleEmpty() {
     const contacts = getCircleContacts();
     if (contacts.length) return false;
     if (typeof window.toast === 'function') {
-      window.toast('Add trusted contacts in Profile — then panic reaches them instantly', 'err');
+      window.toast('Opening WhatsApp — add contacts in Profile for faster alerts next time', 'err');
     }
+    setTimeout(() => sharePanicWhatsApp(), 600);
     return true;
   }
 

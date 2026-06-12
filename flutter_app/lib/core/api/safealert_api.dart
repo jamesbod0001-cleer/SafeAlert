@@ -81,6 +81,15 @@ class SafeAlertApi {
   Future<void> updateResponderProfile({required List<String> skills, required bool available}) =>
       put('/user/responder-profile', body: {'skills': skills, 'available': available}).then((_) {});
   Future<void> testNotification() => post('/user/test-notification').then((_) {});
+  Future<Map<String, dynamic>> medicalIce() async => (await get('/user/medical-ice'))['medical_ice'] as Map<String, dynamic>? ?? {};
+  Future<void> updateMedicalIce(Map<String, dynamic> patch) => put('/user/medical-ice', body: patch).then((_) {});
+  Future<List<dynamic>> nearbyResources(double lat, double lng, {double radiusKm = 40, String? type}) async =>
+      (await get('/resources/nearby', query: {
+        'lat': '$lat',
+        'lng': '$lng',
+        'radius_km': '$radiusKm',
+        if (type != null) 'type': type,
+      }))['resources'] as List? ?? [];
 
   // ── Zones ──
   Future<List<dynamic>> zones({double? lat, double? lng, double? radiusKm, String? state, int? limit}) async {
@@ -104,7 +113,8 @@ class SafeAlertApi {
       post('/zones/$id/report-false', body: {'device_id': deviceId, 'reason': reason ?? 'Suspected false report'}).then((_) {});
 
   // ── Panic ──
-  Future<Map<String, dynamic>> activatePanic(double lat, double lng) => post('/panic/activate', body: {'lat': lat, 'lng': lng});
+  Future<Map<String, dynamic>> activatePanic(double lat, double lng, {String reason = 'security'}) =>
+      post('/panic/activate', body: {'lat': lat, 'lng': lng, 'reason': reason});
   Future<void> deactivatePanic() => post('/panic/deactivate').then((_) {});
   Future<void> broadcastPanic() => post('/panic/broadcast').then((_) {});
   Future<Map<String, dynamic>> activePanic() => get('/panic/mine/active');

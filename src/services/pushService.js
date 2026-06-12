@@ -1,10 +1,10 @@
 // src/services/pushService.js
 const { getMessaging } = require('../config/firebase');
-const appConfig = require('../config/appConfig');
+const runtimeSettings = require('./runtimeSettingsService');
 const logger = require('../utils/logger');
 
 async function sendPush({ tokens, type, body, data = {} }) {
-  if (!appConfig.pushNotificationsEnabled) {
+  if (!(await runtimeSettings.isPushNotificationsEnabled())) {
     return { success: true, sent: 0, disabled: true };
   }
 

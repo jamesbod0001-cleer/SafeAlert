@@ -1,39 +1,298 @@
 [
-  { "name": "Abia", "minLat": 4.75, "maxLat": 5.75, "minLng": 7.15, "maxLng": 7.85 },
-  { "name": "Adamawa", "minLat": 7.5, "maxLat": 10.2, "minLng": 11.5, "maxLng": 13.5 },
-  { "name": "Akwa Ibom", "minLat": 4.45, "maxLat": 5.45, "minLng": 7.45, "maxLng": 8.25 },
-  { "name": "Anambra", "minLat": 5.65, "maxLat": 6.55, "minLng": 6.75, "maxLng": 7.25 },
-  { "name": "Bauchi", "minLat": 9.5, "maxLat": 12.5, "minLng": 9.0, "maxLng": 11.2 },
-  { "name": "Bayelsa", "minLat": 4.45, "maxLat": 5.35, "minLng": 5.4, "maxLng": 6.5 },
-  { "name": "Benue", "minLat": 6.5, "maxLat": 8.5, "minLng": 7.5, "maxLng": 10.0 },
-  { "name": "Borno", "minLat": 10.5, "maxLat": 13.9, "minLng": 11.5, "maxLng": 15.0 },
-  { "name": "Cross River", "minLat": 4.5, "maxLat": 6.6, "minLng": 7.8, "maxLng": 9.5 },
-  { "name": "Delta", "minLat": 5.0, "maxLat": 6.25, "minLng": 5.0, "maxLng": 6.6 },
-  { "name": "Ebonyi", "minLat": 5.7, "maxLat": 6.55, "minLng": 7.65, "maxLng": 8.35 },
-  { "name": "Edo", "minLat": 5.8, "maxLat": 7.55, "minLng": 5.0, "maxLng": 6.55 },
-  { "name": "Ekiti", "minLat": 7.25, "maxLat": 8.05, "minLng": 4.85, "maxLng": 5.85 },
-  { "name": "Enugu", "minLat": 6.2, "maxLat": 7.05, "minLng": 7.3, "maxLng": 7.85 },
-  { "name": "FCT", "minLat": 8.65, "maxLat": 9.35, "minLng": 6.95, "maxLng": 7.65 },
-  { "name": "Gombe", "minLat": 9.5, "maxLat": 11.5, "minLng": 10.0, "maxLng": 12.2 },
-  { "name": "Imo", "minLat": 5.0, "maxLat": 6.0, "minLng": 6.75, "maxLng": 7.55 },
-  { "name": "Jigawa", "minLat": 11.0, "maxLat": 13.2, "minLng": 9.0, "maxLng": 10.5 },
-  { "name": "Kaduna", "minLat": 9.5, "maxLat": 11.8, "minLng": 6.5, "maxLng": 8.5 },
-  { "name": "Kano", "minLat": 11.0, "maxLat": 12.8, "minLng": 7.5, "maxLng": 9.5 },
-  { "name": "Katsina", "minLat": 11.5, "maxLat": 13.5, "minLng": 6.5, "maxLng": 8.5 },
-  { "name": "Kebbi", "minLat": 10.5, "maxLat": 13.2, "minLng": 3.5, "maxLng": 6.5 },
-  { "name": "Kogi", "minLat": 6.5, "maxLat": 8.5, "minLng": 5.5, "maxLng": 7.8 },
-  { "name": "Kwara", "minLat": 7.5, "maxLat": 9.5, "minLng": 2.8, "maxLng": 5.5 },
-  { "name": "Lagos", "minLat": 6.35, "maxLat": 6.7, "minLng": 2.7, "maxLng": 3.75 },
-  { "name": "Nasarawa", "minLat": 7.5, "maxLat": 9.5, "minLng": 7.8, "maxLng": 9.5 },
-  { "name": "Niger", "minLat": 8.5, "maxLat": 11.5, "minLng": 4.5, "maxLng": 7.0 },
-  { "name": "Ogun", "minLat": 6.4, "maxLat": 7.55, "minLng": 2.8, "maxLng": 4.5 },
-  { "name": "Ondo", "minLat": 5.8, "maxLat": 7.55, "minLng": 4.5, "maxLng": 6.1 },
-  { "name": "Osun", "minLat": 6.8, "maxLat": 8.2, "minLng": 4.0, "maxLng": 5.1 },
-  { "name": "Oyo", "minLat": 7.0, "maxLat": 8.8, "minLng": 2.7, "maxLng": 4.6 },
-  { "name": "Plateau", "minLat": 8.5, "maxLat": 10.5, "minLng": 8.0, "maxLng": 10.5 },
-  { "name": "Rivers", "minLat": 4.3, "maxLat": 5.5, "minLng": 6.5, "maxLng": 7.5 },
-  { "name": "Sokoto", "minLat": 11.5, "maxLat": 13.5, "minLng": 4.0, "maxLng": 6.5 },
-  { "name": "Taraba", "minLat": 6.5, "maxLat": 9.0, "minLng": 9.5, "maxLng": 12.5 },
-  { "name": "Yobe", "minLat": 10.8, "maxLat": 13.0, "minLng": 10.0, "maxLng": 13.0 },
-  { "name": "Zamfara", "minLat": 11.0, "maxLat": 13.5, "minLng": 5.5, "maxLng": 7.5 }
+  {
+    "name": "Abia",
+    "minLat": 4.834317206973594,
+    "maxLat": 6.040006161155475,
+    "minLng": 7.143767834218238,
+    "maxLng": 7.982965945921705,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Adamawa",
+    "minLat": 7.391217192719296,
+    "maxLat": 10.949460982138646,
+    "minLng": 11.34741296243834,
+    "maxLng": 13.750673561235885,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Akwa Ibom",
+    "minLat": 4.468633346851504,
+    "maxLat": 5.517574786946909,
+    "minLng": 7.460275173060836,
+    "maxLng": 8.34399785861433,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Anambra",
+    "minLat": 5.681609277346297,
+    "maxLat": 6.722229003665632,
+    "minLng": 6.601873333187825,
+    "maxLng": 7.333034515130805,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Bauchi",
+    "minLat": 9.4768765029483,
+    "maxLat": 12.529352396995591,
+    "minLng": 8.75013622630587,
+    "maxLng": 10.965727858154196,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Bayelsa",
+    "minLat": 4.272176905439892,
+    "maxLat": 5.379205227339412,
+    "minLng": 5.375165237086094,
+    "maxLng": 6.598309994410783,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Benue",
+    "minLat": 6.401266129328462,
+    "maxLat": 8.158167838874704,
+    "minLng": 7.538271427084737,
+    "maxLng": 9.884653090967447,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Borno",
+    "minLat": 10.033885796292509,
+    "maxLat": 13.719991715645222,
+    "minLng": 11.535725962683102,
+    "maxLng": 14.666935169922226,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Cross River",
+    "minLat": 4.689582999555853,
+    "maxLat": 6.892710210407927,
+    "minLng": 7.841986178719196,
+    "maxLng": 9.474327086825667,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Delta",
+    "minLat": 5.011776447724912,
+    "maxLat": 6.498556137256003,
+    "minLng": 4.984384690900811,
+    "maxLng": 6.769402026981993,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Ebonyi",
+    "minLat": 5.684799670868188,
+    "maxLat": 6.792406082374839,
+    "minLng": 7.503497155369473,
+    "maxLng": 8.455009459718838,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Edo",
+    "minLat": 5.760642052188985,
+    "maxLat": 7.558952807925778,
+    "minLng": 5.021523476327445,
+    "maxLng": 6.715768813679858,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Ekiti",
+    "minLat": 7.290330410120362,
+    "maxLat": 8.1112461104197,
+    "minLng": 4.86386156126207,
+    "maxLng": 5.773028373360773,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Enugu",
+    "minLat": 5.924640179400797,
+    "maxLat": 7.097818853857063,
+    "minLng": 6.860965587392002,
+    "maxLng": 7.903395652587335,
+    "polygon_rings": 1
+  },
+  {
+    "name": "FCT",
+    "minLat": 8.41933623467952,
+    "maxLat": 9.408684983425303,
+    "minLng": 6.779962082284328,
+    "maxLng": 7.724080473734944,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Gombe",
+    "minLat": 9.525595789114448,
+    "maxLat": 11.226097376292955,
+    "minLng": 10.499954791780283,
+    "maxLng": 11.85180331676969,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Imo",
+    "minLat": 5.19455194531605,
+    "maxLat": 5.938930988574327,
+    "minLng": 6.639080048005837,
+    "maxLng": 7.432285786160151,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Jigawa",
+    "minLat": 10.947500228952435,
+    "maxLat": 13.002235551129843,
+    "minLng": 8.160023516172373,
+    "maxLng": 10.597049713373622,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Kaduna",
+    "minLat": 9.03267914912351,
+    "maxLat": 11.52085825820211,
+    "minLng": 6.094372213107192,
+    "maxLng": 8.813119948127166,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Kano",
+    "minLat": 10.560929762698436,
+    "maxLat": 12.600740378665591,
+    "minLng": 7.680050860658753,
+    "maxLng": 9.34320173267389,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Katsina",
+    "minLat": 11.134899700560766,
+    "maxLat": 13.297238407326688,
+    "minLng": 6.85519999958035,
+    "maxLng": 9.047338499572163,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Kebbi",
+    "minLat": 10.102672476353746,
+    "maxLat": 13.249674072800246,
+    "minLng": 3.508628070828877,
+    "maxLng": 6.200881533755819,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Kogi",
+    "minLat": 6.572853565139951,
+    "maxLat": 8.738791465753593,
+    "minLng": 5.332330226758586,
+    "maxLng": 7.802608319718217,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Kwara",
+    "minLat": 8.009554862666846,
+    "maxLat": 10.15666566039198,
+    "minLng": 2.756388662406891,
+    "maxLng": 6.169057369302209,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Lagos",
+    "minLat": 6.370382298704158,
+    "maxLat": 6.700208927100334,
+    "minLng": 2.699168414990424,
+    "maxLng": 4.3686295177381,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Nasarawa",
+    "minLat": 7.766182899021601,
+    "maxLat": 9.295858383157906,
+    "minLng": 6.941065788255571,
+    "maxLng": 9.611920357038912,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Niger",
+    "minLat": 8.229528427195191,
+    "maxLat": 11.362051009746324,
+    "minLng": 3.684285566625647,
+    "maxLng": 7.378645291946725,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Ogun",
+    "minLat": 6.31175127490144,
+    "maxLat": 7.942278475271451,
+    "minLng": 2.700318095703608,
+    "maxLng": 4.604598998844779,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Ondo",
+    "minLat": 5.899277939725209,
+    "maxLat": 7.750246048116651,
+    "minLng": 4.376120088871062,
+    "maxLng": 6.004090308920695,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Osun",
+    "minLat": 6.980854988167209,
+    "maxLat": 8.091309547197909,
+    "minLng": 4.057183264795867,
+    "maxLng": 5.056488990674438,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Oyo",
+    "minLat": 7.081623553084569,
+    "maxLat": 9.188310621637925,
+    "minLng": 2.712468227926422,
+    "maxLng": 4.563011644971482,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Plateau",
+    "minLat": 8.371847741779902,
+    "maxLat": 10.370377187956933,
+    "minLng": 8.565863609318171,
+    "maxLng": 10.637447356810128,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Rivers",
+    "minLat": 4.311949642362151,
+    "maxLat": 5.683523453744442,
+    "minLng": 6.402275085027213,
+    "maxLng": 7.581654521139285,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Sokoto",
+    "minLat": 11.552430962319079,
+    "maxLat": 13.871105305365575,
+    "minLng": 4.126404704113838,
+    "maxLng": 6.792771964354699,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Taraba",
+    "minLat": 6.433332443437564,
+    "maxLat": 9.565485001731474,
+    "minLng": 9.130218505779453,
+    "maxLng": 11.882499695404647,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Yobe",
+    "minLat": 10.567634583569202,
+    "maxLat": 13.387308918671692,
+    "minLng": 9.68073348975878,
+    "maxLng": 12.497093419325893,
+    "polygon_rings": 1
+  },
+  {
+    "name": "Zamfara",
+    "minLat": 10.975240489257203,
+    "maxLat": 13.18245069324496,
+    "minLng": 4.874579633743167,
+    "maxLng": 7.22351105639018,
+    "polygon_rings": 1
+  }
 ]

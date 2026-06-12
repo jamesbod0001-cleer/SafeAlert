@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../../core/i18n/app_i18n.dart';
 import '../../core/theme/app_theme.dart';
@@ -44,8 +45,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _nextPage() {
-    _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
-    setState(() => _page = 1);
+    if (_page == 0) {
+      _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+      setState(() => _page = 1);
+      return;
+    }
+    if (_page == 1) {
+      _requestPermissionsAndContinue();
+    }
+  }
+
+  Future<void> _requestPermissionsAndContinue() async {
+    try {
+      await Geolocator.requestPermission();
+    } catch (_) {}
+    if (!mounted) return;
+    await _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    setState(() => _page = 2);
   }
 
   Future<void> _downloadPack() async {
@@ -101,6 +117,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onPageChanged: (i) => setState(() => _page = i),
                 children: [
                   _welcomePage(app),
+                  _permissionsPage(app),
                   _statePage(app, states, detected),
                 ],
               ),
@@ -115,7 +132,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: Text(AppI18n.t(app.lang, 'get_started')),
                       ),
                     )
-                  : Column(
+                  : _page == 1
+                      ? SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _nextPage,
+                            child: Text(AppI18n.t(app.lang, 'onboarding_continue')),
+                          ),
+                        )
+                      : Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         if (_selectedState != null && _selectedState!.isNotEmpty)
@@ -181,6 +206,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           _bullet('🆘 Hold SOS — alerts your people + nearby helpers'),
           _bullet('👥 Safety circle, estate watch, WhatsApp share'),
           _bullet('📊 Insights & route scores from real journeys'),
+          const Spacer(),
+        ],
+      ),
+    );
+  }
+
+  Widget _permissionsPage(AppController app) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Spacer(),
+          Text(
+            AppI18n.t(app.lang, 'onboarding_permissions_title'),
+            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            AppI18n.t(app.lang, 'onboarding_permissions_body'),
+            style: const TextStyle(color: AppColors.text2, height: 1.5),
+          ),
+          const SizedBox(height: 24),
+          _bullet('📍 Location for SOS & community reports'),
+          _bullet('🔔 Notifications when someone nearby needs help (optional)'),
           const Spacer(),
         ],
       ),

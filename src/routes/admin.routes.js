@@ -5,6 +5,7 @@ const { requireAdminSecret } = require('../middleware/adminAuth');
 const { db } = require('../config/db');
 const appConfig = require('../config/appConfig');
 const communityLeaderService = require('../services/communityLeaderService');
+const runtimeSettings = require('../services/runtimeSettingsService');
 
 router.use(requireAdminSecret);
 
@@ -70,11 +71,33 @@ router.put('/settings/proximity', async (req, res) => {
       },
       { merge: true }
     );
+  runtimeSettings.invalidate();
   res.json({
     ok: true,
     proximity_alerts_enabled: enabled,
     note:
-      'PROXIMITY_ALERTS_ENABLED env var takes precedence on server restart; app_settings is the runtime emergency kill switch.',
+      'Runtime kill switch — takes effect immediately. PROXIMITY_ALERTS_ENABLED env is the boot default only.',
+  });
+});
+
+router.put('/settings/push', async (req, res) => {
+  const enabled = !!req.body.enabled;
+  await db()
+    .collection('app_settings')
+    .doc('global')
+    .set(
+      {
+        push_notifications_enabled: enabled,
+        updated_at: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+  runtimeSettings.invalidate();
+  res.json({
+    ok: true,
+    push_notifications_enabled: enabled,
+    note:
+      'Runtime toggle — takes effect immediately. PUSH_NOTIFICATIONS_ENABLED env is the boot default only.',
   });
 });
 

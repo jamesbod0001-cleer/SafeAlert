@@ -3,6 +3,7 @@ const { db } = require('../config/db');
 const { isMemoryDb } = require('../config/firebase');
 const logger = require('../utils/logger');
 const notifyQueue = require('./notifyQueue');
+const notifyPubSub = require('./notifyPubSubService');
 
 const JOBS_COLLECTION = 'notify_jobs';
 const PROCESSING_STALE_MS = 5 * 60 * 1000;
@@ -36,7 +37,7 @@ function registerHandler(name, handler) {
 }
 
 function schedulePump() {
-  if (pumpScheduled) return;
+  if (pumpScheduled || notifyPubSub.shouldSkipEmbeddedPump()) return;
   pumpScheduled = true;
   setImmediate(() => {
     pumpScheduled = false;
@@ -55,10 +56,14 @@ async function claimOldestPendingJob() {
   if (snap.empty) return null;
 
   const jobDoc = snap.docs[0];
-  const jobData = jobDoc.data();
+  return claimJobDoc(jobDoc.id, jobDoc.data());
+}
+
+async function claimJobDoc(id, jobData) {
+  const ref = db().collection(JOBS_COLLECTION).doc(id);
   const startedAt = nowIso();
 
-  await db().collection(JOBS_COLLECTION).doc(jobDoc.id).update({
+  await ref.update({
     status: 'processing',
     attempts: (jobData.attempts || 0) + 1,
     processing_started_at: startedAt,
@@ -66,7 +71,7 @@ async function claimOldestPendingJob() {
     error: null,
   });
 
-  return { id: jobDoc.id, data: jobData };
+  return { id, data: jobData };
 }
 
 async function runFirestoreJob(job) {
@@ -94,8 +99,30 @@ async function runFirestoreJob(job) {
   }
 }
 
+async function processJobById(jobId, fallback = {}) {
+  if (isMemoryDb()) return;
+
+  const ref = db().collection(JOBS_COLLECTION).doc(jobId);
+  const snap = await ref.get();
+  if (!snap.exists) {
+    if (fallback.name) {
+      await runFirestoreJob({
+        id: jobId,
+        data: { name: fallback.name, payload: fallback.payload || {} },
+      });
+    }
+    return;
+  }
+
+  const data = snap.data();
+  if (data.status === 'done' || data.status === 'failed') return;
+  if (data.status === 'processing') return;
+
+  await runFirestoreJob(await claimJobDoc(jobId, data));
+}
+
 async function pumpQueue() {
-  if (pumpRunning || isMemoryDb()) return;
+  if (pumpRunning || isMemoryDb() || notifyPubSub.shouldSkipEmbeddedPump()) return;
   pumpRunning = true;
 
   try {
@@ -136,8 +163,19 @@ async function enqueueJob(name, payload = {}) {
       updated_at: createdAt,
       attempts: 0,
     });
+
+    let transport = 'firestore';
+    if (notifyPubSub.isEnabled()) {
+      const published = await notifyPubSub.publishJob({
+        jobId: ref.id,
+        name,
+        payload,
+      });
+      transport = published ? 'pubsub' : 'firestore-fallback';
+    }
+
     processNext();
-    return { id: ref.id, mode: 'firestore' };
+    return { id: ref.id, mode: transport };
   } catch (err) {
     logger.error(
       `[NotifyJobs] Firestore enqueue failed for ${name}; falling back to in-memory execution:`,
@@ -184,6 +222,18 @@ async function recoverPending() {
   processNext();
 }
 
+async function startPubSubWorker() {
+  if (!notifyPubSub.shouldRunWorker()) return;
+  await notifyPubSub.startWorker({
+    onMessage: async (body) => {
+      await processJobById(body.jobId, {
+        name: body.name,
+        payload: body.payload,
+      });
+    },
+  });
+}
+
 async function init() {
   if (initialized) return;
   if (initPromise) return initPromise;
@@ -193,6 +243,7 @@ async function init() {
     registerNotifyJobHandlers({ registerHandler });
     initialized = true;
     await recoverPending();
+    await startPubSubWorker();
   })();
 
   try {
@@ -208,4 +259,6 @@ module.exports = {
   enqueueJob,
   processNext,
   recoverPending,
+  processJobById,
+  startPubSubWorker,
 };

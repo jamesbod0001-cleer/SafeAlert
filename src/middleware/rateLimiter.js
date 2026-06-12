@@ -46,4 +46,20 @@ const locationLimiter = rateLimit({
   message: { error: 'Location updates too frequent' },
 });
 
-module.exports = { defaultLimiter, authLimiter, panicLimiter, locationLimiter };
+/** Anonymous zone confirm/clear — cap votes per IP to limit bot farms. */
+const zoneVoteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: parseInt(process.env.RATE_LIMIT_ZONE_VOTE_MAX || '30', 10),
+  keyGenerator: (req) => req.ip || req.socket?.remoteAddress || 'unknown',
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many zone votes from this network — try again later' },
+});
+
+module.exports = {
+  defaultLimiter,
+  authLimiter,
+  panicLimiter,
+  locationLimiter,
+  zoneVoteLimiter,
+};

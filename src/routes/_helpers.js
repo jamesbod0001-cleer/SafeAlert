@@ -3,6 +3,7 @@ const { db } = require('../config/db');
 const { isMemoryDb } = require('../config/firebase');
 const { validateProductionEnv } = require('../config/envValidate');
 const fallbackData = require('../services/fallbackDataService');
+const runtimeSettings = require('../services/runtimeSettingsService');
 
 async function healthHandler(req, res) {
   const envCheck = validateProductionEnv();
@@ -24,6 +25,10 @@ async function healthHandler(req, res) {
     appConfig.firebaseWebVapidKey &&
     appConfig.firebaseWebProjectId
   );
+  const whatsappConfigured = !!(
+    appConfig.whatsappVerifyToken && appConfig.whatsappWebhookSecret
+  );
+  const runtime = await runtimeSettings.getSnapshot();
 
   res.json({
     status: firestore_ok ? 'ok' : 'degraded',
@@ -36,9 +41,14 @@ async function healthHandler(req, res) {
     firestore_ok,
     fallback_data: fallbackData.hasFallback(),
     fallback_zones: fallbackData.getMeta().zone_count || 0,
-    proximity_alerts: appConfig.proximityAlertsEnabled,
-    push_notifications_enabled: appConfig.pushNotificationsEnabled,
+    proximity_alerts: runtime.proximity_alerts_enabled,
+    push_notifications_enabled: runtime.push_notifications_enabled,
+    runtime_settings: runtime,
+    notify_queue_role: appConfig.notifyQueueRole,
+    notify_pubsub_enabled: appConfig.notifyPubSubEnabled,
     fcm_web_configured: fcmWebOk,
+    fcm_admin_configured: !!(process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL),
+    whatsapp_configured: whatsappConfigured,
     sms_username: atUser || null,
     sandbox_otp_in_api: atUser === 'sandbox' || process.env.EXPOSE_SANDBOX_OTP === 'true',
     at_sandbox: atUser === 'sandbox',
@@ -101,6 +111,10 @@ function configPublicHandler(req, res) {
         }
       : null,
     nigeria_states: require('../config/nigeriaStates.json'),
+    emergency_contacts: appConfig.emergencyContacts,
+    emergency_contacts_grouped: appConfig.emergencyContactsGrouped,
+    emergency_contacts_disclaimer: appConfig.emergencyContactsDisclaimer,
+    panic_reasons: ['medical', 'road_accident', 'security', 'other'],
   });
 }
 

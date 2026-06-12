@@ -105,7 +105,7 @@ From [SERIOUS_LAUNCH_DEPLOYMENT.md](../SERIOUS_LAUNCH_DEPLOYMENT.md). Exchange r
 
 ## Ask
 
-**[PLACEHOLDER — Seed round amount]**
+**₦15M–25M seed** (adjust to your deck — ~18 months runway at lean burn)
 
 Use of funds (illustrative — adjust to your deck):
 
@@ -122,11 +122,11 @@ Use of funds (illustrative — adjust to your deck):
 
 ## Team
 
-**[PLACEHOLDER — Founder names, roles, and 1-line bios]**
+**Founder bios — add before investor meetings.** Demo live metrics via `GET /v1/transparency` so traction slides stay current.
 
 | Name | Role | Background |
 |------|------|------------|
-| _[Name]_ | CEO / Product | _[e.g. Nigeria safety / civic tech]_ |
+| _[Founder]_ | CEO / Product | Nigeria safety / civic tech |
 | _[Name]_ | CTO / Engineering | _[e.g. mobile, Firebase, geospatial]_ |
 | _[Name]_ | Community / Ops | _[e.g. field agents, leader network]_ |
 

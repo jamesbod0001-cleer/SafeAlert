@@ -11,10 +11,14 @@
   const authBtn = document.getElementById('auth-btn');
   const authError = document.getElementById('auth-error');
   const logoutBtn = document.getElementById('logout-btn');
+  const refreshBtn = document.getElementById('admin-refresh-btn');
+  const statusEl = document.getElementById('admin-status');
   const leadersPanel = document.getElementById('leaders-panel');
   const flagsPanel = document.getElementById('flags-panel');
   const proximityToggle = document.getElementById('proximity-toggle');
+  const pushToggle = document.getElementById('push-toggle');
   const proximityNote = document.getElementById('proximity-note');
+  const pushNote = document.getElementById('push-note');
 
   function getSecret() {
     return sessionStorage.getItem(STORAGE_KEY) || '';
@@ -23,6 +27,12 @@
   function setSecret(value) {
     if (value) sessionStorage.setItem(STORAGE_KEY, value);
     else sessionStorage.removeItem(STORAGE_KEY);
+  }
+
+  function setStatus(msg, isError) {
+    if (!statusEl) return;
+    statusEl.textContent = msg || '';
+    statusEl.className = isError ? 'error' : 'note';
   }
 
   async function api(path, options = {}) {
@@ -65,31 +75,48 @@
       .replace(/"/g, '&quot;');
   }
 
+  function fmtWhen(iso) {
+    if (!iso) return '—';
+    try {
+      return new Date(iso).toLocaleString('en-NG', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+      });
+    } catch {
+      return iso;
+    }
+  }
+
   async function loadSettings() {
     const data = await api('/settings');
     proximityToggle.checked = !!data.proximity_alerts_enabled;
-    proximityNote.textContent =
-      'Push notifications: ' +
-      (data.push_notifications_enabled ? 'enabled' : 'disabled') +
-      '. Env PROXIMITY_ALERTS_ENABLED wins on restart.';
+    if (pushToggle) pushToggle.checked = !!data.push_notifications_enabled;
+    proximityNote.textContent = data.proximity_alerts_enabled
+      ? 'Nearby panic & zone alerts are ON.'
+      : 'Proximity alerts are OFF — circle SMS may still send.';
+    if (pushNote) {
+      pushNote.textContent = data.push_notifications_enabled
+        ? 'FCM push notifications enabled.'
+        : 'Push notifications disabled at runtime.';
+    }
   }
 
   async function loadLeaders() {
+    leadersPanel.innerHTML = '<p class="empty">Loading applications…</p>';
     const { leaders } = await api('/leaders/pending');
     if (!leaders.length) {
-      leadersPanel.innerHTML = '<p class="empty">No pending applications.</p>';
+      leadersPanel.innerHTML = '<p class="empty">No pending applications — all caught up.</p>';
       return;
     }
     const rows = leaders
       .map(
         (l) =>
           '<tr>' +
-          '<td>' +
+          '<td><strong>' +
           esc(l.org_name || '—') +
-          '</td>' +
-          '<td>' +
-          esc(l.role) +
-          '</td>' +
+          '</strong><div class="cell-sub">' +
+          esc(l.role || '') +
+          '</div></td>' +
           '<td>' +
           esc([l.state, l.lga].filter(Boolean).join(', ') || '—') +
           '</td>' +
@@ -99,7 +126,7 @@
           '<td class="actions">' +
           '<button class="btn btn-sm" data-verify="' +
           esc(l.id) +
-          '" data-verified="1">Verify</button>' +
+          '" data-verified="1">Approve</button>' +
           '<button class="btn btn-sm btn-danger" data-verify="' +
           esc(l.id) +
           '" data-verified="0">Reject</button>' +
@@ -108,22 +135,30 @@
       )
       .join('');
     leadersPanel.innerHTML =
-      '<table><thead><tr><th>Org</th><th>Role</th><th>Location</th><th>Phone</th><th></th></tr></thead><tbody>' +
+      '<p class="note">' +
+      leaders.length +
+      ' pending</p><table><thead><tr><th>Applicant</th><th>Location</th><th>Phone</th><th></th></tr></thead><tbody>' +
       rows +
       '</tbody></table>';
     leadersPanel.querySelectorAll('[data-verify]').forEach((btn) => {
       btn.addEventListener('click', async () => {
         const id = btn.getAttribute('data-verify');
         const verified = btn.getAttribute('data-verified') === '1';
+        const label = verified ? 'Approve this leader?' : 'Reject this application?';
+        if (!confirm(label)) return;
         btn.disabled = true;
         try {
           await api('/leaders/' + id + '/verify', {
             method: 'POST',
-            body: JSON.stringify({ verified, note: verified ? 'Approved via admin UI' : 'Rejected via admin UI' }),
+            body: JSON.stringify({
+              verified,
+              note: verified ? 'Approved via admin UI' : 'Rejected via admin UI',
+            }),
           });
+          setStatus(verified ? 'Leader approved.' : 'Application rejected.', false);
           await loadLeaders();
         } catch (err) {
-          alert(err.message);
+          setStatus(err.message, true);
           btn.disabled = false;
         }
       });
@@ -131,6 +166,7 @@
   }
 
   async function loadFlags() {
+    flagsPanel.innerHTML = '<p class="empty">Loading flags…</p>';
     const { flags } = await api('/false-reports');
     if (!flags.length) {
       flagsPanel.innerHTML = '<p class="empty">No false-report flags.</p>';
@@ -140,9 +176,9 @@
       .map(
         (f) =>
           '<tr>' +
-          '<td>' +
+          '<td><code style="font-size:11px">' +
           esc(f.zone_id || '—') +
-          '</td>' +
+          '</code></td>' +
           '<td>' +
           esc(f.reason || '—') +
           '</td>' +
@@ -150,22 +186,27 @@
           esc((f.device_hash || '').slice(0, 12)) +
           '…</td>' +
           '<td>' +
-          esc(f.created_at ? new Date(f.created_at).toLocaleString() : '—') +
+          esc(fmtWhen(f.created_at)) +
           '</td>' +
           '</tr>'
       )
       .join('');
     flagsPanel.innerHTML =
-      '<table><thead><tr><th>Zone</th><th>Reason</th><th>Device</th><th>When</th></tr></thead><tbody>' +
+      '<p class="note">' +
+      flags.length +
+      ' recent flags</p><table><thead><tr><th>Zone ID</th><th>Reason</th><th>Device</th><th>When</th></tr></thead><tbody>' +
       rows +
       '</tbody></table>';
   }
 
   async function loadAll() {
+    setStatus('Refreshing…', false);
     try {
       await Promise.all([loadSettings(), loadLeaders(), loadFlags()]);
+      setStatus('Updated ' + new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }), false);
     } catch (err) {
       if (err.message !== 'Invalid admin secret') {
+        setStatus(err.message, true);
         leadersPanel.innerHTML = '<p class="error">' + esc(err.message) + '</p>';
       }
     }
@@ -179,14 +220,35 @@
         method: 'PUT',
         body: JSON.stringify({ enabled }),
       });
-      proximityNote.textContent = result.note || 'Updated.';
+      proximityNote.textContent = result.note || (enabled ? 'Proximity alerts ON.' : 'Proximity alerts OFF.');
+      setStatus('Proximity setting saved.', false);
     } catch (err) {
       proximityToggle.checked = !enabled;
-      alert(err.message);
+      setStatus(err.message, true);
     } finally {
       proximityToggle.disabled = false;
     }
   });
+
+  if (pushToggle) {
+    pushToggle.addEventListener('change', async () => {
+      const enabled = pushToggle.checked;
+      pushToggle.disabled = true;
+      try {
+        const result = await api('/settings/push', {
+          method: 'PUT',
+          body: JSON.stringify({ enabled }),
+        });
+        if (pushNote) pushNote.textContent = result.note || (enabled ? 'Push ON.' : 'Push OFF.');
+        setStatus('Push setting saved.', false);
+      } catch (err) {
+        pushToggle.checked = !enabled;
+        setStatus(err.message, true);
+      } finally {
+        pushToggle.disabled = false;
+      }
+    });
+  }
 
   authBtn.addEventListener('click', async () => {
     const secret = secretInput.value.trim();
@@ -216,6 +278,8 @@
     secretInput.value = '';
     showAuth();
   });
+
+  refreshBtn?.addEventListener('click', () => loadAll());
 
   if (getSecret()) {
     showDashboard();

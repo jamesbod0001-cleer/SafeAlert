@@ -24,6 +24,9 @@ function floatEnv(name, fallback) {
   return Number.isFinite(v) ? v : fallback;
 }
 
+const nigeriaEmergencyContacts = require('./nigeriaEmergencyContacts');
+const parsedEmergencyContacts = parseJsonEnv('EMERGENCY_CONTACTS', []);
+
 const isProduction = process.env.NODE_ENV === 'production';
 const budgetMode = process.env.BUDGET_MODE === 'true';
 
@@ -59,6 +62,12 @@ module.exports = {
   criticalZoneSmsEnabled: process.env.CRITICAL_ZONE_SMS_ENABLED === 'true',
   criticalZoneSmsMax: intEnv('CRITICAL_ZONE_SMS_MAX', 0),
   notifyQueueConcurrency: intEnv('NOTIFY_QUEUE_CONCURRENCY', 3),
+  /** embedded | publisher | worker | all — controls Firestore pump vs Pub/Sub */
+  notifyQueueRole: process.env.NOTIFY_QUEUE_ROLE || 'embedded',
+  notifyPubSubEnabled: process.env.NOTIFY_PUBSUB_ENABLED === 'true',
+  notifyPubSubTopic: process.env.NOTIFY_PUBSUB_TOPIC || 'safealert-notify-jobs',
+  notifyPubSubSubscription:
+    process.env.NOTIFY_PUBSUB_SUBSCRIPTION || 'safealert-notify-worker',
   panicBroadcastRadiusKm: floatEnv('PANIC_BROADCAST_RADIUS_KM', 10),
   locationMinIntervalSec: effectiveLocationMinIntervalSec(),
   locationTtlMinutes: intEnv('LOCATION_TTL_MINUTES', 45),
@@ -94,6 +103,8 @@ module.exports = {
   openaiModel: process.env.OPENAI_MODEL || 'gpt-4o-mini',
   whatsappVerifyToken: process.env.WHATSAPP_VERIFY_TOKEN || '',
   whatsappWebhookSecret: process.env.WHATSAPP_WEBHOOK_SECRET || '',
+  /** When set, POST /sms/inbound requires matching X-Webhook-Secret header */
+  smsInboundWebhookSecret: process.env.SMS_INBOUND_WEBHOOK_SECRET || '',
   zeroRatingInfoUrl: process.env.ZERO_RATING_INFO_URL || '',
   zonesMaxPerQuery: intEnv('ZONES_MAX_PER_QUERY', 300),
   zonesStateQueryLimit: intEnv('ZONES_STATE_QUERY_LIMIT', 250),
@@ -113,7 +124,11 @@ module.exports = {
     critical: intEnv('SEVERITY_THRESHOLD_CRITICAL', 10),
   },
   incidentTypes: parseListEnv('INCIDENT_TYPES', []),
-  emergencyContacts: parseJsonEnv('EMERGENCY_CONTACTS', []),
+  emergencyContacts: parsedEmergencyContacts.length
+    ? parsedEmergencyContacts
+    : nigeriaEmergencyContacts.flat,
+  emergencyContactsGrouped: nigeriaEmergencyContacts.groups,
+  emergencyContactsDisclaimer: nigeriaEmergencyContacts.disclaimer,
   /** Native app store links (set when published). */
   iosAppStoreUrl: process.env.IOS_APP_STORE_URL || '',
   androidPlayStoreUrl: process.env.ANDROID_PLAY_STORE_URL || '',

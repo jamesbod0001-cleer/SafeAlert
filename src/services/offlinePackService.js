@@ -10,7 +10,6 @@ const zoneService = require('./zoneService');
 const fallbackData = require('./fallbackDataService');
 
 const PACK_DIR = path.join(__dirname, '../../data/offline-packs');
-const BLOCKED = new Set(['safealert_starter', 'review_fixture', 'daily_starter']);
 
 function normState(s) {
   return String(s || '')
@@ -23,31 +22,52 @@ function findStateBounds(stateName) {
   return stateBounds.find((s) => s.name.toLowerCase().includes(key) || key.includes(s.name.toLowerCase()));
 }
 
+function mapPackZone(z) {
+  return {
+    id: z.id,
+    lat: z.lat,
+    lng: z.lng,
+    type: z.type,
+    severity: z.severity,
+    state: z.state,
+    lga: z.lga,
+    place: z.place,
+    source: z.source,
+    verified: !!z.verified,
+    leader_endorsed: !!z.leader_endorsed,
+    updated_at: z.updated_at,
+  };
+}
+
+function fallbackZonesForState(stateName) {
+  if (!fallbackData.hasFallback()) return [];
+  const target = normState(stateName).toLowerCase();
+  return fallbackData
+    .getZones({ limit: 10000 })
+    .filter((z) => normState(z.state).toLowerCase() === target)
+    .map(mapPackZone);
+}
+
 async function buildPackFromFirestore(stateName) {
   const bounds = findStateBounds(stateName);
   if (!bounds) return { error: `Unknown state: ${stateName}` };
 
-  const fallbackDataMod = fallbackData;
   try {
     const zones = await zoneService.getZones({
       state: normState(stateName),
       limit: 500,
     });
 
-    const mapped = zones.map((z) => ({
-      id: z.id,
-      lat: z.lat,
-      lng: z.lng,
-      type: z.type,
-      severity: z.severity,
-      state: z.state,
-      lga: z.lga,
-      place: z.place,
-      source: z.source,
-      verified: !!z.verified,
-      leader_endorsed: !!z.leader_endorsed,
-      updated_at: z.updated_at,
-    }));
+    let mapped = zones.map(mapPackZone);
+    let source = 'firestore';
+
+    if (mapped.length === 0) {
+      const fallbackZones = fallbackZonesForState(stateName);
+      if (fallbackZones.length) {
+        mapped = fallbackZones;
+        source = 'static_fallback';
+      }
+    }
 
     return {
       state: normState(stateName),
@@ -56,24 +76,15 @@ async function buildPackFromFirestore(stateName) {
       bounds,
       zone_count: mapped.length,
       zones: mapped,
-      note: 'Download on Wi‑Fi. Warnings use cached data when offline.',
+      source,
+      note:
+        mapped.length > 0
+          ? 'Download on Wi‑Fi. Warnings use cached data when offline.'
+          : 'No zones yet for this state — check back after community reports or ACLED sync.',
     };
   } catch (err) {
-    if (fallbackDataMod.isQuotaError(err) && fallbackDataMod.hasFallback()) {
-      const all = fallbackDataMod.getZones({ limit: 10000 });
-      const zones = all
-        .filter((z) => normState(z.state).toLowerCase() === normState(stateName).toLowerCase())
-        .map((z) => ({
-          id: z.id,
-          lat: z.lat,
-          lng: z.lng,
-          type: z.type,
-          severity: z.severity,
-          state: z.state,
-          lga: z.lga,
-          verified: !!z.verified,
-          updated_at: z.updated_at,
-        }));
+    if (fallbackData.isQuotaError(err) && fallbackData.hasFallback()) {
+      const zones = fallbackZonesForState(stateName);
       return {
         state: normState(stateName),
         version: new Date().toISOString().slice(0, 10),
@@ -108,7 +119,16 @@ async function getPack(stateName) {
   } catch {
     /* rebuild */
   }
-  return buildPackFromFirestore(stateName);
+  const built = await buildPackFromFirestore(stateName);
+  if (built.zones?.length && !built.error) {
+    try {
+      fs.mkdirSync(PACK_DIR, { recursive: true });
+      fs.writeFileSync(filePath, JSON.stringify(built));
+    } catch {
+      /* non-fatal */
+    }
+  }
+  return built;
 }
 
 module.exports = { getPack, buildPackFromFirestore, listAvailablePacks, normState };

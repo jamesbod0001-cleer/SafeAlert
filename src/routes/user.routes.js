@@ -24,7 +24,8 @@ router.put('/user/profile', requireAuth, validate('updateProfile'), async (req, 
 // Update FCM token for push notifications
 router.put('/user/fcm-token', requireAuth, async (req, res) => {
   const { token } = req.body;
-  if (!token) return res.status(400).json({ error: 'Token required' });
+  if (!token || typeof token !== 'string') return res.status(400).json({ error: 'Token required' });
+  if (token.length > 512) return res.status(400).json({ error: 'Token too long' });
   await db().collection('users').doc(req.user.id).update({ fcm_token: token });
   locationService.syncLocationUserFields(req.user.id, { fcm_token: token }).catch(() => {});
   res.json({ success: true });
@@ -76,6 +77,13 @@ router.put('/user/preferences', requireAuth, validate('updatePreferences'), asyn
   const prefPatch = {};
   if (req.body.night_mode !== undefined) prefPatch.night_mode = req.body.night_mode;
   if (req.body.women_mode !== undefined) prefPatch.women_mode = req.body.women_mode;
+  if (req.body.women_prefer_female_helpers !== undefined) {
+    prefPatch.women_prefer_female_helpers = req.body.women_prefer_female_helpers;
+  }
+  if (req.body.women_checkin_nudge !== undefined) prefPatch.women_checkin_nudge = req.body.women_checkin_nudge;
+  if (req.body.women_responder_opt_in !== undefined) {
+    prefPatch.women_responder_opt_in = req.body.women_responder_opt_in;
+  }
   if (req.body.language !== undefined) prefPatch.language = req.body.language;
   if (req.body.data_saver !== undefined) prefPatch.data_saver = req.body.data_saver;
   if (Object.keys(prefPatch).length) {
@@ -98,6 +106,23 @@ router.put('/user/preferences', requireAuth, validate('updatePreferences'), asyn
   }
 
   res.json({ success: true, preferences: authService.getPreferences(user) });
+});
+
+router.get('/user/medical-ice', requireAuth, async (req, res) => {
+  res.json({ medical_ice: req.user.medical_ice || {} });
+});
+
+router.put('/user/medical-ice', requireAuth, validate('updateMedicalIce'), async (req, res) => {
+  const medical_ice = {
+    blood_group: (req.body.blood_group || '').trim().slice(0, 10),
+    allergies: (req.body.allergies || '').trim().slice(0, 500),
+    conditions: (req.body.conditions || '').trim().slice(0, 500),
+    ice_name: (req.body.ice_name || '').trim().slice(0, 80),
+    ice_phone: (req.body.ice_phone || '').trim().slice(0, 20),
+    updated_at: new Date().toISOString(),
+  };
+  await db().collection('users').doc(req.user.id).update({ medical_ice });
+  res.json({ success: true, medical_ice });
 });
 
 router.get('/user/circle', requireAuth, async (req, res) => {

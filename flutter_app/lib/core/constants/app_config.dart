@@ -18,10 +18,14 @@ const typeIcons = {
   'suspicious': '👁️',
   'one_chance': '🚐',
   'checkpoint': '🛑',
+  'medical_emergency': '🏥',
+  'road_accident': '🚗',
+  'vehicle_breakdown': '🔧',
 };
 
 const responderSkills = [
   'first_aid',
+  'driver',
   'escort',
   'mechanic',
   'legal',

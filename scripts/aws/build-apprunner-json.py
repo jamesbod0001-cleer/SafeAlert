@@ -123,6 +123,7 @@ def main():
         'STATS_REBUILD_MAX_PAGES': file_env.get('STATS_REBUILD_MAX_PAGES', '8'),
         'DAILY_IMPORT_ENABLED': file_env.get('DAILY_IMPORT_ENABLED', 'false'),
         'IMPORT_JOB_SECRET': file_env.get('IMPORT_JOB_SECRET') or os.environ.get('IMPORT_JOB_SECRET', ''),
+        'ADMIN_SECRET': file_env.get('ADMIN_SECRET') or os.environ.get('ADMIN_SECRET', ''),
     }
     # Drop empty optional keys
     runtime = {k: v for k, v in runtime.items() if v is not None and str(v) != ''}

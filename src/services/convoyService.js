@@ -1,8 +1,30 @@
 const { db } = require('../config/db');
 const { randomUUID: uuidv4 } = require('crypto');
 
+async function circleUserIdsForOrganizer(organizer) {
+  const hashes = new Set(
+    (organizer.circle || []).map((m) => m.phone_hash).filter(Boolean)
+  );
+  if (!hashes.size) return [];
+
+  const snap = await db().collection('users').get();
+  return snap.docs
+    .filter((doc) => hashes.has(doc.data().phone_hash))
+    .map((doc) => doc.id);
+}
+
 async function createConvoy(organizer, { member_ids = [], title }) {
-  const ids = [...new Set([organizer.id, ...member_ids.filter(Boolean)])].slice(0, 10);
+  const allowed = new Set([organizer.id, ...(await circleUserIdsForOrganizer(organizer))]);
+  const requested = member_ids.filter(Boolean);
+  const unauthorized = requested.filter((id) => !allowed.has(id));
+  if (unauthorized.length) {
+    return {
+      error: 'Convoy members must be in your safety circle',
+      status: 403,
+    };
+  }
+
+  const ids = [...new Set([organizer.id, ...requested])].slice(0, 10);
   const id = uuidv4();
   const now = new Date().toISOString();
   const session = {

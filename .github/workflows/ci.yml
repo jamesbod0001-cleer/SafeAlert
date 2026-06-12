@@ -10,6 +10,7 @@ jobs:
           node-version: '20'
       - run: npm ci
       - run: npm test
+      - run: node scripts/national-launch-checklist.js --skip-tests --dry-run
       - run: NODE_ENV=production node -e "require('./src/config/envValidate').validateProductionEnv()"
         env:
           USE_MEMORY_DB: 'false'

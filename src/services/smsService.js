@@ -138,13 +138,16 @@ function initAT() {
   }
 }
 
-async function sendPanicSMS({ memberPhones, reporterName, lat, lng, timestamp }) {
+async function sendPanicSMS({ memberPhones, reporterName, lat, lng, timestamp, reason }) {
   const mapsUrl =
     lat != null && lng != null
       ? `https://maps.google.com/?q=${lat},${lng}`
       : 'Open SafeAlert app for live location';
   const time = new Date(timestamp).toLocaleTimeString('en-NG', { hour:'2-digit', minute:'2-digit', hour12:true, timeZone:'Africa/Lagos' });
-  const message = `🆘 CITIZEN SOS\n${reporterName||'Someone in your circle'} needs help NOW.\n\n📍 Location:\n${mapsUrl}\n\n🕐 Time: ${time}\n\nCall or come if you can — share with trusted people nearby.\n-- SafeAlert NG (not government dispatch)`;
+  let headline = '🆘 CITIZEN SOS';
+  if (reason === 'medical') headline = '🏥 MEDICAL SOS';
+  else if (reason === 'road_accident') headline = '🚗 ROAD CRASH SOS';
+  const message = `${headline}\n${reporterName||'Someone in your circle'} needs help NOW.\n\n📍 Location:\n${mapsUrl}\n\n🕐 Time: ${time}\n\nCall or come if you can — share with trusted people nearby.\n-- SafeAlert NG (not government dispatch)`;
   return sendSms({ to: memberPhones, message });
 }
 

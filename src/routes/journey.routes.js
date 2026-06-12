@@ -61,6 +61,7 @@ router.post('/journey/end', requireAuth, validate('endJourney'), async (req, res
 
 router.post('/journey/convoy', requireAuth, validate('createConvoy'), async (req, res) => {
   const result = await convoyService.createConvoy(req.user, req.body);
+  if (result.error) return res.status(result.status || 403).json({ error: result.error });
   res.status(201).json(result);
 });
 

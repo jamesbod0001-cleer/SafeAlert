@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { optionalAuth } = require('../middleware/auth');
 const { validate } = require('../middleware/validate');
+const { zoneVoteLimiter } = require('../middleware/rateLimiter');
 const { guessState } = require('../utils/geo');
 const zoneService = require('../services/zoneService');
 const reputationService = require('../services/reputationService');
@@ -67,7 +68,7 @@ router.post('/zones', optionalAuth, validate('createZone'), async (req, res) => 
 });
 
 // Confirm a zone is still dangerous
-router.patch('/zones/:id/confirm', optionalAuth, async (req, res) => {
+router.patch('/zones/:id/confirm', zoneVoteLimiter, optionalAuth, async (req, res) => {
   const deviceId = req.body.device_id || req.headers['x-device-id'] || 'anonymous';
   const result = await zoneService.confirmZone(req.params.id, deviceId);
   if (result.error) return res.status(404).json(result);
@@ -94,7 +95,7 @@ router.post('/zones/:id/report-false', validate('reportFalseZone'), async (req, 
 });
 
 // Vote that a zone has been cleared
-router.patch('/zones/:id/clear', async (req, res) => {
+router.patch('/zones/:id/clear', zoneVoteLimiter, async (req, res) => {
   const deviceId = req.body.device_id || req.headers['x-device-id'] || 'anonymous';
   const result = await zoneService.clearZone(req.params.id, deviceId);
   if (result.error) return res.status(404).json(result);

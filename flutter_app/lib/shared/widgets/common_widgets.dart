@@ -28,29 +28,30 @@ class SaCard extends StatelessWidget {
 }
 
 class StatPill extends StatelessWidget {
-  const StatPill({super.key, required this.label, required this.value, this.color});
+  const StatPill({super.key, required this.label, required this.value, this.color, this.expand = true});
   final String label;
   final String value;
   final Color? color;
+  final bool expand;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        decoration: BoxDecoration(
-          color: AppColors.surface2,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          children: [
-            Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: color ?? AppColors.green)),
-            const SizedBox(height: 4),
-            Text(label, textAlign: TextAlign.center, style: const TextStyle(fontSize: 10, color: AppColors.text3)),
-          ],
-        ),
+    final pill = Container(
+      width: expand ? null : 112,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      decoration: BoxDecoration(
+        color: AppColors.surface2,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: color ?? AppColors.green)),
+          const SizedBox(height: 4),
+          Text(label, textAlign: TextAlign.center, style: const TextStyle(fontSize: 10, color: AppColors.text3)),
+        ],
       ),
     );
+    return expand ? Expanded(child: pill) : pill;
   }
 }
 
@@ -93,9 +94,10 @@ class ZoneTile extends StatelessWidget {
 }
 
 class SosHoldButton extends StatefulWidget {
-  const SosHoldButton({super.key, required this.onActivated, this.enabled = true});
+  const SosHoldButton({super.key, required this.onActivated, this.enabled = true, this.hint});
   final Future<void> Function() onActivated;
   final bool enabled;
+  final String? hint;
 
   @override
   State<SosHoldButton> createState() => _SosHoldButtonState();
@@ -104,6 +106,8 @@ class SosHoldButton extends StatefulWidget {
 class _SosHoldButtonState extends State<SosHoldButton> {
   double _progress = 0;
   bool _holding = false;
+
+  int get _secondsLeft => (3 - (_progress * 3)).ceil().clamp(0, 3);
 
   Future<void> _holdTick() async {
     if (!_holding) return;
@@ -120,38 +124,52 @@ class _SosHoldButtonState extends State<SosHoldButton> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPressStart: widget.enabled
-          ? (_) {
-              _holding = true;
-              _holdTick();
-            }
-          : null,
-      onLongPressEnd: (_) => setState(() {
-        _holding = false;
-        _progress = 0;
-      }),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          SizedBox(
-            width: 120,
-            height: 120,
-            child: CircularProgressIndicator(value: _progress, strokeWidth: 4, color: AppColors.red, backgroundColor: AppColors.surface2),
-          ),
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: widget.enabled ? AppColors.red : AppColors.text3,
-              boxShadow: [BoxShadow(color: AppColors.red.withValues(alpha: 0.35), blurRadius: 24, spreadRadius: 2)],
-            ),
+    return Column(
+      children: [
+        GestureDetector(
+          onLongPressStart: widget.enabled
+              ? (_) {
+                  _holding = true;
+                  _holdTick();
+                }
+              : null,
+          onLongPressEnd: (_) => setState(() {
+            _holding = false;
+            _progress = 0;
+          }),
+          child: Stack(
             alignment: Alignment.center,
-            child: const Text('SOS', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 22, color: Colors.white)),
+            children: [
+              SizedBox(
+                width: 120,
+                height: 120,
+                child: CircularProgressIndicator(value: _progress, strokeWidth: 4, color: AppColors.red, backgroundColor: AppColors.surface2),
+              ),
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: widget.enabled ? AppColors.red : AppColors.text3,
+                  boxShadow: [BoxShadow(color: AppColors.red.withValues(alpha: 0.35), blurRadius: 24, spreadRadius: 2)],
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  _holding && _progress > 0 && _progress < 1 ? '$_secondsLeft' : 'SOS',
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 22, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (widget.hint != null) ...[
+          const SizedBox(height: 8),
+          Text(
+            _holding && _progress > 0 && _progress < 1 ? 'Hold ${_secondsLeft}s more…' : widget.hint!,
+            style: const TextStyle(fontSize: 11, color: AppColors.text2),
           ),
         ],
-      ),
+      ],
     );
   }
 }

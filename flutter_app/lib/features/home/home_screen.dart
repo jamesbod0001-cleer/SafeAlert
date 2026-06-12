@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../core/i18n/app_i18n.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../app/app_controller.dart';
 import '../../shared/widgets/common_widgets.dart';
 import '../profile/profile_sheet.dart';
+import 'women_safety_hub.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,7 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              if (!app.isSignedIn) GuestBanner(onSignIn: () => ProfileSheet.show(context)),
+              if (!app.isSignedIn) GuestBanner(onSignIn: () => ProfileSheet.showSignIn(context)),
+              const WomenSafetyHub(),
               if (app.deepLinkedZoneId != null || app.deepLinkedPanicId != null || app.deepLinkedEstateId != null) ...[
                 const SizedBox(height: 8),
                 SaCard(
@@ -69,14 +73,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  StatPill(label: 'Active alerts', value: fmtInt(app.stats.activeZones)),
-                  const SizedBox(width: 8),
-                  StatPill(label: 'Community', value: fmtInt(app.stats.totalUsers), color: AppColors.text),
-                  const SizedBox(width: 8),
-                  StatPill(label: 'SOS today', value: fmtInt(app.stats.panicToday), color: AppColors.red),
-                ],
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final pills = [
+                    StatPill(label: 'Active alerts', value: fmtInt(app.stats.activeZones)),
+                    StatPill(label: 'Community', value: fmtInt(app.stats.totalUsers), color: AppColors.text),
+                    StatPill(label: 'SOS today', value: fmtInt(app.stats.panicToday), color: AppColors.red),
+                  ];
+                  if (constraints.maxWidth < 360) {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          StatPill(label: 'Active alerts', value: fmtInt(app.stats.activeZones), expand: false),
+                          const SizedBox(width: 8),
+                          StatPill(label: 'Community', value: fmtInt(app.stats.totalUsers), color: AppColors.text, expand: false),
+                          const SizedBox(width: 8),
+                          StatPill(label: 'SOS today', value: fmtInt(app.stats.panicToday), color: AppColors.red, expand: false),
+                        ],
+                      ),
+                    );
+                  }
+                  return Row(
+                    children: [
+                      pills[0],
+                      const SizedBox(width: 8),
+                      pills[1],
+                      const SizedBox(width: 8),
+                      pills[2],
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 16),
               SaCard(
@@ -94,13 +121,20 @@ class _HomeScreenState extends State<HomeScreen> {
               Center(
                 child: Column(
                   children: [
-                    Text(app.isSignedIn ? 'Hold for Citizen SOS' : 'Sign in for SOS', style: const TextStyle(color: AppColors.text2, fontSize: 12)),
+                    Text(AppI18n.t(app.lang, 'sos_works_guest'), style: const TextStyle(color: AppColors.text2, fontSize: 12)),
                     const SizedBox(height: 12),
                     SosHoldButton(
-                      enabled: app.isSignedIn,
+                      enabled: true,
+                      hint: AppI18n.t(app.lang, 'panic_hold'),
                       onActivated: () async {
                         final ok = await app.activatePanic();
-                        if (ok && context.mounted) {}
+                        if (ok && context.mounted && app.position != null) {
+                          final url = whatsAppSosUrl(
+                            lat: app.position!.latitude,
+                            lng: app.position!.longitude,
+                          );
+                          await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                        }
                       },
                     ),
                     const SizedBox(height: 8),

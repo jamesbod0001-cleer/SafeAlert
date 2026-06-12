@@ -2,7 +2,7 @@
 
 **Proximity alerts · Community features · National scale (millions of users across Nigeria)**  
 **Last updated:** May 2026  
-**Status:** Planning / engineering reference (not yet fully implemented in production)
+**Status:** Implemented in codebase — proximity kill switch, panic broadcast, estate watch, admin moderation. See `GET /v1/health` for live feature flags.
 
 **Positioning:** SafeAlert is a **neighborhood nervous system** — crowdsourced risk, peer response, and low-tech access (USSD/SMS) so Nigerians help Nigerians when formal systems are slow or absent. **No dependency on government APIs** for core value.
 

@@ -29,4 +29,25 @@ describe('Admin moderation API', () => {
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body.flags)).toBe(true);
   });
+
+  test('PUT /admin/settings/proximity updates runtime health flag', async () => {
+    const off = await request(app)
+      .put(`${BASE}/settings/proximity`)
+      .set('X-Admin-Secret', SECRET)
+      .send({ enabled: false });
+    expect(off.status).toBe(200);
+    expect(off.body.proximity_alerts_enabled).toBe(false);
+
+    const healthOff = await request(app).get('/v1/health');
+    expect(healthOff.body.proximity_alerts).toBe(false);
+
+    const on = await request(app)
+      .put(`${BASE}/settings/proximity`)
+      .set('X-Admin-Secret', SECRET)
+      .send({ enabled: true });
+    expect(on.status).toBe(200);
+
+    const healthOn = await request(app).get('/v1/health');
+    expect(healthOn.body.proximity_alerts).toBe(true);
+  });
 });

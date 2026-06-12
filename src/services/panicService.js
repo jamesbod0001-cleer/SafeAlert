@@ -1,6 +1,7 @@
 const { randomUUID: uuidv4 } = require('crypto');
 const { db } = require('../config/db');
 const appConfig = require('../config/appConfig');
+const runtimeSettings = require('./runtimeSettingsService');
 const { guessState } = require('../utils/geo');
 const { getNearbyUsers } = require('./geoService');
 const pushService = require('./pushService');
@@ -30,7 +31,8 @@ function publicPanicEvent(doc, extras = {}) {
     distance_km:
       extras.distance_km != null ? Math.round(extras.distance_km * 10) / 10 : undefined,
     victim_label: extras.victim_label || 'Someone nearby',
-    alert_type: 'panic',
+    reason: doc.reason || 'security',
+    alert_type: doc.reason === 'medical' ? 'medical_sos' : doc.reason === 'road_accident' ? 'road_sos' : 'panic',
   };
 }
 
@@ -68,7 +70,9 @@ async function assertPanicCooldown(user) {
   return null;
 }
 
-async function createPanicEvent(user, lat, lng) {
+async function createPanicEvent(user, lat, lng, opts = {}) {
+  const { normalizePanicReason } = require('../constants/panicReasons');
+  const reason = normalizePanicReason(opts.reason);
   const id = uuidv4();
   const now = new Date().toISOString();
   const event = {
@@ -79,6 +83,7 @@ async function createPanicEvent(user, lat, lng) {
     state: guessState(lat, lng),
     active: true,
     started_at: now,
+    reason,
     responder_ids: [],
     notified_user_ids: [],
     circle_notified: 0,
@@ -125,7 +130,7 @@ async function getCirclePhonesAndTokens(user) {
   return { circlePhones, circleFCMTokens };
 }
 
-async function notifyCircleAsync(user, lat, lng, circlePhones, circleFCMTokens, panicId) {
+async function notifyCircleAsync(user, lat, lng, circlePhones, circleFCMTokens, panicId, panicReason) {
   if (appConfig.panicSmsEnabled && circlePhones.length > 0) {
     await smsService.sendPanicSMS({
       memberPhones: circlePhones,
@@ -133,10 +138,11 @@ async function notifyCircleAsync(user, lat, lng, circlePhones, circleFCMTokens, 
       lat,
       lng,
       timestamp: new Date().toISOString(),
+      reason: panicReason || user.active_panic_reason || 'security',
     });
   }
 
-  if (appConfig.pushNotificationsEnabled && circleFCMTokens.length > 0) {
+  if ((await runtimeSettings.isPushNotificationsEnabled()) && circleFCMTokens.length > 0) {
     await pushService.notifyCirclePanic({
       circle: circleFCMTokens.map((t) => ({ fcm_token: t })),
       reporterName: user.display_name,
@@ -150,33 +156,69 @@ async function notifyCircleAsync(user, lat, lng, circlePhones, circleFCMTokens, 
   return { sms: circlePhones.length, push: circleFCMTokens.length };
 }
 
-async function notifyNearbyAsync(lat, lng, excludeUserId, panicId, message) {
-  if (!appConfig.proximityAlertsEnabled) return { notified: 0 };
+async function notifyNearbyAsync(lat, lng, excludeUserId, panicId, message, victimUser, panicReason) {
+  if (!(await runtimeSettings.isProximityAlertsEnabled())) return { notified: 0 };
 
-  const nearbyUsers = await getNearbyUsers(lat, lng, appConfig.panicBroadcastRadiusKm, {
+  let nearbyUsers = await getNearbyUsers(lat, lng, appConfig.panicBroadcastRadiusKm, {
     excludeUserId,
     requireFcm: true,
   });
 
+  const reason = panicReason || victimUser?.active_panic_reason || 'security';
+  const prefs = victimUser?.preferences || {};
+
+  if (reason === 'medical') {
+    const med = nearbyUsers.filter((u) => (u.responder_skills || []).includes('first_aid'));
+    if (med.length) nearbyUsers = med;
+  } else if (reason === 'road_accident') {
+    const road = nearbyUsers.filter((u) => {
+      const s = u.responder_skills || [];
+      return s.includes('first_aid') || s.includes('mechanic') || s.includes('driver');
+    });
+    if (road.length) nearbyUsers = road;
+  }
+
+  if (prefs.women_mode && prefs.women_prefer_female_helpers !== false) {
+    const womenHelpers = nearbyUsers.filter((u) => u.preferences?.women_responder_opt_in);
+    if (womenHelpers.length) nearbyUsers = womenHelpers;
+  }
+
   const tokens = nearbyUsers.map((u) => u.fcm_token).filter(Boolean);
-  if (!tokens.length || !appConfig.pushNotificationsEnabled) {
+  if (!tokens.length || !(await runtimeSettings.isPushNotificationsEnabled())) {
     return { notified: 0, userIds: [] };
   }
 
   const tag = shortPanicId(panicId);
   const area = guessState(lat, lng);
+  let defaultBody = `🆘 Panic #${tag} near ${area} — tap to view and offer help.`;
+  if (reason === 'medical') {
+    defaultBody = `🏥 Medical SOS #${tag} near ${area} — first aid help needed if you can`;
+  } else if (reason === 'road_accident') {
+    defaultBody = `🚗 Road crash #${tag} near ${area} — possible injuries; help safely`;
+  } else if (prefs.women_mode) {
+    defaultBody = `🆘 Women's safety SOS #${tag} near ${area} — tap only if you can help safely`;
+  }
+
+  const alertType =
+    reason === 'medical'
+      ? 'medical_sos'
+      : reason === 'road_accident'
+        ? 'road_sos'
+        : prefs.women_mode
+          ? 'women_safety_panic'
+          : 'nearby_panic';
+
   await pushService.sendPush({
     tokens,
     type: 'NEARBY_PANIC',
-    body:
-      message ||
-      `🆘 Panic #${tag} near ${area} — tap to view and offer help.`,
+    body: message || defaultBody,
     data: {
       lat: String(lat),
       lng: String(lng),
       panic_id: panicId,
       short_id: tag,
-      alert_type: 'nearby_panic',
+      panic_reason: reason,
+      alert_type: alertType,
       action: 'open_map',
     },
   });
@@ -253,8 +295,17 @@ async function listRespondersForPanic(panicId, requesterId) {
   const snap = await db().collection('panic_events').doc(panicId).get();
   if (!snap.exists) return { error: 'Panic event not found', status: 404 };
   const data = snap.data();
+  const isVictim = data.user_id === requesterId;
+  const isResponder = (data.responder_ids || []).includes(requesterId);
+  if (!isVictim && !isResponder) {
+    return { error: 'Not authorised to view responders for this panic', status: 403 };
+  }
+
   const ids = data.responder_ids || [];
   const responders = [];
+  const victimSnap = await db().collection('users').doc(data.user_id).get();
+  const victimWomenMode = victimSnap.exists && !!victimSnap.data()?.preferences?.women_mode;
+
   for (const uid of ids) {
     const uSnap = await db().collection('users').doc(uid).get();
     if (!uSnap.exists) continue;
@@ -268,15 +319,31 @@ async function listRespondersForPanic(panicId, requesterId) {
       display_name: name,
       skills: u.responder_skills || [],
       is_you: uid === requesterId,
+      women_helper: !!u.preferences?.women_responder_opt_in,
     });
+  }
+
+  const reason = data.reason || 'security';
+  const skillScore = (skills) => {
+    const s = skills || [];
+    if (reason === 'medical') return s.includes('first_aid') ? 2 : 0;
+    if (reason === 'road_accident') {
+      return (s.includes('first_aid') ? 2 : 0) + (s.includes('mechanic') ? 1 : 0) + (s.includes('driver') ? 1 : 0);
+    }
+    return 0;
+  };
+  responders.sort((a, b) => skillScore(b.skills) - skillScore(a.skills));
+  if (victimWomenMode) {
+    responders.sort((a, b) => (b.women_helper ? 1 : 0) - (a.women_helper ? 1 : 0));
   }
   return {
     panic_id: panicId,
     short_id: shortPanicId(panicId),
+    reason,
     responder_count: responders.length,
     responders,
-    victim_id: data.user_id,
-    is_victim: data.user_id === requesterId,
+    ...(isVictim ? { victim_id: data.user_id } : {}),
+    is_victim: isVictim,
   };
 }
 
@@ -321,6 +388,9 @@ async function runPanicNotifyJob(payload = {}) {
 
   const { lat, lng } = parseJobCoords(payload);
   const user = await getUserForNotifyJob(payload.userId);
+  const eventSnap = await db().collection('panic_events').doc(payload.eventId).get();
+  const panicReason = eventSnap.exists ? eventSnap.data().reason : payload.reason;
+
   const { circlePhones, circleFCMTokens } = await getCirclePhonesAndTokens(user);
 
   const circleResult = await notifyCircleAsync(
@@ -329,7 +399,8 @@ async function runPanicNotifyJob(payload = {}) {
     lng,
     circlePhones,
     circleFCMTokens,
-    payload.eventId
+    payload.eventId,
+    panicReason
   );
 
   const estate = await notifyEstateWatchAsync(user, lat, lng, payload.eventId, payload.message);
@@ -338,7 +409,15 @@ async function runPanicNotifyJob(payload = {}) {
   let nearbyNotified = 0;
   let nearbyUserIds = [];
   if (appConfig.panicAutoBroadcastEnabled) {
-    const nearby = await notifyNearbyAsync(lat, lng, payload.userId, payload.eventId, payload.message);
+    const nearby = await notifyNearbyAsync(
+      lat,
+      lng,
+      payload.userId,
+      payload.eventId,
+      payload.message,
+      user,
+      panicReason
+    );
     nearbyNotified = nearby?.notified || 0;
     nearbyUserIds = nearby?.userIds || [];
   }
@@ -365,7 +444,13 @@ async function runPanicBroadcastJob(payload = {}) {
     throw new Error('panic-broadcast job requires userId');
   }
   const { lat, lng } = parseJobCoords(payload);
-  await notifyNearbyAsync(lat, lng, payload.userId, payload.panicId, payload.message);
+  const user = await getUserForNotifyJob(payload.userId);
+  let panicReason = payload.reason;
+  if (payload.panicId) {
+    const snap = await db().collection('panic_events').doc(payload.panicId).get();
+    if (snap.exists) panicReason = snap.data().reason;
+  }
+  await notifyNearbyAsync(lat, lng, payload.userId, payload.panicId, payload.message, user, panicReason);
 }
 
 async function notifyVictimResponderOnWay(victimId, responderUser, panicId, shortId, responderCount) {

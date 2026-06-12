@@ -43,6 +43,24 @@
 
     root.innerHTML = '<p style="font-size:12px;color:var(--text3)">Loading area watch…</p>';
 
+    let stateSelectHtml = '';
+    if (typeof window.loadStateList === 'function') {
+      try {
+        const states = await window.loadStateList();
+        const home = localStorage.getItem('safealert_state') || '';
+        stateSelectHtml =
+          `<option value="">Select state…</option>` +
+          states
+            .map((st) => {
+              const name = st.name || st;
+              return `<option value="${esc(name)}"${name === home ? ' selected' : ''}>${esc(name)}</option>`;
+            })
+            .join('');
+      } catch {
+        stateSelectHtml = '';
+      }
+    }
+
     let mine = [];
     let nearby = [];
     try {
@@ -113,7 +131,11 @@
           <option value="market">Market / plaza</option>
         </select>
         <label class="field-lbl">State</label>
-        <input class="field-inp" id="estate-reg-state" placeholder="Lagos"/>
+        ${
+          stateSelectHtml
+            ? `<select class="field-inp" id="estate-reg-state">${stateSelectHtml}</select>`
+            : `<input class="field-inp" id="estate-reg-state" placeholder="Lagos"/>`
+        }
         <label class="field-lbl">LGA (optional)</label>
         <input class="field-inp" id="estate-reg-lga" placeholder="Ikeja"/>
         <label class="field-lbl">${t('estate_radius')}</label>

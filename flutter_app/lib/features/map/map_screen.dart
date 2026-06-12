@@ -3,9 +3,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_config.dart';
+import '../../core/i18n/app_i18n.dart';
 import '../../core/theme/app_theme.dart';
 import '../app/app_controller.dart';
-import '../../shared/widgets/common_widgets.dart';
 import '../home/home_screen.dart';
 
 class MapScreen extends StatefulWidget {
@@ -17,11 +17,16 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final _mapController = MapController();
+  bool _mapLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => context.read<AppController>().refreshAll(silent: true));
+    final app = context.read<AppController>();
+    _mapLoaded = !app.dataSaver;
+    if (_mapLoaded) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => app.refreshAll(silent: true));
+    }
   }
 
   @override
@@ -30,6 +35,30 @@ class _MapScreenState extends State<MapScreen> {
     final center = app.position != null
         ? LatLng(app.position!.latitude, app.position!.longitude)
         : const LatLng(9.082, 8.6753);
+
+    if (!_mapLoaded && app.dataSaver) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.map_outlined, size: 48, color: AppColors.text3),
+              const SizedBox(height: 16),
+              Text(AppI18n.t(app.lang, 'map_load_tap'), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.text2)),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() => _mapLoaded = true);
+                  app.refreshAll(silent: true);
+                },
+                child: const Text('Load map'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Stack(
       children: [
@@ -85,28 +114,13 @@ class _MapScreenState extends State<MapScreen> {
         ),
         Positioned(
           top: 12,
-          left: 12,
           right: 12,
-          child: SaCard(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            child: Text(
-              app.locationDenied
-                  ? 'Location off — showing Nigeria overview'
-                  : '${app.activeZones.length} active alerts · ${app.nearbyPanics.length} SOS nearby',
-              style: const TextStyle(fontSize: 12),
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 16,
-          right: 16,
-          child: FloatingActionButton(
-            backgroundColor: AppColors.green,
+          child: FloatingActionButton.small(
+            heroTag: 'map-recenter',
             onPressed: () {
               if (app.position != null) {
                 _mapController.move(LatLng(app.position!.latitude, app.position!.longitude), 12);
               }
-              app.refreshAll();
             },
             child: const Icon(Icons.my_location),
           ),

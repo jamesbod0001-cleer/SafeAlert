@@ -1,103 +1,89 @@
 {
-  "generated_at": "2026-05-24T14:33:43.330Z",
+  "generated_at": "2026-06-07T02:57:20.314Z",
   "stats": {
-    "total_active_zones": 2500,
+    "total_active_zones": 214,
     "critical_zones": 0,
-    "high_zones": 1156,
-    "medium_zones": 1021,
-    "low_zones": 323,
-    "total_reports": 12230,
+    "high_zones": 101,
+    "medium_zones": 77,
+    "low_zones": 36,
+    "total_reports": 1046,
     "active_panics": 0,
     "live_count": 0,
-    "verified_zones": 2177,
+    "verified_zones": 178,
     "by_type": {
-      "banditry": 1959,
-      "armed_robbery": 541
+      "banditry": 182,
+      "armed_robbery": 32
     },
     "by_state": {
-      "Borno": 1372,
-      "Adamawa": 54,
-      "Katsina": 1,
-      "Niger": 9,
-      "Anambra": 68,
-      "Delta": 32,
-      "Kano": 5,
-      "Benue": 209,
-      "Ebonyi": 16,
-      "Federal Capital territory": 4,
-      "Osun": 20,
-      "Plateau": 61,
-      "Rivers": 26,
-      "Lagos": 76,
-      "Imo": 83,
-      "Cross River": 4,
-      "Abia": 28,
-      "Enugu": 26,
-      "Kogi": 12,
-      "Nigeria": 4,
-      "Ogun": 46,
-      "Oyo": 25,
-      "Ondo": 17,
-      "Bayelsa": 6,
-      "Edo": 36,
-      "Bauchi": 5,
-      "Sokoto": 5,
-      "Yobe": 56,
-      "Kaduna": 31,
-      "Taraba": 84,
-      "Kebbi": 1,
-      "Akwa Ibom": 9,
-      "Kwara": 21,
-      "Jigawa": 2,
-      "Nasarawa": 42,
-      "Ekiti": 3,
-      "Zamfara": 1
+      "Borno": 101,
+      "Adamawa": 2,
+      "Niger": 1,
+      "Kwara": 2,
+      "Bauchi": 2,
+      "Kaduna": 1,
+      "Anambra": 14,
+      "Imo": 15,
+      "Enugu": 9,
+      "Delta": 4,
+      "Yobe": 12,
+      "Plateau": 14,
+      "Taraba": 2,
+      "Benue": 14,
+      "Rivers": 1,
+      "Ogun": 3,
+      "Oyo": 3,
+      "Lagos": 2,
+      "Akwa Ibom": 1,
+      "Edo": 1,
+      "Abia": 8,
+      "Ebonyi": 1,
+      "Kebbi": 1
     },
     "top_states": [
       {
         "name": "Borno",
-        "count": 1372
-      },
-      {
-        "name": "Benue",
-        "count": 209
-      },
-      {
-        "name": "Taraba",
-        "count": 84
+        "count": 101
       },
       {
         "name": "Imo",
-        "count": 83
-      },
-      {
-        "name": "Lagos",
-        "count": 76
+        "count": 15
       },
       {
         "name": "Anambra",
-        "count": 68
+        "count": 14
       },
       {
         "name": "Plateau",
-        "count": 61
+        "count": 14
+      },
+      {
+        "name": "Benue",
+        "count": 14
       },
       {
         "name": "Yobe",
-        "count": 56
+        "count": 12
       },
       {
-        "name": "Adamawa",
-        "count": 54
+        "name": "Enugu",
+        "count": 9
+      },
+      {
+        "name": "Abia",
+        "count": 8
+      },
+      {
+        "name": "Delta",
+        "count": 4
       },
       {
         "name": "Ogun",
-        "count": 46
+        "count": 3
       }
     ],
     "by_source": {
-      "hdx_ucdp": 2500
+      "hdx_ucdp": 214
     },
-    "last_updated": "2026-05-24T14:33:43.330Z"
+    "last_updated": "2026-06-07T02:57:20.314Z"
   }
 }

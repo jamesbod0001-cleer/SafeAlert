@@ -13,6 +13,8 @@ async function getSettings() {
   return defaultsFromEnv();
 }
 
+const nigeriaEmergencyContacts = require('../config/nigeriaEmergencyContacts');
+
 function defaultsFromEnv() {
   return {
     app_name: appConfig.appName,
@@ -20,6 +22,8 @@ function defaultsFromEnv() {
     ussd_service_code: appConfig.ussdServiceCode,
     incident_types: appConfig.incidentTypes,
     emergency_contacts: appConfig.emergencyContacts,
+    emergency_contacts_grouped: appConfig.emergencyContactsGrouped || nigeriaEmergencyContacts.groups,
+    emergency_contacts_disclaimer: appConfig.emergencyContactsDisclaimer || nigeriaEmergencyContacts.disclaimer,
     budget_mode: appConfig.budgetMode,
     data_saver_recommended: true,
     guest_features: ['view_map', 'report_zones', 'offline_packs', 'share_alerts'],

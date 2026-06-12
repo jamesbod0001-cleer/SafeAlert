@@ -13,13 +13,27 @@ async function ensureAppSettings() {
     ussd_service_code: appConfig.ussdServiceCode,
     incident_types: appConfig.incidentTypes.length
       ? appConfig.incidentTypes
-      : ['kidnapping', 'armed_robbery', 'banditry', 'terror', 'roadblock', 'suspicious'],
+      : [
+          'kidnapping',
+          'armed_robbery',
+          'banditry',
+          'terror',
+          'roadblock',
+          'suspicious',
+          'medical_emergency',
+          'road_accident',
+          'vehicle_breakdown',
+        ],
     emergency_contacts: appConfig.emergencyContacts,
     updated_at: new Date().toISOString(),
   };
 
   if (!snap.exists) {
-    await ref.set(payload);
+    await ref.set({
+      ...payload,
+      proximity_alerts_enabled: appConfig.proximityAlertsEnabled,
+      push_notifications_enabled: appConfig.pushNotificationsEnabled,
+    });
   } else {
     await ref.set(payload, { merge: true });
   }

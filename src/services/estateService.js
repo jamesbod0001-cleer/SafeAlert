@@ -7,6 +7,7 @@ const { distanceKm } = require('../utils/geo');
 const { guessState } = require('../utils/geo');
 const pushService = require('./pushService');
 const appConfig = require('../config/appConfig');
+const runtimeSettings = require('./runtimeSettingsService');
 const logger = require('../utils/logger');
 
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -260,7 +261,10 @@ async function loadMemberTokens(memberIds, excludeUserId) {
 }
 
 async function notifyEstateWatch(user, lat, lng, panicId, message) {
-  if (!appConfig.proximityAlertsEnabled || !appConfig.pushNotificationsEnabled) {
+  if (
+    !(await runtimeSettings.isProximityAlertsEnabled()) ||
+    !(await runtimeSettings.isPushNotificationsEnabled())
+  ) {
     return { notified: 0, userIds: [] };
   }
 

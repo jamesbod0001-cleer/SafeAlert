@@ -356,6 +356,7 @@ function sanitiseUser(user) {
     help_nearby_enabled: !!safe.help_nearby_enabled,
     help_nearby_radius_km: Math.min(15, safe.help_nearby_radius_km || 5),
     notifications_enabled: safe.notifications_enabled !== false,
+    medical_ice: safe.medical_ice || {},
   };
 }
 
@@ -371,10 +372,14 @@ function getPreferences(user) {
     estate_watch_enabled: user.estate_watch_enabled !== false,
     night_mode: !!prefs.night_mode,
     women_mode: !!prefs.women_mode,
+    women_prefer_female_helpers: prefs.women_prefer_female_helpers !== false,
+    women_checkin_nudge: prefs.women_checkin_nudge !== false,
+    women_responder_opt_in: !!prefs.women_responder_opt_in,
     language: prefs.language || 'en',
     data_saver: prefs.data_saver === undefined ? true : !!prefs.data_saver,
     responder_skills: user.responder_skills || [],
     responder_available: !!user.responder_available,
+    medical_ice: user.medical_ice || {},
   };
 }
 

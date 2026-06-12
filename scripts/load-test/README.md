@@ -75,6 +75,21 @@ Additional expectations:
 - **Zones:** `POST /v1/zones` returns `201` with a `zone.id`.
 - No sustained **5xx** responses under load.
 
+## Security probe (staging)
+
+`k6-security-probe.js` verifies anonymous routes stay locked, webhooks reject forgeries, and invalid zone coords fail:
+
+```bash
+k6 run scripts/load-test/k6-security-probe.js -e API=https://staging.example.com -e TOKEN=eyJ...
+```
+
+Automated security + scaling tests (no k6 required):
+
+```bash
+npm run test:security
+npm run test:scaling
+```
+
 ## Staging vs production
 
 Run load tests against **staging** only. Before national multi-state launch:

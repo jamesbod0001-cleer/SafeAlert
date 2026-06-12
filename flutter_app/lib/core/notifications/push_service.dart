@@ -1,5 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'dart:io' show Platform;
 import '../../features/app/app_controller.dart';
 
 class PushService {
@@ -12,6 +15,9 @@ class PushService {
   Future<void> initialize(AppController app) async {
     try {
       await _ensureFirebase();
+      if (!kIsWeb && Platform.isAndroid) {
+        await Permission.notification.request();
+      }
       final messaging = FirebaseMessaging.instance;
       await messaging.requestPermission(alert: true, badge: true, sound: true);
       await syncToken(app);
@@ -44,7 +50,9 @@ class PushService {
 
   Future<void> _ensureFirebase() async {
     if (_firebaseReady) return;
-    await Firebase.initializeApp();
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp();
+    }
     _firebaseReady = true;
   }
 }

@@ -109,11 +109,75 @@ function checkOfflinePacks() {
     return;
   }
   const jsonFiles = fs.readdirSync(dir).filter((f) => f.endsWith('.json'));
-  if (jsonFiles.length >= 37) {
-    pass('offline-packs', `${jsonFiles.length} .json files`);
-  } else {
+  if (jsonFiles.length < 37) {
     fail('offline-packs', `expected ≥37 .json files, found ${jsonFiles.length}`);
+    return;
   }
+
+  let withZones = 0;
+  for (const f of jsonFiles) {
+    try {
+      const pack = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+      const n = pack.zone_count ?? pack.zones?.length ?? 0;
+      if (n > 0) withZones++;
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (withZones >= 37) {
+    pass('offline-packs', `${jsonFiles.length} files, ${withZones} with zones`);
+  } else if (withZones >= 20) {
+    warn('offline-packs', `${withZones}/37 have zones — run npm run launch:pipeline`);
+  } else {
+    fail('offline-packs', `only ${withZones}/37 have zones — run npm run launch:pipeline`);
+  }
+}
+
+function checkStatePolygons() {
+  const file = path.join(ROOT, 'src/config/nigeriaStatePolygons.json');
+  if (!fs.existsSync(file)) {
+    warn('state polygons', 'missing — run npm run build:state-polygons');
+    return;
+  }
+  try {
+    const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const n = Object.keys(data.states || {}).length;
+    if (n === 37) pass('state polygons', '37 ADM1 boundaries');
+    else warn('state polygons', `expected 37, found ${n}`);
+  } catch (e) {
+    fail('state polygons', e.message);
+  }
+}
+
+function checkAdminSecret() {
+  if (production) {
+    if (!process.env.ADMIN_SECRET && !process.env.IMPORT_JOB_SECRET) {
+      fail('ADMIN_SECRET', 'required for production admin moderation');
+      return;
+    }
+    pass('ADMIN_SECRET', 'configured');
+    return;
+  }
+  if (process.env.ADMIN_SECRET || process.env.IMPORT_JOB_SECRET) {
+    pass('ADMIN_SECRET', 'configured');
+  } else {
+    warn('ADMIN_SECRET', 'unset — admin UI returns 503');
+  }
+}
+
+function checkAtProduction() {
+  if (!production) return;
+  const user = (process.env.AT_USERNAME || '').trim().toLowerCase();
+  if (user === 'sandbox') {
+    warn('AT_USERNAME', 'still sandbox — circle SMS only to whitelisted numbers');
+    return;
+  }
+  if (!(process.env.AT_SENDER_ID || '').trim()) {
+    warn('AT_SENDER_ID', 'empty — production SMS may fail');
+    return;
+  }
+  pass('Africa\'s Talking', 'production credentials present');
 }
 
 function checkPublicFile(relPath, label) {
@@ -193,7 +257,11 @@ async function main() {
   checkDevFixedOtp();
   checkUseMemoryDb();
   checkNigeriaStates();
+  checkStatePolygons();
   checkOfflinePacks();
+  checkAdminSecret();
+  checkAtProduction();
+  checkPublicFile('public/faq.html', 'faq.html');
   checkPublicFile('public/privacy.html', 'privacy.html');
   checkPublicFile('public/terms.html', 'terms.html');
   checkNpmTest();

@@ -38,7 +38,16 @@ app.use(
   })
 );
 app.use(morgan(isProduction() ? 'combined' : 'dev'));
-app.use(express.json({ limit: '1mb' }));
+app.use(
+  express.json({
+    limit: '1mb',
+    verify: (req, _res, buf) => {
+      if (req.method === 'POST' && String(req.originalUrl || '').includes('/webhooks/whatsapp')) {
+        req.rawBody = buf;
+      }
+    },
+  })
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(defaultLimiter);
 
