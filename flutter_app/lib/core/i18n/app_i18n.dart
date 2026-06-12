@@ -111,11 +111,11 @@ class AppI18n {
       'pcm': 'Routes',
     },
     'circle_tab': {
-      'en': 'Circle',
-      'ha': 'Daular',
-      'yo': 'Ẹgbẹ́',
-      'ig': 'Otu',
-      'pcm': 'Circle',
+      'en': 'My People',
+      'ha': 'Mutanena',
+      'yo': 'Awọn eniyan mi',
+      'ig': 'Ndị m',
+      'pcm': 'My People',
     },
     'report_tab': {
       'en': 'Report',
@@ -134,11 +134,11 @@ class AppI18n {
 
     // ── Panic / SOS ──
     'sos': {
-      'en': 'Citizen SOS',
-      'ha': 'SOS na jama\'a',
-      'yo': 'SOS araalu',
-      'ig': 'SOS obodo',
-      'pcm': 'Citizen SOS',
+      'en': 'SOS',
+      'ha': 'SOS',
+      'yo': 'SOS',
+      'ig': 'SOS',
+      'pcm': 'SOS',
     },
     'panic_hold': {
       'en': 'Hold 3 seconds to activate',
@@ -148,11 +148,11 @@ class AppI18n {
       'pcm': 'Hold 3 seconds make e activate',
     },
     'panic_guest_toast': {
-      'en': 'SOS active — WhatsApp your circle. Sign in for nearby helpers.',
+      'en': 'SOS active — WhatsApp your people. Sign in for nearby helpers too.',
       'ha': 'SOS yana aiki — aika WhatsApp zuwa mutanenka.',
       'yo': 'SOS ti n ṣiṣẹ — fi WhatsApp ranṣẹ si awọn eniyan rẹ.',
       'ig': 'SOS na-arụ ọrụ — zipu WhatsApp na ndị gị.',
-      'pcm': 'SOS don activate — WhatsApp your circle.',
+      'pcm': 'SOS don activate — WhatsApp your people.',
     },
     'panic_offline_toast': {
       'en': 'Server unreachable — use WhatsApp SOS below',
@@ -169,11 +169,11 @@ class AppI18n {
       'pcm': 'Share for WhatsApp make more people see',
     },
     'panic_active_voice': {
-      'en': 'Citizen SOS active. Your circle is being alerted.',
+      'en': 'SOS active. Your people are being alerted.',
       'ha': 'SOS na jama\'a yana aiki.',
       'yo': 'SOS araalu ti n ṣiṣẹ.',
       'ig': 'SOS obodo na-arụ ọrụ.',
-      'pcm': 'Citizen SOS don activate.',
+      'pcm': 'SOS don activate.',
     },
     'panic_sub_local': {
       'en': 'Local SOS — WhatsApp & calls below. Sign in for nearby helpers.',
@@ -190,7 +190,7 @@ class AppI18n {
       'pcm': 'Hold for SOS — no sign-in needed',
     },
     'guest_sos_banner': {
-      'en': 'SOS works without sign-in. Sign in to reach nearby helpers too.',
+      'en': 'SOS works without sign-in. Sign in to save your people list and reach nearby helpers.',
       'ha': 'SOS yana aiki ba tare da shiga ba.',
       'yo': 'SOS ṣiṣẹ lai wiwọle.',
       'ig': 'SOS na-arụ ọrụ na-enweghị ịbanye.',
@@ -253,11 +253,11 @@ class AppI18n {
       'pcm': 'Check-in 1h',
     },
     'women_my_circle': {
-      'en': 'My circle',
+      'en': 'My people',
       'ha': 'Daular ta',
       'yo': 'Ẹgbẹ́ mi',
       'ig': 'Otu m',
-      'pcm': 'My circle',
+      'pcm': 'My people',
     },
     'women_safety_tips': {
       'en': 'Safety tips',
@@ -274,7 +274,7 @@ class AppI18n {
       'pcm': 'Medical & road crash',
     },
     'medical_hub_hint': {
-      'en': 'No single ambulance app in Nigeria — you tap who to call (112, hospital, FRSC). SOS alerts your circle + skilled helpers.',
+      'en': 'No one ambulance app for all Nigeria — you choose who to call (112, hospital, FRSC). SOS alerts your people and nearby helpers.',
       'ha': 'Ba aikace-aikacen ambulance guda ba — ka kira wanda kake so. SOS na sanar da mutanenka.',
       'yo': 'Ko si app ambulance kan — o ti pẹlu ti o fi pe. SOS ma san circle re.',
       'ig': 'Enweghị otu ambulance app — ị na-akpọ onye ị chọrọ. SOS na-eme ka circle gị mara.',
@@ -341,7 +341,7 @@ class AppI18n {
       'pcm': 'Need help',
     },
     'start_journey': {
-      'en': 'Start journey',
+      'en': 'Start trip',
       'ha': 'Fara tafiya',
       'yo': 'Bẹrẹ irin ajo',
       'ig': 'Malite njem',
@@ -380,14 +380,14 @@ class AppI18n {
       'pcm': 'Safe road',
     },
     'stat_my_circle': {
-      'en': 'My circle',
+      'en': 'My people',
       'ha': 'Daular na',
       'yo': 'Ẹgbẹ́ mi',
       'ig': 'Otu m',
-      'pcm': 'My circle',
+      'pcm': 'My people',
     },
     'view_insights': {
-      'en': 'Safety insights →',
+      'en': 'See safety updates →',
       'ha': 'Duba bayanan tsaro →',
       'yo': 'Wo ìmọ̀ ààbò →',
       'ig': 'Lee nghọta nchekwa →',
@@ -417,7 +417,7 @@ class AppI18n {
 
     // ── Insights ──
     'insights_title': {
-      'en': 'Safety Insights',
+      'en': 'Safety updates',
       'ha': 'Bayanan Tsaro',
       'yo': 'Ìmọ̀ Ààbò',
       'ig': 'Nghọta Nchekwa',
@@ -575,7 +575,7 @@ class AppI18n {
       'pcm': 'Routes',
     },
     'nav_circle': {
-      'en': 'Circle',
+      'en': 'My People',
       'ha': 'Da\'ira',
       'yo': 'Agbègbè',
       'ig': 'Gburugburu',

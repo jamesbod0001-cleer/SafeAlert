@@ -136,7 +136,7 @@
     const contacts = getCircleContacts();
     if (!contacts.length) {
       wrap.innerHTML =
-        '<p style="font-size:11px;color:rgba(255,255,255,0.65);line-height:1.5;margin-bottom:8px">Add circle members in Profile — or use WhatsApp below to alert someone you trust.</p>';
+        '<p style="font-size:11px;color:rgba(255,255,255,0.65);line-height:1.5;margin-bottom:8px">Add people you trust in Profile — or use WhatsApp below.</p>';
       return;
     }
     wrap.innerHTML = contacts

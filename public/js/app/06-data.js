@@ -117,7 +117,7 @@ async function loadCircleData() {
         phone: store[m.name] || m.phone,
         status: 'safe',
         icon: '🏠',
-        last: 'Circle member',
+        last: 'Trusted contact',
       }));
       window.SafeAlertCitizenSOS?.cacheCircle?.(circle);
     } catch (_) {

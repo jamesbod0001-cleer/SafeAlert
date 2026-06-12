@@ -36,7 +36,7 @@ class _CircleScreenState extends State<CircleScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Safety circle, estates & groups require sign-in', textAlign: TextAlign.center, style: TextStyle(color: AppColors.text2)),
+              const Text('Sign in to add people you trust', textAlign: TextAlign.center, style: TextStyle(color: AppColors.text2)),
               const SizedBox(height: 16),
               ElevatedButton(onPressed: () => ProfileSheet.show(context), child: const Text('Sign in')),
             ],
@@ -53,9 +53,9 @@ class _CircleScreenState extends State<CircleScreen> {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _section('👥 Safety circle', [
+          _section('👥 People you trust', [
             if (app.circle.isEmpty)
-              const Text('Add people who get your SOS & journey alerts', style: TextStyle(color: AppColors.text2, fontSize: 13))
+              const Text('Who gets your SOS and trip alerts', style: TextStyle(color: AppColors.text2, fontSize: 13))
             else
               ...app.circle.map((m) => ListTile(
                     title: Text(m.name),

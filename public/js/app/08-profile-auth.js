@@ -20,7 +20,7 @@ function openProfile(mode = 'auto') {
 
 function openCircleAdd() {
   if (!state.token) {
-    toast('Sign in to add circle members', 'err');
+    toast('Sign in to add someone you trust', 'err');
     openProfile();
     return;
   }
@@ -185,7 +185,7 @@ function updateProfileUI(mode = 'auto') {
     if (settingsWrap) settingsWrap.style.display = signinOnly ? 'none' : 'block';
     if (title) title.textContent = signinOnly ? 'Account' : 'Settings';
     if (sub && !signinOnly) {
-      sub.textContent = 'Circle, alerts, data saver, and helper preferences.';
+      sub.textContent = 'Your people, alerts, data saver, and helper settings.';
     }
     syncPreferencesUI();
   } else {
@@ -196,8 +196,8 @@ function updateProfileUI(mode = 'auto') {
     if (title) title.textContent = signinOnly ? 'Sign in' : 'Your account';
     if (sub) {
       sub.textContent = signinOnly
-        ? 'Optional — SOS works without sign-in. Sign in to sync your circle and reach nearby helpers.'
-        : 'View map & report alerts without signing in. Sign in with phone + OTP for circle sync and journey watch.';
+        ? 'Optional — SOS works without sign-in. Sign in to save your people list and reach nearby helpers.'
+        : 'Browse the map and report danger without sign-in. Sign in with phone + OTP to save your people and share trips.';
     }
   }
   window.SafeAlertZeroBudget?.renderGuestBanner?.(window.SAFEALERT_PUBLIC_CONFIG || {});
@@ -335,7 +335,7 @@ function signOut() {
 async function deleteMyAccount() {
   if (!state.token) return toast('Sign in first', 'err');
   const ok = window.confirm(
-    'Delete your SafeAlert account permanently?\n\nThis removes your profile, circle, and preferences. This cannot be undone.'
+    'Delete your SafeAlert account permanently?\n\nThis removes your profile, people list, and settings. This cannot be undone.'
   );
   if (!ok) return;
   try {
@@ -386,7 +386,7 @@ async function saveCircleMember() {
       relation: m.relation,
       status: 'safe',
       icon: '🏠',
-      last: 'Circle member',
+        last: 'Trusted contact',
     }));
     document.getElementById('c-name').value = '';
     document.getElementById('c-phone').value = '';
@@ -394,7 +394,7 @@ async function saveCircleMember() {
     buildCircle();
     document.getElementById('s-circle').textContent = circle.length;
     window.SafeAlertCitizenSOS?.cacheCircle?.(circle);
-    toast('Circle member saved', 'ok');
+    toast('Contact saved', 'ok');
   } catch (e) {
     toast(e.message, 'err');
   }

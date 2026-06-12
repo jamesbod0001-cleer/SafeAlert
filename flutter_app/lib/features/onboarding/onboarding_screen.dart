@@ -204,7 +204,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 24),
           _bullet('🗺️ Live community alerts on the map'),
           _bullet('🆘 Hold SOS — alerts your people + nearby helpers'),
-          _bullet('👥 Safety circle, estate watch, WhatsApp share'),
+          _bullet('👥 People you trust, estate watch, WhatsApp share'),
           _bullet('📊 Insights & route scores from real journeys'),
           const Spacer(),
         ],

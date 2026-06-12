@@ -79,7 +79,7 @@ async function markMissed(checkIn) {
   const phones = circle.map((m) => decryptContact(m.phone_encrypted)).filter(Boolean);
   const tokens = circle.map((m) => m.fcm_token).filter(Boolean);
 
-  const msg = `${user.display_name || 'A circle member'} missed their SafeAlert check-in. Please try to reach them.`;
+  const msg = `${user.display_name || 'Someone you trust'} missed their SafeAlert check-in. Please try to reach them.`;
   if (phones.length) {
     try {
       await smsService.sendCheckInMissedSMS({ phones, message: msg });

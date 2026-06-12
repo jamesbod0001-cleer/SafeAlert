@@ -25,8 +25,8 @@ function showPanicOverlay(opts = {}) {
     sub.textContent = localOnly
       ? 'Local SOS — use WhatsApp & calls below. Sign in to reach nearby helpers.'
       : serverQueued
-        ? 'Your circle + nearby helpers — not government dispatch'
-        : 'Your circle + nearby helpers — not government dispatch';
+        ? 'Your people + nearby helpers — not government dispatch'
+        : 'Your people + nearby helpers — not government dispatch';
   }
   document.getElementById('pov-members').innerHTML = circle
     .slice(0, 5)
@@ -126,7 +126,7 @@ async function doPanic() {
   }
 
   if (!state.token) {
-    toast('SOS active — WhatsApp your circle now. Sign in to alert nearby helpers.', 'ok');
+    toast('SOS active — WhatsApp your people now. Sign in to alert nearby helpers too.', 'ok');
     return;
   }
 
@@ -139,7 +139,7 @@ async function doPanic() {
     const pid = panicRes.short_id || panicRes.panic_id?.slice(-6)?.toUpperCase() || '';
     toast(
       panicRes.notifications_async
-        ? `Panic #${pid} — your circle & nearby helpers are being notified`
+        ? `Panic #${pid} — your people & nearby helpers are being notified`
         : `Panic #${pid} activated`,
       'ok'
     );
@@ -157,7 +157,7 @@ async function doPanic() {
       if (typeof refreshPovResponders === 'function') refreshPovResponders();
     }
     const sub = document.querySelector('#pov .pov-sub');
-    if (sub) sub.textContent = 'Your circle + nearby helpers — not government dispatch';
+    if (sub) sub.textContent = 'Your people + nearby helpers — not government dispatch';
     setTimeout(() => window.SafeAlertCitizenSOS?.sharePanicWhatsApp?.(), 1500);
   } catch (e) {
     if (e.status === 409) {

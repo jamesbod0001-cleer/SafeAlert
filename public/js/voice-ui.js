@@ -64,7 +64,7 @@
         map: 'Map. Red areas are danger alerts. Tap a pin for details.',
         insights: 'Safety insights. Summary of alerts across Nigeria and near you.',
         routes: 'Route safety. Scores from travellers who finished journeys.',
-        circle: 'Safety circle. Your trusted contacts and community groups.',
+        circle: 'People you trust. Your close contacts and community groups.',
         report: 'Report incident. Choose type and location. You stay anonymous.',
         trust: 'Community tools. Leaders, agents, schools, offline maps, and support tips.',
       };

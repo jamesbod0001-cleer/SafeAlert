@@ -11,7 +11,7 @@ function legalConfig() {
     account_deletion: {
       in_app: 'Settings & account → Delete my account (you must be signed in).',
       email_fallback:
-        'Email our privacy team from the address linked to your account, or include your registered phone number.',
+        'Email us from the address linked to your account, or send your registered phone number.',
     },
     emergency_notice:
       'SafeAlert does not dispatch police, ambulance, or other emergency services. Call 112 or your local emergency number when life is at risk.',

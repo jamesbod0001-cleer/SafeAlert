@@ -524,13 +524,13 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
         <div style="font-size:20px">🆘</div>
         <div style="flex:1">
           <div style="font-size:14px;font-weight:800;margin-bottom:4px">SOS works without sign-in</div>
-          <p style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:8px">Hold PANIC to alert your circle on WhatsApp. Sign in to reach nearby helpers too.</p>
+          <p style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:8px">Hold SOS to alert your people on WhatsApp. Sign in to reach nearby helpers too.</p>
           <button type="button" class="btn btn-outline btn-sm" onclick="openSignInSheet()">Sign in (optional)</button>
         </div>
       </div>
 
       <div class="card card-sm" style="margin-bottom:12px;border-color:var(--green-border);background:var(--green-soft);display:none" id="circle-setup-nudge">
-        <div style="font-size:14px;font-weight:800;margin-bottom:6px">👥 Set up your safety circle first</div>
+        <div style="font-size:14px;font-weight:800;margin-bottom:6px">👥 Add people you trust first</div>
         <p style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:10px">Add 3–5 people you trust. When you panic, they get your live location — your people, not government.</p>
         <button type="button" class="btn btn-green btn-sm" onclick="openProfile('signin')">Add trusted contacts</button>
       </div>
@@ -560,11 +560,11 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
         <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:0">Quick tools — SOS prioritizes trusted female helpers when available. You stay in control.</p>
         <div class="women-safety-actions">
           <button type="button" class="btn btn-green btn-sm" onclick="womenQuickCheckIn(1)">⏰ Check-in 1h</button>
-          <button type="button" class="btn btn-outline btn-sm" onclick="go('circle')">👥 My circle</button>
-          <button type="button" class="btn btn-outline btn-sm" onclick="womenShareLiveTip()">📍 Share journey</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="go('circle')">👥 My people</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="womenShareLiveTip()">📍 Share trip</button>
           <button type="button" class="btn btn-outline btn-sm" onclick="womenSafetyTips()">💡 Safety tips</button>
         </div>
-        <p id="women-checkin-nudge" style="display:none;font-size:10px;color:var(--amber);margin:10px 0 0;line-height:1.45">Tip: schedule a check-in when traveling alone — your circle is notified if you miss it.</p>
+        <p id="women-checkin-nudge" style="display:none;font-size:10px;color:var(--amber);margin:10px 0 0;line-height:1.45">Tip: set a check-in when traveling alone — your people get notified if you miss it.</p>
       </div>
 
       <!-- Secondary tools (collapsed on small screens) -->
@@ -574,23 +574,23 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
       <!-- JOURNEY WATCH -->
       <div class="card" style="margin-bottom:12px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-          <div style="font-size:15px;font-weight:800">🚗 Journey Watch</div>
+          <div style="font-size:15px;font-weight:800">🚗 Share my trip</div>
           <div id="j-timer-badge" style="display:none;background:var(--green-soft);border:1px solid var(--green-border);border-radius:20px;padding:4px 12px;font-size:13px;font-weight:800;color:var(--green)" id="jbadge">00:00</div>
         </div>
-        <div class="journey-meta">Your circle sees your live GPS while you travel. Auto-alert fires if you stop in a danger zone.</div>
+        <div class="journey-meta">Your people see your live location while you travel. You get an alert if you stop in a danger area.</div>
         <div id="j-start-ui">
           <label class="field-lbl" for="j-start-from">From (optional)</label>
           <input class="field-inp" id="j-start-from" type="text" placeholder="e.g. Lagos" autocomplete="off" style="margin-bottom:8px"/>
           <label class="field-lbl" for="j-start-to">To (optional)</label>
           <input class="field-inp" id="j-start-to" type="text" placeholder="e.g. Ibadan" autocomplete="off" style="margin-bottom:10px"/>
-          <button class="btn btn-green" onclick="startJourney()"><span class="btn-ico" aria-hidden="true">▶</span><span class="btn-txt" data-i18n="start_journey">Start journey</span></button>
+          <button class="btn btn-green" onclick="startJourney()"><span class="btn-ico" aria-hidden="true">▶</span><span class="btn-txt" data-i18n="start_journey">Start trip</span></button>
         </div>
         <div id="j-live-ui" style="display:none">
           <div class="journey-live">
             <div class="journey-live-dot"></div>
             <div>
-              <div style="font-size:12px;font-weight:700;color:var(--green)">LIVE — Circle watching your GPS</div>
-              <div style="font-size:11px;color:var(--text2);margin-top:1px">Push alert if you stop in a hot zone (SMS backup for circle)</div>
+              <div style="font-size:12px;font-weight:700;color:var(--green)">LIVE — Your people can see your location</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:1px">Alert if you stop in a danger area (SMS backup for your people)</div>
             </div>
             <div class="journey-timer" id="j-timer">00:00</div>
           </div>
@@ -604,7 +604,7 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
       <!-- SAFE CHECK-IN -->
       <div class="card" style="margin-bottom:12px" id="checkin-card">
         <div style="font-size:15px;font-weight:800;margin-bottom:6px">✅ Safe Check-in</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:10px">Set a deadline — if you don't confirm, your circle is notified. Reply <strong>SAFE</strong> by SMS too.</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:10px">Set a time — if you don't confirm you're safe, your people get notified. Reply <strong>SAFE</strong> by SMS too.</div>
         <div id="checkin-idle">
           <button class="btn btn-outline btn-sm" onclick="startCheckIn()">Schedule check-in (2h)</button>
         </div>
@@ -648,10 +648,10 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
         <div class="stat-card">
           <div class="stat-icon">👥</div>
           <div class="stat-num" style="color:var(--blue)" id="s-circle">0</div>
-          <div class="stat-lbl" data-i18n="stat_my_circle">My circle</div>
+          <div class="stat-lbl" data-i18n="stat_my_circle">My people</div>
         </div>
       </div>
-      <button type="button" class="btn btn-outline btn-sm" style="margin-bottom:14px" onclick="go('insights')"><span class="btn-ico" aria-hidden="true">📊</span><span class="btn-txt" data-i18n="view_insights">Safety insights →</span></button>
+      <button type="button" class="btn btn-outline btn-sm" style="margin-bottom:14px" onclick="go('insights')"><span class="btn-ico" aria-hidden="true">📊</span><span class="btn-txt" data-i18n="view_insights">See safety updates →</span></button>
 
       <!-- USSD BANNER -->
       <div class="ussd-banner">
@@ -721,7 +721,7 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
   <!-- INSIGHTS / ANALYTICS SCREEN -->
   <div id="screen-insights" class="screen fade-up">
     <div style="padding:22px 18px 0">
-      <div style="font-size:22px;font-weight:900;margin-bottom:4px" data-i18n="insights_title">Safety Insights</div>
+      <div style="font-size:22px;font-weight:900;margin-bottom:4px" data-i18n="insights_title">Safety updates</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.5" data-i18n="insights_sub">Live summary of community alerts, severity, and hotspots across Nigeria</div>
       <div id="insights-loading" style="font-size:12px;color:var(--text3);padding:24px 0;text-align:center">Loading dashboard…</div>
       <div id="insights-body" style="display:none">
@@ -780,13 +780,13 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
   <!-- CIRCLE SCREEN -->
   <div id="screen-circle" class="screen fade-up">
     <div style="padding:22px 18px 0">
-      <div style="font-size:22px;font-weight:900;margin-bottom:4px">Safety Circle</div>
-      <div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5">Your 5 trusted contacts. They see your live location during journeys and panics.</div>
+      <div style="font-size:22px;font-weight:900;margin-bottom:4px">People You Trust</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5">Up to 5 close contacts. They see your live location when you SOS or share a trip.</div>
 
       <div class="card" style="padding:0 18px">
         <div id="circle-list"></div>
       </div>
-      <button class="btn btn-outline" style="margin:10px 0 8px" onclick="openCircleAdd()">+ Add Circle Member</button>
+      <button class="btn btn-outline" style="margin:10px 0 8px" onclick="openCircleAdd()">+ Add trusted contact</button>
       <button class="btn btn-outline btn-sm" style="margin-bottom:8px" onclick="shareApp()"><span class="btn-ico" aria-hidden="true">📤</span><span class="btn-txt" data-i18n="share_app">Share SafeAlert with friends</span></button>
       <button class="btn btn-outline btn-sm" style="margin-bottom:24px" onclick="shareCircleInvite()"><span class="btn-ico" aria-hidden="true">👥</span><span class="btn-txt" data-i18n="invite_circle">Invite to your circle</span></button>
 
@@ -884,10 +884,10 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
       <div class="nav-icon" aria-hidden="true">🗺</div>
       <span class="nav-label" data-i18n="map">Map</span>
     </button>
-    <button type="button" class="nav-item" id="nb-circle" role="tab" aria-selected="false" aria-label="Safety circle" onclick="go('circle')">
+    <button type="button" class="nav-item" id="nb-circle" role="tab" aria-selected="false" aria-label="People you trust" onclick="go('circle')">
       <div class="nav-indicator"></div>
       <div class="nav-icon" aria-hidden="true">👥</div>
-      <span class="nav-label" data-i18n="circle_tab">Circle</span>
+      <span class="nav-label" data-i18n="circle_tab">My People</span>
     </button>
     <button type="button" class="nav-item nav-report" id="nb-report" role="tab" aria-selected="false" aria-label="Report incident" onclick="go('report')">
       <div class="nav-indicator"></div>
@@ -913,16 +913,16 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
   <div style="text-align:center;z-index:1">
     <div class="pov-status">● CITIZEN SOS ACTIVE</div>
     <div class="pov-timer" id="pov-timer">00:00</div>
-    <div class="pov-sub">Your circle + nearby helpers — not government dispatch</div>
+    <div class="pov-sub">Your people + nearby helpers — not government dispatch</div>
     <div class="pov-coords" id="pov-coords">Acquiring location…</div>
   </div>
   <div style="width:100%;z-index:1">
     <div class="pov-notif-title">🆘 Your people are being alerted</div>
-    <div class="pov-notif-sub">Push to circle &amp; opted-in neighbors · Live GPS updating every minute</div>
+    <div class="pov-notif-sub">Push to your people &amp; nearby helpers · Live location updates every minute</div>
     <div id="pov-members"></div>
     <div id="pov-circle-actions" style="margin:12px 0;padding:12px;background:rgba(0,0,0,0.25);border-radius:12px;border:1px solid rgba(255,255,255,0.1)"></div>
     <div class="pov-responders" id="pov-responders-wrap">
-      <div class="pov-responders-title">HELPERS EN ROUTE</div>
+      <div class="pov-responders-title">PEOPLE COMING TO HELP</div>
       <div id="pov-responders"></div>
     </div>
     <div id="pov-medical-actions" style="display:none;margin:12px 0;padding:12px;background:rgba(59,130,246,0.12);border-radius:12px;border:1px solid rgba(59,130,246,0.25)"></div>
@@ -981,7 +981,7 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
   <div class="sheet-handle"></div>
   <div class="sheet-title">More</div>
   <div class="sheet-sub">Insights, routes, community tools &amp; settings</div>
-  <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="moreGo('insights')">📊 Safety insights</button>
+  <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="moreGo('insights')">📊 Safety updates</button>
   <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="moreGo('routes')">🛣 Safe routes</button>
   <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="moreGo('trust')">🤝 Community &amp; trust</button>
   <button type="button" class="btn btn-outline" style="margin-bottom:10px;width:100%" onclick="closeMoreSheet(); openMedicalCrashSheet()">🏥 Emergency numbers &amp; hospitals</button>
@@ -992,7 +992,7 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
 <div id="profile-sheet" class="sheet" onclick="event.stopPropagation()">
   <div class="sheet-handle"></div>
   <div class="sheet-title">Your account</div>
-  <div class="sheet-sub">View map & report alerts without signing in. Sign in with phone + OTP only for panic, safety circle, and journey watch. OTP uses SMS — sandbox mode shows the code in-app for free testing.</div>
+  <div class="sheet-sub">Browse the map and report danger without sign-in. Sign in with phone + OTP for SOS, your people list, and trip sharing. OTP uses SMS — sandbox mode shows the code in-app for free testing.</div>
   <div id="profile-signed-out" onclick="event.stopPropagation()">
     <label class="field-lbl" for="p-phone">Phone</label>
     <input class="field-inp" id="p-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="08031234567 (11 digits, starts with 0)"/>
@@ -1052,7 +1052,7 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
       </label>
       <div id="medical-ice-block" style="margin:14px 0;padding-top:14px;border-top:1px solid var(--border)">
         <div class="sheet-title" style="font-size:15px">Medical ICE (In Case of Emergency)</div>
-        <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:8px 0 10px">Shared with your circle when you tap Share ICE on SOS. Not sent to government.</p>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:8px 0 10px">Shared with your people when you tap Share ICE on SOS. Not sent to government.</p>
         <label class="field-lbl" for="ice-blood">Blood group</label>
         <input class="field-inp" id="ice-blood" placeholder="e.g. O+" style="margin-bottom:8px"/>
         <label class="field-lbl" for="ice-allergies">Allergies</label>
@@ -1068,12 +1068,12 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
       <div class="women-prefs-block" id="women-prefs-block">
         <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">
           <input type="checkbox" id="pref-women-mode" onchange="onWomenModeToggle()"/>
-          <span style="font-size:13px;font-weight:600;line-height:1.45"><strong>Women's safety mode</strong><br/><span style="font-weight:500;color:var(--text2);font-size:11px">Home hub, check-in shortcuts, trusted helpers on SOS</span></span>
+          <span style="font-size:13px;font-weight:600;line-height:1.45"><strong>Women's safety mode</strong><br/><span style="font-weight:500;color:var(--text2);font-size:11px">Home shortcuts, check-ins, trusted helpers on SOS</span></span>
         </label>
         <div id="women-safety-subopts" style="display:none">
           <label class="sub-opt" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;margin-top:10px">
             <input type="checkbox" id="pref-women-prefer-helpers" onchange="saveWomenSafetyPrefs()"/>
-            <span>Prefer women helpers nearby when I SOS (falls back to all helpers if none)</span>
+            <span>Prefer women helpers when I SOS (uses any helper if none nearby)</span>
           </label>
           <label class="sub-opt" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer">
             <input type="checkbox" id="pref-women-checkin-nudge" onchange="saveWomenSafetyPrefs()"/>
@@ -1081,39 +1081,39 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
           </label>
           <label class="sub-opt" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer">
             <input type="checkbox" id="pref-women-responder" onchange="saveWomenSafetyPrefs()"/>
-            <span>I can help other women nearby (opt-in responder)</span>
+            <span>I can help other women nearby</span>
           </label>
           <p id="women-help-nearby-nudge" style="display:none;font-size:10px;color:var(--amber);margin:8px 0 0 24px;line-height:1.45">Turn on <em>Help nearby</em> above to receive women's safety alerts from others.</p>
         </div>
       </div>
       <button class="btn btn-outline btn-sm" style="margin-bottom:8px" onclick="testPushNotification()">🔔 Test notification</button>
-      <button class="btn btn-outline btn-sm" onclick="shareCircleInvite()">Invite circle via WhatsApp</button>
+      <button class="btn btn-outline btn-sm" onclick="shareCircleInvite()">Invite via WhatsApp</button>
     </div>
     <div id="responder-block" style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
       <div class="sheet-title" style="font-size:15px">I can help nearby</div>
-      <p style="font-size:11px;color:var(--text2);margin:8px 0 10px">List skills so others in panic see you as a responder.</p>
+      <p style="font-size:11px;color:var(--text2);margin:8px 0 10px">Tell others what you can help with when someone nearby needs SOS.</p>
       <label style="display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:pointer">
         <input type="checkbox" id="pref-responder-available" onchange="saveResponderProfile()"/>
-        <span style="font-size:13px;font-weight:600">Available to respond</span>
+        <span style="font-size:13px;font-weight:600">I'm available to help nearby</span>
       </label>
       <div id="responder-skills" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
-      <button class="btn btn-outline btn-sm" onclick="saveResponderProfile()">Save responder profile</button>
+      <button class="btn btn-outline btn-sm" onclick="saveResponderProfile()">Save helper settings</button>
     </div>
     <div id="circle-add-block" style="margin-top:14px">
-      <div class="sheet-title" style="font-size:15px">Add to safety circle</div>
+      <div class="sheet-title" style="font-size:15px">Add someone you trust</div>
       <label class="field-lbl">Name</label>
       <input class="field-inp" id="c-name" placeholder="e.g. Mama"/>
       <label class="field-lbl">Phone</label>
       <input class="field-inp" id="c-phone" placeholder="080…"/>
       <label class="field-lbl">Relation</label>
       <input class="field-inp" id="c-rel" placeholder="Mother, Friend…"/>
-      <button class="btn btn-green btn-sm" onclick="saveCircleMember()">Save member</button>
+      <button class="btn btn-green btn-sm" onclick="saveCircleMember()">Save contact</button>
     </div>
     </div>
     <button class="btn btn-outline" style="margin-top:12px" onclick="signOut()">Sign out</button>
     <div id="account-delete-block" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
       <div class="sheet-title" style="font-size:15px;color:var(--red)">Delete account</div>
-      <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:8px 0 10px">Permanently removes your profile, circle, and preferences. Community reports may remain anonymised.</p>
+      <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:8px 0 10px">Permanently removes your profile, people list, and settings. Community reports may stay on the map without your name.</p>
       <button type="button" class="btn btn-sm" style="background:var(--red-soft);border:1px solid var(--red-border);color:var(--red)" onclick="deleteMyAccount()">Delete my account</button>
     </div>
     <footer class="legal-footer">
@@ -1132,7 +1132,7 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
   <ul style="font-size:12px;color:var(--text2);line-height:1.55;padding-left:18px;margin:0 0 16px">
     <li>Add 3–5 trusted people to your circle before you travel</li>
     <li>Schedule a check-in when alone at night or on long trips</li>
-    <li>Share your journey plan on WhatsApp — use <em>Share journey</em> above</li>
+    <li>Share your trip plan on WhatsApp — use <em>Share trip</em> above</li>
     <li>Hold SOS if threatened — helpers see approximate area, not your exact door</li>
     <li>Meet helpers in public, lit places — read <a href="faq.html#abuse" style="color:var(--green)">helper safety FAQ</a></li>
     <li>Call <strong>112</strong> for immediate danger — SafeAlert supplements, not replaces</li>
@@ -1180,7 +1180,7 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
 <div id="panic-disclaimer-sheet" class="sheet" onclick="event.stopPropagation()">
   <div class="sheet-handle"></div>
   <div class="sheet-title">Before you activate SOS</div>
-  <div class="sheet-sub">SafeAlert alerts your circle and nearby helpers. It does not dispatch police or ambulance.</div>
+  <div class="sheet-sub">SafeAlert alerts your people and nearby helpers. It does not dispatch police or ambulance.</div>
   <p style="font-size:12px;color:var(--text2);line-height:1.55;margin-bottom:16px">In a life-threatening emergency, call <strong>112</strong> or your local emergency number. Misusing SOS to lure helpers is prohibited — see <a href="faq.html#abuse" style="color:var(--green)">helper safety FAQ</a>. You only need to accept this once.</p>
   <div class="sheet-actions">
     <button type="button" class="btn btn-outline" id="panic-disclaimer-cancel">Cancel</button>
@@ -1235,7 +1235,7 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
   </div>
   <div class="ob-step">
     <h2>Sign in (optional)</h2>
-    <p>Phone + OTP saves your circle and panic history. Sandbox mode shows the code in-app — no SMS needed.</p>
+    <p>Phone + OTP saves your people list and SOS history. Sandbox mode shows the code in-app — no SMS needed.</p>
   </div>
   <div class="ob-actions">
     <button type="button" class="btn btn-green" id="ob-next">Continue</button>
@@ -1246,7 +1246,7 @@ html.women-safety-mode .women-sos-ring #panic-btn{box-shadow:0 0 28px rgba(236,7
 <div id="post-panic-feedback">
   <div class="pf-card">
     <div style="font-size:16px;font-weight:800;margin-bottom:8px">Did anyone help?</div>
-    <p style="font-size:12px;color:var(--text2);margin-bottom:14px">Quick feedback helps improve responder matching.</p>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:14px">Your feedback helps us match helpers better.</p>
     <div style="display:flex;gap:10px">
       <button class="btn btn-green btn-sm" style="flex:1" onclick="submitPanicFeedback(true)">Yes, helpful</button>
       <button class="btn btn-outline btn-sm" style="flex:1" onclick="submitPanicFeedback(false)">No / unsure</button>

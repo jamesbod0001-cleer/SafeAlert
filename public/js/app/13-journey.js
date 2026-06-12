@@ -71,7 +71,7 @@ async function submitJourneyQuickFeedback(rating) {
 
 async function startJourney() {
   if (!(await ensureAuth())) {
-    toast('Sign in required for journey');
+    toast('Sign in to share your trip');
     return;
   }
   journeyFrom = document.getElementById('j-start-from')?.value?.trim() || '';
@@ -87,7 +87,7 @@ async function startJourney() {
       document.getElementById('j-timer').textContent = fmt(jSecs);
     }, 1000);
     startLocationPing();
-    toast('🚗 Journey started — your circle is watching', 'ok');
+    toast('🚗 Trip started — your people can see your location', 'ok');
   } catch (e) {
     toast(e.message);
   }

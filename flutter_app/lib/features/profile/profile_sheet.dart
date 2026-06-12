@@ -83,7 +83,7 @@ class _ProfileBodyState extends State<_ProfileBody> {
           Text(
             signInOnly
                 ? AppI18n.t(lang, 'guest_sos_banner')
-                : 'Map & report without sign-in. Phone + OTP for circle sync & journey.',
+                : 'Map & report without sign-in. Phone + OTP for your people list & trip sharing.',
             style: const TextStyle(fontSize: 12, color: AppColors.text2, height: 1.4),
           ),
           const SizedBox(height: 16),
@@ -139,8 +139,8 @@ class _ProfileBodyState extends State<_ProfileBody> {
               ),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
-                title: const Text('Available as helper'),
-                subtitle: const Text('Respond to nearby SOS'),
+                title: const Text('I can help people nearby'),
+                subtitle: const Text('When someone near you needs SOS'),
                 value: app.preferences['responder_available'] == true,
                 onChanged: (v) async {
                   await app.api.updateResponderProfile(

@@ -98,10 +98,10 @@
 
   window.shareCircleInvite = function shareCircleInvite() {
     const link = `${window.location.origin}/app/?invite=1`;
-    const text = `Join my SafeAlert NG safety circle — I will see your live location when you panic or travel: ${link}`;
+    const text = `Join my SafeAlert people list — I will get your live location when you SOS or travel: ${link}`;
     if (navigator.share) {
       navigator
-        .share({ title: 'SafeAlert NG — Safety Circle', text, url: link })
+        .share({ title: 'SafeAlert NG — People you trust', text, url: link })
         .catch(() => window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank'));
     } else {
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');

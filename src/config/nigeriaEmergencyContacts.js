@@ -49,7 +49,7 @@ module.exports = {
       label: 'If official lines fail',
       contacts: [
         {
-          name: 'Your safety circle (WhatsApp)',
+          name: 'People you trust (WhatsApp)',
           phone: '',
           note: 'Often fastest — add hospital & driver contacts before you travel',
         },

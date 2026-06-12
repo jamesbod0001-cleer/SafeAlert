@@ -148,7 +148,7 @@ async function saveResponderProfile() {
     });
     state.preferences.responder_skills = d.responder?.skills || skills;
     state.preferences.responder_available = d.responder?.available;
-    toast('Responder profile saved', 'ok');
+    toast('Helper settings saved', 'ok');
     syncNearbyPanicCard();
   } catch (e) {
     toast(e.message, 'err');
